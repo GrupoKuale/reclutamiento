@@ -77,7 +77,7 @@ class Requisitions(models.Model):
                 (self.env.uid, dh_group.id)
             )
             is_dh = bool(self.env.cr.fetchone())
-        can = is_dh or (self.env.uid == 1)
+        can = is_dh or self.env.user.has_group('base.group_system')
         for record in self:
             record.can_authorize = can
 
