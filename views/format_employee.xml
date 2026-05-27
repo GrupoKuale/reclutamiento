@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_format_employee" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.format_employeeView</field>
+            <field name="model">reclutamiento__kuale.format_employee</field>
+            <field name="arch" type="xml">
+                <form string="Formato de empleado">
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" placeholder="Nombre del formato"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="active" widget="boolean_toggle"
+                                       string="Activo"/>
+                                <field name="job_id"
+                                       placeholder="Global (aplica a todos los puestos)"
+                                       options="{'no_create': True}"/>
+                            </group>
+                            <group>
+                                <field name="description"
+                                       placeholder="Descripcion interna del formato"/>
+                            </group>
+                        </group>
+                        <separator string="Contenido del formato"/>
+                        <p class="text-muted" style="font-size:0.85em; margin-bottom:8px;">
+                            Usa el modo codigo &lt;/&gt; para insertar variables:
+                            &lt;t t-out="object.name"&gt;&lt;/t&gt;,
+                            &lt;t t-out="object.company_id.name"&gt;&lt;/t&gt;,
+                            &lt;t t-out="object.actual_date"&gt;&lt;/t&gt;, etc.
+                        </p>
+                        <field name="body" nolabel="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_format_employee_list" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.format_employee.list</field>
+            <field name="model">reclutamiento__kuale.format_employee</field>
+            <field name="arch" type="xml">
+                <tree string="Formatos de empleado">
+                    <field name="name"/>
+                    <field name="job_id" string="Puesto (vacio = global)"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_format_employee" model="ir.actions.act_window">
+            <field name="name">Formatos de empleado</field>
+            <field name="res_model">reclutamiento__kuale.format_employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_active': 1}</field>
+        </record>
+
+        <menuitem id="menu_format_employee"
+            name="Formatos de empleado"
+            parent="reclutamiento__kuale_catalogo"
+            action="action_format_employee"
+            sequence="50"/>
+    </data>
+</odoo>

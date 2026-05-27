@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_employee_request_loan_form" model="ir.ui.view">
+            <field name="name">employee.request.loan.form</field>
+            <field name="model">reclutamiento__kuale.employee.request.loan</field>
+            <field name="arch" type="xml">
+                <form string="Solicitud de préstamo">
+                    <sheet>
+                        <group>
+                            <field name="amount"/>
+                            <field name="requestId" context="{'default_loanRequestId': active_id}">
+                                <tree>
+                                    <field name="requestedBy"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_employee_request_loan_tree" model="ir.ui.view">
+            <field name="name">employee.request.loan.tree</field>
+            <field name="model">reclutamiento__kuale.employee.request.loan</field>
+            <field name="arch" type="xml">
+                <tree string="Solicitudes de préstamo">
+                    <field name="amount"/>
+                    <field name="requestId"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_employee_request_loan_search" model="ir.ui.view">
+            <field name="name">employee.request.loan.search</field>
+            <field name="model">reclutamiento__kuale.employee.request.loan</field>
+            <field name="arch" type="xml">
+                <search string="Buscar solicitudes de préstamo">
+                    <filter name="filter_amount" string="Monto" domain="[('amount', '!=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_employee_request_loan" model="ir.actions.act_window">
+            <field name="name">Solicitudes de préstamo</field>
+            <field name="res_model">reclutamiento__kuale.employee.request.loan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_employee_request_loan_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Crea la primera solicitud de préstamo.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_request_form" model="ir.ui.view">
+            <field name="name">employee.request.form</field>
+            <field name="model">reclutamiento__kuale.employee.request</field>
+            <field name="arch" type="xml">
+                <form string="Detalles de la solicitud">
+                    <sheet>
+                        <group>
+                            <field name="folio" readonly="1" invisible="1"/>
+                            <field name="requestedBy"/>
+                            <field name="requestType"/>
+                            <field name="status"/>
+                            <field name="workRequestId" invisible="requestType != 'work'" string = "Detalles">
+                                <tree editable="bottom">
+                                    <field name="type"/>
+                                </tree>
+                            </field>
+
+                            <field name="loanRequestId" invisible="requestType != 'loan'" string = "Detalles">
+                                <tree editable="bottom" modifiers="{'readonly': [('loanRequestId.amount', '!=', False)]}">
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+
+                            <field name="labor_letterRequestId" invisible="requestType != 'labor_letter'" string = "Detalles">
+
+                                <tree editable="bottom">
+                                    <field name ="purpose"/>
+                                </tree>
+                            </field>
+
+                            <field name="uniformRequestId" invisible="requestType != 'uniform'" string = "Detalles">
+                                <tree editable="bottom">
+                                    <field name="item"/>
+                                    <field name="size"/>
+                                    <field name="uniformRequestReason"/>
+                                        
+                                </tree>
+                            </field>
+
+                            <field name="vacationRequestId" invisible="requestType != 'vacation'" string = "Detalles">
+                                <tree editable="bottom" >
+                                    <field name="startDate"/>
+                                    <field name="endDate"/>
+                                </tree>
+                            </field>
+
+                            <field name="expensesRequestId" invisible="requestType != 'expenses'" string = "Detalles">
+                                <tree editable="bottom" >
+                                    <field name="startDate"/>
+                                    <field name="endDate"/>
+                                    <field name="destiny"/>
+                                </tree>
+                            </field>
+
+                            <field name="requestDescription" string="Descripción"/>
+                        </group>
+                        
+                            
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_employee_request_tree" model="ir.ui.view">
+            <field name="name">employee.request.tree</field>
+            <field name="model">reclutamiento__kuale.employee.request</field>
+            <field name="arch" type="xml">
+                <tree string="Solicitudes del empleado">
+                    <field name="folio"/>
+                    <field name="requestedBy"/>
+                    <field name="status"/>
+                    
+                </tree>
+            </field>
+        </record>
+
+        <!-- Acción general -->
+        <record id="action_employee_request" model="ir.actions.act_window">
+            <field name="name">Solicitudes del empleado</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay solicitudes de empleados.
+                </p>
+                <p>
+                    Crea la primera solicitud de empleado.
+                </p>
+            </field>
+        </record>
+
+        <!-- Acciones con filtros -->
+         <record id="action_employee_request_work" model="ir.actions.act_window">
+            <field name="name">Trabajo</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'work')]</field>
+        </record>
+
+        <record id="action_employee_request_vacation" model="ir.actions.act_window">
+            <field name="name">Vacaciones</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'vacation')]</field>
+        </record>
+
+        <record id="action_employee_request_expenses" model="ir.actions.act_window">
+            <field name="name">Viáticos</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'expenses')]</field>
+        </record>
+
+        <record id="action_employee_request_uniform" model="ir.actions.act_window">
+            <field name="name">Uniformes</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'uniform')]</field>
+        </record>
+
+        <record id="action_employee_request_loan" model="ir.actions.act_window">
+            <field name="name">Préstamo</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'loan')]</field>
+        </record>
+
+        <record id="action_employee_request_labor_letter" model="ir.actions.act_window">
+            <field name="name">Carta laboral</field>
+            <field name="res_model">reclutamiento__kuale.employee.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('requestType', '=', 'labor_letter')]</field>
+        </record>
+
+    </data>
+</odoo>

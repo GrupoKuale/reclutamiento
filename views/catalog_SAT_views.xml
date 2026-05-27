@@ -1,0 +1,153 @@
+<odoo>
+    <!--TIPOS DE CONTRATOS-->
+    <record id="catalog_sat_type_contract_action" model="ir.actions.act_window">
+        <field name="name">Tipos de contratos</field>
+        <field name="res_model">catalog_sat.type_contract</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_type_contract_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.type_contract</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--PERIODICIDAD DE PAGO-->
+    <record id="catalog_sat_payment_periodicity_action" model="ir.actions.act_window">
+        <field name="name">Periodicidad de pago</field>
+        <field name="res_model">catalog_sat.payment_periodicity</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_payment_periodicity_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.payment_periodicity</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--TIPO DE JORNADA-->
+    <record id="catalog_sat_type_workday_action" model="ir.actions.act_window">
+        <field name="name">Tipo de jornada</field>
+        <field name="res_model">catalog_sat.type_workday</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_type_workday_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.type_workday</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--REGIMEN FISCAL-->
+    <record id="catalog_sat_fiscal_regime_action" model="ir.actions.act_window">
+        <field name="name">Régimen Fiscal</field>
+        <field name="res_model">catalog_sat.fiscal_regime</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_fiscal_regime_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.fiscal_regime</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="apply_for"/>
+            </tree>
+        </field>
+    </record>
+     <!--TIPO DE REGIMEN-->
+    <record id="catalog_sat_type_regime_action" model="ir.actions.act_window">
+        <field name="name">Tipo de régimen</field>
+        <field name="res_model">catalog_sat.type_regime</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_type_regime_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.type_regime</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="apply_for"/>
+            </tree>
+        </field>
+    </record>
+    <!--USO CFDI-->
+    <record id="catalog_sat_use_cfdi_action" model="ir.actions.act_window">
+        <field name="name">Uso CFDI</field>
+        <field name="res_model">catalog_sat.use_cfdi</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_use_cfdi_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.use_cfdi</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+                <field name="apply_for"/>
+            </tree>
+        </field>
+    </record>
+     <!--RIESGO PUESTO-->
+    <record id="catalog_sat_risk_placed_action" model="ir.actions.act_window">
+        <field name="name">Riesgo Puesto</field>
+        <field name="res_model">catalog_sat.risk_placed</field>
+        <field name="view_mode">tree</field>
+    </record>
+     <record id="catalog_sat_risk_placed_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.risk_placed</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--MÉTODOS DE PAGO-->
+    <record id="catalog_sat_payment_method_action" model="ir.actions.act_window">
+        <field name="name">Método de Pago</field>
+        <field name="res_model">catalog_sat.payment_method</field>
+        <field name="view_mode">tree</field>
+    </record>
+     <record id="catalog_sat_payment_method_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.payment_method</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--ESTADOS-->
+    <record id="catalog_sat_federal_entity_code_action" model="ir.actions.act_window">
+        <field name="name">Estados</field>
+        <field name="res_model">catalog_sat.federal_entity_code</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <record id="catalog_sat_federal_entity_code_view_tree" model="ir.ui.view">
+        <field name="model">catalog_sat.federal_entity_code</field>
+        <field name="arch" type="xml">
+            <tree editable="bottom">
+                <field name="name"/>
+                <field name="c_country"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+    <!--BASE DE PAGO-->
+    <record id="catalog_payroll_payment_basis_action" model="ir.actions.act_window">
+        <field name="name">Base de Pago</field>
+        <field name="res_model">catalog_payroll.payment_basis</field>
+        <field name="view_mode">tree</field>
+    </record>
+    <!--TIPO DE PRESTACIÓN-->
+    <record id="catalog_payroll_type_benefit_action" model="ir.actions.act_window">
+        <field name="name">Tipo de prestación</field>
+        <field name="res_model">catalog_payroll.type_benefit</field>
+        <field name="view_mode">tree</field>
+    </record>
+</odoo>

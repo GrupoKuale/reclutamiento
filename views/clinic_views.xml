@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_clinic_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.clinic.view.tree</field>
+            <field name="model">reclutamiento__kuale.clinic</field>
+            <field name="arch" type="xml">
+                <tree string="Clinica">
+                    <field name="name" />
+                    <field name="city_select" />
+                    <field name="address" />
+                    <field name="description" />
+                    <field name="status"  />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_clinic_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.clinic.view.form</field>
+            <field name="model">reclutamiento__kuale.clinic</field>
+            <field name="arch" type="xml">
+                <form string="Clinica">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="active"  />
+                                <field name="name" />
+                                <label for="street" string="Dirección"/>
+                                <div class="o_address_format">
+                                        <field name="street" placeholder="Calle..." class="o_address_street"/>
+                                        <field name="street2" placeholder="Calle 2..." class="o_address_street"/>
+                                        <field name="city_select" placeholder="Ciudad" class="o_address_city"/>
+                                        <field name="state_id" class="o_address_state" placeholder="Estado" options='{"no_open": True}' context="{'default_country_id': country_id}"/>
+                                        <field name="zip" placeholder="ZIP" class="o_address_zip"/>
+                                        <field name="country_id" placeholder="Pais" class="o_address_country" options='{"no_open": True, "no_create": True}'/>
+                                </div>
+                            </group>
+                            <group>
+                                <field name="description" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_clinic_action" model="ir.actions.act_window">
+            <field name="name">Clinicas</field>
+            <field name="res_model">reclutamiento__kuale.clinic</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crea una nueva clinica
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

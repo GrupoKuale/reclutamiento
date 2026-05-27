@@ -1,0 +1,2130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="formRecruitment">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Complemento</t>
+            <div id="wrap" class="kuale-apply">
+                <style>
+                    #top { display: none !important; }
+                    .kuale-colony-wrap { position: relative; }
+                    .kuale-colony-menu {
+                        position: absolute; top: 100%; left: 0; right: 0; z-index: 999;
+                        background: #fff; border: 1px solid #ced4da; border-radius: 4px;
+                        max-height: 200px; overflow-y: auto; display: none;
+                        box-shadow: 0 4px 12px rgba(0,0,0,.1);
+                    }
+                    .kuale-colony-notfound {
+                        padding: 10px 14px; font-size: 13px; color: #999; display: none;
+                    }
+                </style>
+ 
+                <!-- ══ Topbar ══ -->
+                <div class="kuale-landing__topbar">
+                    <div class="kuale-landing__brand">
+                        <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo.png" alt="Grupo Kuale"/>
+                        <span class="kuale-landing__brand-text">
+                            <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                            RECLUTAMIENTO
+                        </span>
+                    </div>
+                    <div class="kuale-landing__topbar-actions">
+                        <div class="kuale-user-badge" id="kualeUserBadge">
+                            <span class="kuale-user-badge__name" t-esc="' '.join(request.env.user.name.split()[:2]) if request.env.user.name else ''"/>
+                            <span class="kuale-user-badge__avatar">
+                                <t t-esc="''.join([p[0].upper() for p in request.env.user.name.split()[:2]])"/>
+                            </span>
+                            <!-- Dropdown -->
+                            <div class="kuale-user-dropdown" id="kualeUserDropdown">
+                                <a href="/mis-aplicaciones" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                    Mis Aplicaciones
+                                </a>
+                                <a href="#" data-kuale-perfil="open" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    Mi cuenta
+                                </a>
+                                <div class="kuale-user-dropdown__divider"/>
+                                <a href="/kuale/logout" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                    Cerrar sesión
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+                <!-- ══ Hero ══ -->
+                <section class="kuale-apply-hero">
+                    <div class="kuale-apply-hero__bg"/>
+                    <div class="container kuale-apply-hero__content">
+                        <div class="row g-4 align-items-center">
+                            <div class="col-lg-7">
+                                <h1 class="kuale-apply-hero__title">Complemento de solicitud</h1>
+                                <p class="kuale-apply-hero__subtitle">
+                                    Completa la información adicional requerida para continuar
+                                    con tu proceso de contratación.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+ 
+                <!-- ══ Formulario ══ -->
+                <section class="kuale-apply-main">
+                    <div class="container position-relative">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <section id="forms" class="s_website_form" data-vcss="001" data-snippet="s_website_form">
+                                    <form id="hr_recruitment_form2"
+                                        action="/website/form3/hr.applicant"
+                                        method="post"
+                                        enctype="multipart/form-data"
+                                        class="o_mark_required row"
+                                        data-mark="*"
+                                        data-model_name="hr.applicant"
+                                        data-success-mode="redirect"
+                                        data-success-page="/job-thank-you-c"
+                                        hide-change-model="true"
+                                        novalidate="novalidate">
+ 
+                                        <input type="hidden" name="identification_options_ids" id="kuale_identification_options_ids" value=""/>
+                                        <input type="hidden" name="competencies_ids" id="kuale_competencies_ids" value=""/>
+                                        <input type="hidden" name="ability_ids" id="kuale_ability_ids" value=""/>
+
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+ 
+                                        <!-- ════ SECCIÓN 1: General ════ -->
+                                        <div class="form-section mx-0" id="section1">
+                                            <div class="kuale-section-card mb-4">
+                                                <h3 class="font-weight-bold mb-4">General <span style="color:#FA0000;">&#42;</span></h3>
+                                                <input id="status_stage_id" name="status_stage_id"
+                                                    t-att-value="applicant_record.id" style="display:none;"/>
+                                                <div class="row g-3">
+
+                                                    <!-- RFC -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">RFC <span class="text-danger">*</span></span>
+                                                        </label>
+                                                        <input id="rfc_number" type="text" required="true"
+                                                            t-att-value="applicant_record.rfc_number"
+                                                            class="form-control s_website_form_input" name="rfc_number"/>
+                                                        <span class="text-muted small">
+                                                            <a href="https://www.sat.gob.mx/aplicacion/31274/consulta-tu-clave-de-rfc-mediante-curp" target="_blank">Consultar RFC</a>
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- NSS -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">NSS<span class="text-danger">*</span></span>
+                                                        </label>
+                                                        <input id="social_security_number" type="text" required="true"
+                                                            t-att-value="applicant_record.social_security_number or ''"
+                                                            class="form-control s_website_form_input" name="social_security_number"/>
+                                                    </div>
+
+                                                    <!-- Unidad Médica Familiar -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">Unidad Médica Familiar</span>
+                                                        </label>
+                                                        <select class="form-control s_website_form_input"
+                                                                name="medical_unity"
+                                                                id="medical_unity_select">
+                                                            <option value="">-- Sin UMF para tu colonia --</option>
+                                                        </select>
+                                                        <span class="text-muted small" id="umf_hint" style="display:none;">
+                                                            UMF asignada según tu colonia
+                                                        </span>
+                                                    </div>
+
+                                                    <!-- Nacionalidad -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">Nacionalidad <span class="text-danger">*</span></span>
+                                                        </label>
+                                                        <select class="form-control s_website_form_input" name="nationality" id="nationality_select" required="true">
+                                                            <t t-foreach="nationality_options" t-as="option">
+                                                                <option t-att-value="option[0]"><t t-esc="option[1]"/></option>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4" id="other_nationality_section" style="display:none;">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">Otra nacionalidad</span>
+                                                        </label>
+                                                        <input id="other_nationality" type="text" class="form-control s_website_form_input" name="other_nationality"/>
+                                                    </div>
+
+                                                    <!-- Talla Uniforme -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">Talla Uniforme <span class="text-danger">*</span></span>
+                                                        </label>
+                                                        <t t-foreach="product_template_variants.items()" t-as="template_variants">
+                                                            <t t-set="template_id" t-value="template_variants[0]"/>
+                                                            <t t-set="template_data" t-value="template_variants[1]"/>
+                                                            <t t-set="template_name" t-value="template_data['name']"/>
+                                                            <t t-set="variants" t-value="template_data['variants']"/>
+                                                            <div style="margin-top:8px;">
+                                                                <label class="text-muted small d-block mb-1"><t t-esc="template_name"/></label>
+                                                                <select class="form-control s_website_form_input" name="clothing_size">
+                                                                    <option t-foreach="variants" t-as="variant"
+                                                                            t-att-value="str(template_id)+':'+str(variant['id'])">
+                                                                        <t t-esc="variant['display_name']"/>
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" class="mt-3 kuale-btn-new kuale-btn-new--solid btn-spacing" onclick="nextSection();">Siguiente</button>
+                                            </div>
+                                        </div>
+ 
+                                        <!-- ════ SECCIÓN 2: Domicilio Actual ════ -->
+                                        <div class="form-section mx-0 d-none" id="section2">
+                                            <div class="kuale-section-card mb-4">
+                                                <h3 class="font-weight-bold mb-4">Domicilio Actual <span style="color:#FA0000;">&#42;</span></h3>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Código Postal <span class="text-danger">*</span></span></label>
+                                                        <input id="postal_code" type="text" required="true"
+                                                               class="form-control s_website_form_input"
+                                                               t-att-value="applicant_record.postal_code"
+                                                               name="postal_code"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Estado <span class="text-danger">*</span></span></label>
+                                                        <input id="state" type="text" required="true"
+                                                               class="form-control s_website_form_input"
+                                                               t-att-value="applicant_record.state"
+                                                               name="state"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Municipio <span class="text-danger">*</span></span></label>
+                                                        <input id="municipality" type="text" required="true"
+                                                               class="form-control s_website_form_input"
+                                                               t-att-value="applicant_record.municipality"
+                                                               name="municipality"/>
+                                                    </div>
+                                                    <!-- Colonia con autocomplete — IDs que usa form-navigation.js -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Colonia <span class="text-danger">*</span></span></label>
+                                                        <!-- hidden que se envía al servidor -->
+                                                        <input type="hidden" id="colony" name="colony"
+                                                               t-att-value="applicant_record.colony"/>
+                                                        <div class="kuale-colony-wrap">
+                                                            <input type="text" id="colonyInput"
+                                                                   class="form-control s_website_form_input"
+                                                                   placeholder="Escribe o selecciona tu colonia"
+                                                                   autocomplete="off"
+                                                                   t-att-value="applicant_record.colony"/>
+                                                            <div id="colonyMenu" class="kuale-colony-menu"></div>
+                                                            <div id="colony_not_found" class="kuale-colony-notfound">No se encontraron colonias para este CP.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Calle <span class="text-danger">*</span></span></label>
+                                                        <input id="current_address" required="true"
+                                                               t-att-value="applicant_record.current_address"
+                                                               class="form-control s_website_form_input" name="current_address"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">No. Exterior <span class="text-danger">*</span></span></label>
+                                                        <input id="exterior_number" type="text" required="true"
+                                                               class="form-control s_website_form_input"
+                                                               t-att-value="applicant_record.exterior_number"
+                                                               name="exterior_number"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">No. Interior</span></label>
+                                                        <input id="interior_number" type="text"
+                                                               class="form-control s_website_form_input"
+                                                               t-att-value="applicant_record.interior_number"
+                                                               name="interior_number"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" class="kuale-btn-new kuale-btn-new--outline mt-3 btn-spacing" onclick="prevSection()">Anterior</button>
+                                                <button type="button" class="mt-3 kuale-btn-new kuale-btn-new--solid btn-spacing" onclick="nextSection();">Siguiente</button>
+                                            </div>
+                                        </div>
+ 
+                                        <!-- ════ SECCIÓN 3: Domicilio Fiscal ════ -->
+                                        <div class="form-section mx-0 d-none" id="section3">
+                                            <div class="kuale-section-card mb-4">
+                                                <h3 class="font-weight-bold mb-4">
+                                                    Domicilio Fiscal
+                                                    <span style="color:#FA0000; font-size:18px; margin-left:4px;">&#42;</span>
+                                                </h3>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Código Postal <span class="text-danger">*</span></span></label>
+                                                        <input id="postal_code_fiscal" type="text"
+                                                               t-att-value="applicant_record.postal_code_fiscal"
+                                                               class="form-control s_website_form_input"
+                                                               name="postal_code_fiscal" required="true"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Estado <span class="text-danger">*</span></span></label>
+                                                        <input id="state_fiscal" type="text"
+                                                               t-att-value="applicant_record.state_fiscal"
+                                                               class="form-control s_website_form_input"
+                                                               name="state_fiscal" required="true"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Municipio <span class="text-danger">*</span></span></label>
+                                                        <input id="municipality_fiscal" type="text"
+                                                               t-att-value="applicant_record.municipality_fiscal"
+                                                               class="form-control s_website_form_input"
+                                                               name="municipality_fiscal" required="true"/>
+                                                    </div>
+                                                    <!-- Colonia fiscal con autocomplete -->
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Colonia <span class="text-danger">*</span></span></label>
+                                                        <input type="hidden" id="colony_fiscal" name="colony_fiscal"
+                                                               t-att-value="applicant_record.colony_fiscal"/>
+                                                        <div class="kuale-colony-wrap">
+                                                            <input type="text" id="colonyFiscalInput"
+                                                                   class="form-control s_website_form_input"
+                                                                   placeholder="Escribe o selecciona la colonia"
+                                                                   autocomplete="off"
+                                                                   t-att-value="applicant_record.colony_fiscal" required="true"/>
+                                                            <div id="colonyFiscalMenu" class="kuale-colony-menu"></div>
+                                                            <div id="colony_fiscal_not_found" class="kuale-colony-notfound">No se encontraron colonias para este CP.</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Calle <span class="text-danger">*</span></span></label>
+                                                        <input id="fiscal_address" type="text"
+                                                               t-att-value="applicant_record.fiscal_address"
+                                                               class="form-control s_website_form_input"
+                                                               name="fiscal_address" required="true"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">No. Exterior <span class="text-danger">*</span></span></label>
+                                                        <input id="exterior_number_fiscal" type="text"
+                                                               t-att-value="applicant_record.exterior_number_fiscal"
+                                                               class="form-control s_website_form_input"
+                                                               name="exterior_number_fiscal" required="true"/>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">No. Interior</span></label>
+                                                        <input id="interior_number_fiscal" type="text"
+                                                               t-att-value="applicant_record.interior_number_fiscal"
+                                                               class="form-control s_website_form_input"
+                                                               name="interior_number_fiscal"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" class="kuale-btn-new kuale-btn-new--outline mt-3 btn-spacing" onclick="prevSection()">Anterior</button>
+                                                <button type="button" class="mt-3 kuale-btn-new kuale-btn-new--solid btn-spacing" onclick="nextSection();">Siguiente</button>
+                                            </div>
+                                        </div>
+ 
+                                        <!-- ════ SECCIÓN 4: Datos Bancarios ════ -->
+                                        <div class="form-section mx-0 d-none" id="section4">
+                                            <div class="kuale-section-card mb-4">
+                                        
+                                                <!-- ── Cuentas Bancarias ── -->
+                                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+                                                    <h3 class="font-weight-bold mb-0">
+                                                        Cuentas Bancarias
+                                                        <span style="color:#FA0000; font-size:18px; margin-left:4px;">&#42;</span>
+                                                    </h3>
+                                                    <div style="display:flex; gap:12px; align-items:center;">
+                                                        <button type="button" id="btn_add_bank"
+                                                            style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:8px 20px; font-weight:700; cursor:pointer; font-size:14px;">
+                                                            + Agregar cuenta
+                                                        </button>
+                                                        <button type="button" id="btn_delete_bank" style="display:none;
+                                                            background:none; border:2px solid #FA0000; color:#FA0000; border-radius:999px;
+                                                            padding:8px 20px; font-weight:700; cursor:pointer; font-size:14px;">
+                                                            Borrar seleccionados
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div style="overflow-x:auto; border-radius:8px; margin-bottom:24px;">
+                                                    <table class="table table-sm" style="width:100%; border-collapse:collapse;">
+                                                        <thead>
+                                                            <tr style="background:#FA0000; color:#fff;">
+                                                                <th style="padding:10px 12px; text-align:center; width:40px;"></th>
+                                                                <th style="padding:10px 12px; text-align:center;">Número de Cuenta</th>
+                                                                <th style="padding:10px 12px; text-align:center;">CLABE Interbancaria</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="bank_tbody"></tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="bank_hidden_inputs" style="display:none;"></div>
+                                                <!-- Campo requerido para validar que hay al menos una cuenta -->
+                                                <input type="hidden" id="bank_filled" name="bank_filled" required="true"/>
+                                        
+                                                <hr style="margin:24px 0;"/>
+                                        
+                                                <!-- ── Beneficiarios ── -->
+                                                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+                                                    <h3 class="font-weight-bold mb-0">
+                                                        Beneficiarios
+                                                        <span style="color:#FA0000; font-size:18px; margin-left:4px;">&#42;</span>
+                                                    </h3>
+                                                    <div style="display:flex; gap:12px; align-items:center;">
+                                                        <button type="button" id="btn_add_beneficiary"
+                                                            style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:8px 20px; font-weight:700; cursor:pointer; font-size:14px;">
+                                                            + Agregar beneficiario
+                                                        </button>
+                                                        <button type="button" id="btn_delete_beneficiary" style="display:none;
+                                                            background:none; border:2px solid #FA0000; color:#FA0000; border-radius:999px;
+                                                            padding:8px 20px; font-weight:700; cursor:pointer; font-size:14px;">
+                                                            Borrar seleccionados
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div style="overflow-x:auto; border-radius:8px; margin-bottom:12px;">
+                                                    <table class="table table-sm" style="width:100%; border-collapse:collapse;">
+                                                        <thead>
+                                                            <tr style="background:#FA0000; color:#fff;">
+                                                                <th style="padding:10px 12px; text-align:center; width:40px;"></th>
+                                                                <th style="padding:10px 12px; text-align:center;">Nombre</th>
+                                                                <th style="padding:10px 12px; text-align:center;">Parentesco</th>
+                                                                <th style="padding:10px 12px; text-align:center;">Porcentaje</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="beneficiary_tbody"></tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="beneficiary_hidden_inputs" style="display:none;"></div>
+                                                <!-- Campo requerido para validar que hay al menos un beneficiario -->
+                                                <input type="hidden" id="beneficiary_filled" name="beneficiary_filled" required="true"/>
+                                        
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="button" class="kuale-btn-new kuale-btn-new--outline mt-3 btn-spacing" onclick="prevSection()">Anterior</button>
+                                                <button type="button" class="mt-3 kuale-btn-new kuale-btn-new--solid btn-spacing" onclick="nextSection();">Siguiente</button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- ══ Modal: Cuenta Bancaria ══ -->
+                                        <div id="bankModal" style="display:none; position:fixed; inset:0; z-index:99999;
+                                            background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center;">
+                                            <div style="background:#fff; border-radius:12px; overflow:hidden; max-width:520px;
+                                                        width:95%; box-shadow:0 24px 64px rgba(0,0,0,.25);">
+                                                <div style="background:#FA0000; padding:20px 32px;">
+                                                    <h4 id="bank_modal_title" style="font-weight:800; margin:0; color:#fff;">Agregar cuenta bancaria</h4>
+                                                </div>
+                                                <div style="padding:24px 32px;">
+                                                    <div class="row g-3">
+                                                        <!-- Tipo de cuenta — siempre Nómina, no editable -->
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Tipo de cuenta</span>
+                                                            </label>
+                                                            <input type="text"
+                                                                value="Nómina"
+                                                                class="form-control s_website_form_input"
+                                                                readonly="readonly"
+                                                                style="background:#f5f5f5; color:#888; cursor:not-allowed;"/>
+                                                        </div>
+                                                        <!-- Banco -->
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Banco <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_bank_name" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="Ej. Santander, BBVA, Banorte..."/>
+                                                        </div>
+                                                        <!-- Número de Cuenta -->
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Número de Cuenta <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_account_number" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="10 dígitos"/>
+                                                        </div>
+                                                        <!-- CLABE -->
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">CLABE Interbancaria <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_interbank_clabe" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="18 dígitos"/>
+                                                        </div>
+                                                        <!-- Tarjeta de nómina -->
+                                                        <div class="col-12">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Número de tarjeta de nómina</span>
+                                                            </label>
+                                                            <input id="modal_payroll_card" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="16 dígitos (opcional)"/>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:24px;">
+                                                        <button type="button" id="cancel_bank"
+                                                            style="background:none; border:2px solid #ccc; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer; color:#333;">
+                                                            Cancelar
+                                                        </button>
+                                                        <input type="hidden" id="bank_editing_index" value="-1"/>
+                                                        <button type="button" id="save_bank"
+                                                            style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer;">
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- ══ Modal: Beneficiario ══ -->
+                                        <div id="beneficiaryModal" style="display:none; position:fixed; inset:0; z-index:99999;
+                                            background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center;">
+                                            <div style="background:#fff; border-radius:12px; overflow:hidden; max-width:520px;
+                                                        width:95%; box-shadow:0 24px 64px rgba(0,0,0,.25);">
+                                                <div style="background:#FA0000; padding:20px 32px;">
+                                                    <h4 id="beneficiary_modal_title" style="font-weight:800; margin:0; color:#fff;">Agregar beneficiario</h4>
+                                                </div>
+                                                <div style="padding:24px 32px;">
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Nombre completo <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_beneficiary_name" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="Nombre del beneficiario"/>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Parentesco <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <select id="modal_beneficiary_relationship" class="form-control s_website_form_input">
+                                                                <option value="">Selecciona...</option>
+                                                                <option value="mother">Madre</option>
+                                                                <option value="father">Padre</option>
+                                                                <option value="sibling">Hermano(a)</option>
+                                                                <option value="child">Hijo(a)</option>
+                                                                <option value="spouse">Cónyuge</option>
+                                                                <option value="other">Otro</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Porcentaje <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_beneficiary_percentage" type="number"
+                                                                min="1" max="100"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="Ej. 100"/>
+                                                        </div>
+                                                        <div class="col-12" id="modal_other_rel_section" style="display:none;">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">Especificar parentesco <span class="text-danger">*</span></span>
+                                                            </label>
+                                                            <input id="modal_other_relationship" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="Especifica el parentesco"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div id="beneficiary_percentage_warning" style="display:none; color:#FA0000; font-size:13px; margin-top:4px;">
+                                                                La suma de porcentajes no puede exceder 100%.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:24px;">
+                                                        <button type="button" id="cancel_beneficiary"
+                                                            style="background:none; border:2px solid #ccc; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer; color:#333;">
+                                                            Cancelar
+                                                        </button>
+                                                        <input type="hidden" id="beneficiary_editing_index" value="-1"/>
+                                                        <button type="button" id="save_beneficiary"
+                                                            style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer;">
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+ 
+                                        <!-- ════ SECCIÓN 5: Datos Médicos ════ -->
+                                        <div class="form-section mx-0 d-none" id="section5">
+
+                                            <!-- Card Datos Médicos -->
+                                            <div class="kuale-section-card mb-4">
+                                                <h3 class="font-weight-bold mb-4">Datos Médicos <span style="color:#FA0000;">&#42;</span></h3>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">Tipo de sangre <span class="text-danger">*</span></span></label>
+                                                        <select class="form-control s_website_form_input" name="blood_type" required="true">
+                                                            <t t-foreach="blood_type_options" t-as="option">
+                                                                <option t-att-value="option[0]"><t t-esc="option[1]"/></option>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">¿Eres alérgico a algún medicamento/alimento?</span></label>
+                                                        <select class="form-control s_website_form_input" name="has_allergy" id="has_allergy_select">
+                                                            <option value="yes">Sí</option>
+                                                            <option value="no" selected="selected">No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4" id="allergy_detail_section" style="display:none;">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">¿Cuál alergia padece?</span></label>
+                                                        <input id="allergy" type="text" class="form-control s_website_form_input" name="allergy"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">¿Recibe algún tratamiento médico?</span></label>
+                                                        <select class="form-control s_website_form_input" name="has_medical_tx" id="has_medical_tx_select">
+                                                            <option value="yes">Sí</option>
+                                                            <option value="no" selected="selected">No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4" id="medical_tx_detail_section" style="display:none;">
+                                                        <label class="s_website_form_label fw-bold mb-1"><span class="s_website_form_label_content">¿Qué tratamiento recibe?</span></label>
+                                                        <input id="medical_tx" type="text" class="form-control s_website_form_input" name="medical_tx"/>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">¿Padeces de alguna enfermedad crónica?</span>
+                                                        </label>
+                                                        <select class="form-control s_website_form_input"
+                                                                name="has_chronic_disease"
+                                                                id="has_chronic_disease_select">
+                                                            <option value="yes">Sí</option>
+                                                            <option value="no" selected="selected">No</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4" id="chronic_disease_detail_section" style="display:none;">
+                                                        <label class="s_website_form_label fw-bold mb-1">
+                                                            <span class="s_website_form_label_content">¿Cuál enfermedad crónica?</span>
+                                                        </label>
+                                                        <input id="chronic_disease" type="text"
+                                                            class="form-control s_website_form_input"
+                                                            name="chronic_disease"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Card Contacto de Emergencia -->
+                                            <div class="kuale-section-card mb-4">
+                                                <div style="display:flex; align-items:center; justify-content:space-between;
+                                                            flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+                                                    <h3 class="font-weight-bold mb-0">
+                                                        Contacto de emergencia
+                                                        <span style="color:#FA0000; font-size:18px; margin-left:4px;">&#42;</span>
+                                                    </h3>
+                                                    <button type="button" id="btn_add_emergency"
+                                                        style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                            padding:8px 20px; font-weight:700; cursor:pointer; font-size:14px;">
+                                                        + Agregar contacto
+                                                    </button>
+                                                </div>
+                                                <div style="overflow-x:auto; border-radius:8px; margin-bottom:20px;">
+                                                    <table class="table table-sm" style="width:100%; border-collapse:collapse;">
+                                                        <thead>
+                                                            <tr style="background:#FA0000; color:#fff;">
+                                                                <th style="padding:10px 12px; text-align:center; width:40px;"></th>
+                                                                <th style="padding:10px 12px; text-align:center;">Nombre</th>
+                                                                <th style="padding:10px 12px; text-align:center;">Parentesco</th>
+                                                                <th style="padding:10px 12px; text-align:center;">Teléfono</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="emergency_tbody"></tbody>
+                                                    </table>
+                                                </div>
+                                                <div id="emergency_hidden_inputs" style="display:none;"></div>
+                                                <input type="hidden" id="emergency_filled" name="emergency_filled" required="true"/>
+
+                                                <!-- Términos y condiciones dentro de esta card -->
+                                                <div class="d-flex align-items-center gap-2 mt-2" style="cursor:pointer;" id="terms_label">
+                                                    <input type="checkbox"
+                                                        id="terms_conditions" name="terms_conditions"
+                                                        required="true"
+                                                        style="position:absolute; opacity:0; width:0; height:0; pointer-events:none;"/>
+                                                    <div id="terms_custom_check"
+                                                        style="width:20px; height:20px; min-width:20px; border:2px solid #ccc;
+                                                                border-radius:4px; display:flex; align-items:center; justify-content:center;
+                                                                cursor:pointer; transition:all .2s; background:#fff;">
+                                                    </div>
+                                                    <span class="mb-0" style="cursor:pointer;">
+                                                        He leído y acepto los
+                                                        <a href="#" id="open_terms_modal" style="color:#FA0000; font-weight:700;"
+                                                        onclick="event.stopPropagation();">términos y condiciones</a>
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button type="button" class="kuale-btn-new kuale-btn-new--outline mt-3 btn-spacing" onclick="prevSection()">Anterior</button>
+                                                <button type="button"
+                                                        class="mt-3 kuale-btn-new kuale-btn-new--solid btn-spacing"
+                                                        id="complement_submit_btn">
+                                                    Enviar
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- ══ Modal campos requeridos ══ -->
+                                        <div class="modal fade" id="alertModal" tabindex="-1"
+                                             aria-labelledby="alertModalLabel" aria-hidden="true"
+                                             style="backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);">
+                                            <div class="modal-dialog" style="max-width:480px; width:90%;">
+                                                <div class="modal-content" style="border-radius:12px; border:none; box-shadow:0 24px 64px rgba(0,0,0,.3); font-family:'Aloevera',system-ui,sans-serif; overflow:hidden;">
+                                                    <div class="modal-header" style="background:#FA0000; border:none; padding:24px 32px 16px;">
+                                                        <div style="display:flex; align-items:center; gap:12px;">
+                                                            <span style="font-size:28px;">&#x26A0;&#xFE0F;</span>
+                                                            <h5 class="modal-title" id="alertModalLabel"
+                                                                style="color:#fff; font-size:20px; font-weight:800; margin:0;">
+                                                                Campos requeridos
+                                                            </h5>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-body" style="padding:24px 32px; text-align:left;">
+                                                        Por favor, completa todos los campos requeridos antes de continuar.
+                                                    </div>
+                                                    <div class="modal-footer" style="border:none; padding:0 32px 28px; justify-content:flex-end;">
+                                                        <button type="button" id="acceptAlertModal"
+                                                                style="background:#FA0000; color:#fff; border:none; border-radius:999px; padding:12px 36px; font-size:15px; font-weight:800; cursor:pointer; font-family:'Aloevera',system-ui,sans-serif;">
+                                                            Aceptar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ══ Modal: Términos y Condiciones ══ -->
+                                        <div id="termsModal" style="display:none; position:fixed; inset:0; z-index:99999;
+                                            background:rgba(0,0,0,.6); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center;">
+                                            <div style="background:#fff; border-radius:12px; overflow:hidden; max-width:640px;
+                                                        width:95%; box-shadow:0 24px 64px rgba(0,0,0,.3); max-height:90vh; display:flex; flex-direction:column;">
+                                                <div style="background:#FA0000; padding:20px 32px; flex-shrink:0;">
+                                                    <h4 style="font-weight:800; margin:0; color:#fff;">Términos y Condiciones</h4>
+                                                </div>
+                                                <div style="padding:24px 32px; overflow-y:auto; flex:1; font-size:14px; line-height:1.7; color:#333;">
+                                                    <p><strong>Última actualización:</strong> 2025</p>
+                                                    <p>Al completar este formulario, usted acepta los siguientes términos y condiciones establecidos por <strong>Grupo Kuale</strong> para el proceso de reclutamiento y selección de personal.</p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">1. Recopilación de Datos Personales</h6>
+                                                    <p>Los datos personales proporcionados en este formulario serán utilizados exclusivamente para fines de evaluación y selección de candidatos. Grupo Kuale se compromete a tratar su información de manera confidencial conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPDPPP).</p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">2. Uso de la Información</h6>
+                                                    <p>La información proporcionada será utilizada para:</p>
+                                                    <ul>
+                                                        <li>Evaluar su perfil para la vacante aplicada.</li>
+                                                        <li>Contactarle en caso de avanzar en el proceso de selección.</li>
+                                                        <li>Integrar su expediente laboral en caso de ser contratado.</li>
+                                                    </ul>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">3. Confidencialidad</h6>
+                                                    <p>Grupo Kuale no compartirá su información personal con terceros sin su consentimiento previo, salvo que sea requerido por autoridades competentes conforme a la legislación vigente.</p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">4. Veracidad de la Información</h6>
+                                                    <p>El candidato declara bajo protesta de decir verdad que toda la información proporcionada es verídica y completa. Cualquier falsedad en los datos podrá ser motivo de descalificación inmediata del proceso o, en su caso, rescisión de contrato sin responsabilidad para Grupo Kuale.</p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">5. Datos Bancarios</h6>
+                                                    <p>Los datos bancarios solicitados serán utilizados exclusivamente para el pago de nómina en caso de ser contratado. Esta información se almacena de manera segura y no será compartida con terceros bajo ninguna circunstancia.</p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">6. Derechos ARCO</h6>
+                                                    <p>Usted tiene derecho a Acceder, Rectificar, Cancelar u Oponerse al tratamiento de sus datos personales (Derechos ARCO) enviando una solicitud a: <strong>reclutamiento@grupokuale.com</strong></p>
+
+                                                    <h6 style="font-weight:700; margin-top:16px;">7. Aceptación</h6>
+                                                    <p>Al marcar la casilla de aceptación, usted confirma haber leído, entendido y aceptado los presentes términos y condiciones en su totalidad.</p>
+                                                </div>
+                                                <div style="padding:16px 32px; border-top:1px solid #eee; display:flex; gap:12px; justify-content:flex-end; flex-shrink:0;">
+                                                    <button type="button" id="decline_terms"
+                                                        style="background:none; border:2px solid #ccc; border-radius:999px;
+                                                            padding:10px 24px; font-weight:700; cursor:pointer; color:#333;">
+                                                        Cerrar
+                                                    </button>
+                                                    <button type="button" id="accept_terms"
+                                                        style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                            padding:10px 24px; font-weight:700; cursor:pointer;">
+                                                        Acepto los términos
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal confirmación envío -->
+                                        <div id="kualeConfirmModal" style="display:none; position:fixed; inset:0; z-index:99999;
+                                            background:rgba(0,0,0,.6); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center;">
+                                            <div style="background:#fff; border-radius:12px; padding:40px 36px;
+                                                        max-width:480px; width:90%; box-shadow:0 24px 64px rgba(0,0,0,.3);
+                                                        font-family:'Aloevera',system-ui,sans-serif; text-align:center;">
+                                                <div style="font-size:48px; margin-bottom:16px;">&#x26A0;&#xFE0F;</div>
+                                                <h3 style="font-size:20px; font-weight:800; color:#111; margin-bottom:12px;">
+                                                    &#xBF;Est&#xE1;s seguro?
+                                                </h3>
+                                                <p style="font-size:14px; color:#555; line-height:1.6; margin-bottom:24px;">
+                                                    Una vez que env&#xED;es tu solicitud <strong>no podr&#xE1;s realizar cambios</strong>.
+                                                    Aseg&#xFA;rate de que todos tus datos est&#xE9;n correctos antes de continuar.
+                                                </p>
+                                                <div style="display:flex; gap:12px; justify-content:center;">
+                                                    <button type="button" id="kualeConfirmCancel"
+                                                            style="flex:1; background:#f5f5f5; color:#333; border:none; border-radius:999px;
+                                                                padding:14px 24px; font-size:15px; font-weight:700; cursor:pointer;
+                                                                font-family:'Aloevera',system-ui,sans-serif;">
+                                                        Revisar
+                                                    </button>
+                                                    <button type="button" id="kualeConfirmOk"
+                                                            style="flex:1; background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:14px 24px; font-size:15px; font-weight:800; cursor:pointer;
+                                                                font-family:'Aloevera',system-ui,sans-serif;">
+                                                        S&#xED;, enviar
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ══ Modal: Contacto de Emergencia ══ -->
+                                        <div id="emergencyModal" style="display:none; position:fixed; inset:0; z-index:99999;
+                                            background:rgba(0,0,0,.5); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center;">
+                                            <div style="background:#fff; border-radius:12px; overflow:hidden; max-width:520px;
+                                                        width:95%; box-shadow:0 24px 64px rgba(0,0,0,.25);">
+                                                <div style="background:#FA0000; padding:20px 32px;">
+                                                    <h4 id="emergency_modal_title" 
+                                                        style="font-weight:800; margin:0; color:#fff;">
+                                                        Agregar contacto de emergencia
+                                                    </h4>
+                                                </div>
+                                                <div style="padding:24px 32px;">
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">
+                                                                    Nombre completo <span class="text-danger">*</span>
+                                                                </span>
+                                                            </label>
+                                                            <input id="modal_emergency_name" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="Nombre del contacto"/>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">
+                                                                    Parentesco <span class="text-danger">*</span>
+                                                                </span>
+                                                            </label>
+                                                            <select id="modal_emergency_relationship" 
+                                                                    class="form-control s_website_form_input">
+                                                                <option value="">Selecciona...</option>
+                                                                <option value="mother">Madre</option>
+                                                                <option value="father">Padre</option>
+                                                                <option value="sibling">Hermano(a)</option>
+                                                                <option value="child">Hijo(a)</option>
+                                                                <option value="spouse">Cónyuge</option>
+                                                                <option value="other">Otro</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label class="s_website_form_label fw-bold mb-1">
+                                                                <span class="s_website_form_label_content">
+                                                                    Teléfono <span class="text-danger">*</span>
+                                                                </span>
+                                                            </label>
+                                                            <input id="modal_emergency_phone" type="text"
+                                                                class="form-control s_website_form_input"
+                                                                placeholder="10 dígitos"/>
+                                                        </div>
+                                                    </div>
+                                                    <div style="display:flex; gap:12px; justify-content:flex-end; margin-top:24px;">
+                                                        <button type="button" id="cancel_emergency"
+                                                            style="background:none; border:2px solid #ccc; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer; color:#333;">
+                                                            Cancelar
+                                                        </button>
+                                                        <input type="hidden" id="emergency_editing_index" value="-1"/>
+                                                        <button type="button" id="save_emergency"
+                                                            style="background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                                                padding:10px 24px; font-weight:700; cursor:pointer;">
+                                                            Guardar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modal carga -->
+                                        <div id="kualeLoadingModal" style="display:none; position:fixed; inset:0; z-index:999999;
+                                            background:rgba(0,0,0,.7); backdrop-filter:blur(4px);
+                                            align-items:center; justify-content:center; flex-direction:column;">
+                                            <svg width="70" height="70" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+                                                <circle cx="25" cy="25" r="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="5"/>
+                                                <circle cx="25" cy="25" r="20" fill="none" stroke="#FA0000" stroke-width="5"
+                                                        stroke-dasharray="31.4 94.2" stroke-linecap="round">
+                                                    <animateTransform attributeName="transform" type="rotate"
+                                                        from="0 25 25" to="360 25 25" dur="0.8s" repeatCount="indefinite"/>
+                                                </circle>
+                                            </svg>
+                                            <p style="color:#fff; font-size:15px; font-weight:700; margin-top:20px;
+                                                    font-family:'Aloevera',system-ui,sans-serif;">
+                                                Enviando tu solicitud...
+                                            </p>
+                                            <p style="color:rgba(255,255,255,0.7); font-size:12px; margin-top:4px;
+                                                    font-family:'Aloevera',system-ui,sans-serif;">
+                                                Por favor espera, no cierres esta página.
+                                            </p>
+                                        </div>
+ 
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <script>
+                //<![CDATA[
+                    // ── Modal helpers ────────────────────────────────────────────────
+                    function kualeOpenModal(modalEl) {
+                        modalEl.style.display = 'flex';
+                        modalEl.style.alignItems = window.innerWidth <= 767 ? 'flex-end' : 'center';
+                        document.body.classList.add('kuale-modal-open');
+                    }
+                    function kualeCloseModal(modalEl) {
+                        modalEl.style.display = 'none';
+                        modalEl.style.alignItems = 'center';
+                        document.body.classList.remove('kuale-modal-open');
+                    }
+
+                    document.addEventListener('touchmove', function(e) {
+                        if (!document.body.classList.contains('kuale-modal-open')) return;
+                        var el = e.target;
+                        while (el && el !== document.body) {
+                            if (el.scrollHeight > el.clientHeight) return;
+                            el = el.parentElement;
+                        }
+                        e.preventDefault();
+                    }, { passive: false });
+
+                    document.addEventListener("DOMContentLoaded", function () {
+
+                        // ── Helper JSON local ────────────────────────────────────────
+                        function getSatData(key) {
+                            return new Promise(function(resolve, reject) {
+                                if (key !== 'umf' && window._satData && window._satData[key]) { resolve(window._satData[key]); return; }
+                                if (!window._satData) window._satData = {};
+                                fetch('/reclutamiento__kuale/static/src/data/' + key + '.json')
+                                    .then(function(r) { return r.json(); })
+                                    .then(function(data) { window._satData[key] = data; resolve(data); })
+                                    .catch(reject);
+                            });
+                        }
+
+                        // ── Autocomplete CP genérico ─────────────────────────────────
+                        function initCpAutocomplete(cfg) {
+                            var postalInput    = document.getElementById(cfg.postalId);
+                            var stateInput     = document.getElementById(cfg.stateId);
+                            var munInput       = document.getElementById(cfg.munId);
+                            var colonyHidden   = document.getElementById(cfg.colonyHiddenId);
+                            var colonyInput    = document.getElementById(cfg.colonyInputId);
+                            var colonyMenu     = document.getElementById(cfg.colonyMenuId);
+                            var colonyNotFound = document.getElementById(cfg.colonyNotFoundId);
+                            if (!postalInput) return;
+                            var allColonias = [];
+
+                            function buildMenu(filter) {
+                                if (!colonyMenu) return;
+                                colonyMenu.innerHTML = '';
+                                var filtered = filter
+                                    ? allColonias.filter(function(c) { return c.toLowerCase().indexOf(filter.toLowerCase()) !== -1; })
+                                    : allColonias;
+                                if (colonyNotFound) colonyNotFound.style.display = (filter && filtered.length === 0) ? 'block' : 'none';
+                                if (filtered.length === 0) { colonyMenu.style.display = 'none'; return; }
+                                filtered.forEach(function(nombre) {
+                                    (function(text) {
+                                        var opt = document.createElement('div');
+                                        opt.textContent = text;
+                                        opt.style.cssText = 'padding:10px 14px; cursor:pointer; font-size:14px;';
+                                        opt.addEventListener('mouseenter', function() { opt.style.background = '#f5f5f5'; });
+                                        opt.addEventListener('mouseleave', function() { opt.style.background = ''; });
+                                        opt.addEventListener('mousedown', function(e) {
+                                            e.preventDefault();
+                                            if (colonyInput)  colonyInput.value  = text;
+                                            if (colonyHidden) colonyHidden.value = text;
+                                            colonyMenu.style.display = 'none';
+                                            if (colonyNotFound) colonyNotFound.style.display = 'none';
+                                        });
+                                        colonyMenu.appendChild(opt);
+                                    })(nombre);
+                                });
+                                colonyMenu.style.display = 'block';
+                            }
+
+                            if (colonyInput) {
+                                colonyInput.addEventListener('input', function() {
+                                    if (colonyHidden) colonyHidden.value = colonyInput.value;
+                                    if (allColonias.length) buildMenu(colonyInput.value);
+                                });
+                                colonyInput.addEventListener('focus', function() {
+                                    if (allColonias.length) buildMenu(colonyInput.value);
+                                });
+                                colonyInput.addEventListener('blur', function() {
+                                    setTimeout(function() { if (colonyMenu) colonyMenu.style.display = 'none'; }, 150);
+                                    if (colonyInput.value && colonyHidden) colonyHidden.value = colonyInput.value;
+                                });
+                            }
+
+                            function buscarCP(cp) {
+                                if (cp.length !== 5) {
+                                    if (stateInput)     stateInput.value = '';
+                                    if (munInput)       munInput.value   = '';
+                                    if (colonyHidden)   colonyHidden.value = '';
+                                    if (colonyInput)    colonyInput.value  = '';
+                                    if (colonyMenu)     colonyMenu.style.display = 'none';
+                                    if (colonyNotFound) colonyNotFound.style.display = 'none';
+                                    allColonias = []; return;
+                                }
+                                getSatData('cp_estado_municipio').then(function(cpData) {
+                                    var entry = cpData[cp];
+                                    if (!entry) return;
+                                    var stateCode = entry.e;
+                                    var munCode   = entry.m;
+                                    Promise.all([getSatData('estados'), getSatData('municipios')]).then(function(res) {
+                                        if (stateInput && !stateInput.value) {
+                                            var est = res[0].find(function(e) { return e.c === stateCode; });
+                                            if (est) stateInput.value = est.n;
+                                        }
+                                        if (munInput && !munInput.value) {
+                                            var muns = res[1][stateCode] || [];
+                                            var mun  = muns.find(function(m) { return m.c === munCode; });
+                                            if (mun) munInput.value = mun.n;
+                                        }
+                                    });
+                                    getSatData('colonias').then(function(coloniasData) {
+                                        allColonias = coloniasData[cp] || [];
+                                        var currentVal = colonyInput ? colonyInput.value : '';
+                                        if (!currentVal) {
+                                            if (colonyHidden)   colonyHidden.value = '';
+                                            if (colonyInput)    colonyInput.value  = '';
+                                        } else {
+                                            if (colonyHidden) colonyHidden.value = currentVal;
+                                        }
+                                        if (colonyMenu)     colonyMenu.innerHTML = '';
+                                        if (colonyNotFound) colonyNotFound.style.display = 'none';
+                                    });
+                                }).catch(function(err) { console.error('Error CP:', err); });
+                            }
+
+                            postalInput.addEventListener('input', function() {
+                                var cp = postalInput.value.replace(/\D/g, '').slice(0, 5);
+                                postalInput.value = cp;
+                                buscarCP(cp);
+                            });
+
+                            document.addEventListener('click', function(e) {
+                                if (colonyMenu && colonyInput &&
+                                    !colonyInput.contains(e.target) && !colonyMenu.contains(e.target)) {
+                                    colonyMenu.style.display = 'none';
+                                }
+                            });
+
+                            setTimeout(function() {
+                                var cp = postalInput.value.replace(/\D/g, '').slice(0, 5);
+                                if (cp.length === 5) buscarCP(cp);
+                            }, 600);
+                        }
+
+                        // ── UMF automática por Colonia ──────────────
+                        function updateUMF(colonia) {
+                            var sel  = document.getElementById('medical_unity_select');
+                            var hint = document.getElementById('umf_hint');
+                            if (!sel) return;
+                            sel.innerHTML = '';
+                            if (!colonia || colonia.trim() === '') {
+                                sel.innerHTML = '<option value="">-- Ingresa tu colonia para ver tu UMF --</option>';
+                                if (hint) hint.style.display = 'none';
+                                return;
+                            }
+                            var coloniaNorm = colonia
+                                .toUpperCase()
+                                .normalize('NFD')
+                                .replace(/[\u0300-\u036f]/g, '')
+                                .replace(/\s+/g, ' ')
+                                .trim();
+
+                            getSatData('umf').then(function(umfData) {
+                                var umfs = umfData[coloniaNorm] || [];
+                                if (umfs.length === 0) {
+                                    sel.innerHTML = '<option value="">-- Sin UMF registrada para tu colonia --</option>';
+                                    if (hint) hint.style.display = 'none';
+                                } else {
+                                    sel.innerHTML = '';
+                                    umfs.forEach(function(u) {
+                                        var opt = document.createElement('option');
+                                        opt.value       = u.nombre_umf;
+                                        opt.textContent = u.nombre_umf + (u.domicilio ? ' \u2013 ' + u.domicilio : '');
+                                        opt.dataset.cp  = u.cp || '';
+                                        sel.appendChild(opt);
+                                    });
+                                    if (umfs.length === 1) sel.value = umfs[0].nombre_umf;
+                                    if (hint) hint.style.display = 'block';
+                                }
+                            }).catch(function(e) {
+                                console.error('Error cargando UMF:', e);
+                            });
+                        }
+
+                        // Calcular con la colonia que ya tiene el candidato del primer formulario
+                        setTimeout(function() {
+                            var colonyHidden = document.getElementById('colony');
+                            var colonyInput  = document.getElementById('colonyInput');
+                            var coloniaVal   = (colonyHidden && colonyHidden.value)
+                                            || (colonyInput  && colonyInput.value)
+                                            || '';
+                            if (coloniaVal) updateUMF(coloniaVal);
+                        }, 1200);
+
+                        // Actualizar UMF cuando el usuario seleccione una colonia del dropdown
+                        document.addEventListener('mousedown', function(e) {
+                            if (e.target && e.target.closest && e.target.closest('#colonyMenu')) {
+                                setTimeout(function() {
+                                    var val = document.getElementById('colony') &&
+                                            document.getElementById('colony').value;
+                                    if (val) updateUMF(val);
+                                }, 200);
+                            }
+                        });
+                        var colonyInputEl = document.getElementById('colonyInput');
+                        if (colonyInputEl) {
+                            colonyInputEl.addEventListener('blur', function() {
+                                if (this.value) updateUMF(this.value);
+                            });
+                        }
+
+                        initCpAutocomplete({
+                            postalId: 'postal_code', stateId: 'state', munId: 'municipality',
+                            colonyHiddenId: 'colony', colonyInputId: 'colonyInput',
+                            colonyMenuId: 'colonyMenu', colonyNotFoundId: 'colony_not_found'
+                        });
+                        initCpAutocomplete({
+                            postalId: 'postal_code_fiscal', stateId: 'state_fiscal', munId: 'municipality_fiscal',
+                            colonyHiddenId: 'colony_fiscal', colonyInputId: 'colonyFiscalInput',
+                            colonyMenuId: 'colonyFiscalMenu', colonyNotFoundId: 'colony_fiscal_not_found'
+                        });
+
+                        // ── NSS validación ───────────────────────────────────────────────
+                        function validateNss(nss) {
+                            if (nss.length !== 11 || isNaN(nss)) return false;
+                            var sum = 0, double = false;
+                            for (var i = nss.length - 1; i >= 0; i--) {
+                                var digit = parseInt(nss[i], 10);
+                                if (double) { digit *= 2; if (digit > 9) digit -= 9; }
+                                sum += digit;
+                                double = !double;
+                            }
+                            return sum % 10 === 0;
+                        }
+
+                        var nssInput    = document.getElementById('social_security_number');
+                        var nssErrorDiv = document.createElement('div');
+                        nssErrorDiv.style.cssText = 'color:#6c757d; font-size:13px; display:none; margin-top:4px;';
+                        if (nssInput) {
+                            nssInput.parentNode.appendChild(nssErrorDiv);
+                            nssInput.addEventListener('input', function () {
+                                this.value = this.value.replace(/\D/g, '').slice(0, 11);
+                                if (this.value.length === 0) { nssErrorDiv.style.display = 'none'; return; }
+                                if (!validateNss(this.value)) {
+                                    nssErrorDiv.textContent = 'NSS inválido. Debe ser un número de 11 dígitos.';
+                                    nssErrorDiv.style.display = 'block';
+                                } else {
+                                    nssErrorDiv.style.display = 'none';
+                                }
+                            });
+                        }
+
+                        // ── Otra nacionalidad ────────────────────────────────────────
+                        var natSel      = document.getElementById('nationality_select');
+                        var otherNatSec = document.getElementById('other_nationality_section');
+                        if (natSel) {
+                            natSel.addEventListener('change', function () {
+                                var show = this.value === 'other';
+                                otherNatSec.style.display = show ? 'block' : 'none';
+                                var on = document.getElementById('other_nationality');
+                                if (on) show ? on.setAttribute('required','true') : on.removeAttribute('required');
+                            });
+                        }
+
+                        // ── Alergia ──────────────────────────────────────────────────
+                        var allergySel    = document.getElementById('has_allergy_select');
+                        var allergyDetail = document.getElementById('allergy_detail_section');
+                        if (allergySel) {
+                            allergySel.addEventListener('change', function () {
+                                allergyDetail.style.display = this.value === 'yes' ? 'block' : 'none';
+                            });
+                        }
+
+                        // ── Tratamiento médico ───────────────────────────────────────
+                        var medSel    = document.getElementById('has_medical_tx_select');
+                        var medDetail = document.getElementById('medical_tx_detail_section');
+                        if (medSel) {
+                            medSel.addEventListener('change', function () {
+                                medDetail.style.display = this.value === 'yes' ? 'block' : 'none';
+                            });
+                        }
+
+                        // ── Enfermedad crónica ───────────────────────────────────────
+                        var chronicSel    = document.getElementById('has_chronic_disease_select');
+                        var chronicDetail = document.getElementById('chronic_disease_detail_section');
+                        if (chronicSel) {
+                            chronicSel.addEventListener('change', function () {
+                                chronicDetail.style.display = this.value === 'yes' ? 'block' : 'none';
+                                var cd = document.getElementById('chronic_disease');
+                                if (cd) this.value === 'yes' 
+                                    ? cd.setAttribute('required','true') 
+                                    : cd.removeAttribute('required');
+                            });
+                        }
+
+                        // ── Badge de usuario ─────────────────────────────────────────
+                        var badge = document.getElementById('kualeUserBadge');
+                        if (badge) {
+                            badge.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                this.classList.toggle('is-open');
+                            });
+                            document.addEventListener('click', function() {
+                                badge.classList.remove('is-open');
+                            });
+                        }
+
+                        // ── Modal alertModal (campos requeridos) ─────────────────────
+                        var acceptBtn = document.getElementById('acceptAlertModal');
+                        if (acceptBtn) {
+                            acceptBtn.addEventListener('click', function() {
+                                var modal = document.getElementById('alertModal');
+                                if (typeof bootstrap !== 'undefined' && bootstrap.Modal.getInstance(modal)) {
+                                    bootstrap.Modal.getInstance(modal).hide();
+                                } else {
+                                    modal.classList.remove('show');
+                                    modal.style.display = 'none';
+                                    document.body.classList.remove('modal-open');
+                                    var backdrop = document.querySelector('.modal-backdrop');
+                                    if (backdrop) backdrop.remove();
+                                }
+                            });
+                        }
+
+                        // ════════════════════════════════════════
+                        // CUENTAS BANCARIAS
+                        // ════════════════════════════════════════
+                        var bankModal      = document.getElementById('bankModal');
+                        var btnAddBank     = document.getElementById('btn_add_bank');
+                        var btnDeleteBank  = document.getElementById('btn_delete_bank');
+                        var saveBankBtn    = document.getElementById('save_bank');
+                        var cancelBankBtn  = document.getElementById('cancel_bank');
+                        var bankTbody      = document.getElementById('bank_tbody');
+                        var bankHidden     = document.getElementById('bank_hidden_inputs');
+                        var bankFilled     = document.getElementById('bank_filled');
+                        var bankEditIdx    = document.getElementById('bank_editing_index');
+                        var modalAccNum    = document.getElementById('modal_account_number');
+                        var modalClabe     = document.getElementById('modal_interbank_clabe');
+                        var bankModalTitle = document.getElementById('bank_modal_title');
+                        var modalBankName   = document.getElementById('modal_bank_name');
+                        var modalPayroll    = document.getElementById('modal_payroll_card');
+                        var banks          = [];
+
+                        function openBankModal(idx) {
+                            modalAccNum.value   = '';
+                            modalClabe.value    = '';
+                            modalBankName.value = '';
+                            modalPayroll.value  = '';
+                            [modalAccNum, modalClabe, modalBankName].forEach(function(el) {
+                                el.style.borderColor = '';
+                            });
+                            bankEditIdx.value = idx !== undefined ? idx : -1;
+                            if (idx !== undefined) {
+                                bankModalTitle.textContent = 'Editar cuenta bancaria';
+                                modalAccNum.value   = banks[idx].account_number;
+                                modalClabe.value    = banks[idx].interbank_clabe;
+                                modalBankName.value = banks[idx].bank || '';
+                                modalPayroll.value  = banks[idx].payroll_card_number || '';
+                            } else {
+                                bankModalTitle.textContent = 'Agregar cuenta bancaria';
+                            }
+                            kualeOpenModal(bankModal);
+                        }
+
+                        function closeBankModal() {
+                            kualeCloseModal(bankModal);
+                        }
+
+                        function renderBankTable() {
+                            bankTbody.innerHTML  = '';
+                            bankHidden.innerHTML = '';
+                            if (banks.length === 0) {
+                                var tr = document.createElement('tr');
+                                tr.innerHTML = '<td colspan="3" style="text-align:center; padding:16px; color:#aaa; font-style:italic;">Sin cuentas agregadas</td>';
+                                bankTbody.appendChild(tr);
+                                btnDeleteBank.style.display = 'none';
+                                bankFilled.value = '';
+                                bankFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                                return;
+                            }
+                            banks.forEach(function(b, i) {
+                                var idx = i + 1;
+                                var tr = document.createElement('tr');
+                                tr.style.cssText = 'border-bottom:1px solid #eee; cursor:pointer;';
+                                tr.setAttribute('data-index', i);
+                                tr.innerHTML =
+                                    '<td style="text-align:center; padding:8px 12px;">' +
+                                        '<input type="checkbox" class="bank-check" data-index="' + i + '" ' +
+                                        'style="width:15px;height:15px;cursor:pointer;accent-color:#FA0000"/>' +
+                                    '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (b.account_number || '-') + '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (b.interbank_clabe  || '-') + '</td>';
+                                tr.addEventListener('click', function(e) {
+                                    if (e.target.classList.contains('bank-check')) return;
+                                    openBankModal(i);
+                                });
+                                bankTbody.appendChild(tr);
+                                // Hidden inputs — incluye todos los campos
+                                bankHidden.innerHTML +=
+                                    '<input type="hidden" name="account_number' + idx + '" value="' + (b.account_number || '') + '"/>' +
+                                    '<input type="hidden" name="interbank_clabe' + idx + '" value="' + (b.interbank_clabe || '') + '"/>' +
+                                    '<input type="hidden" name="bank' + idx + '" value="' + (b.bank || '') + '"/>' +
+                                    '<input type="hidden" name="payroll_card_number' + idx + '" value="' + (b.payroll_card_number || '') + '"/>' +
+                                    '<input type="hidden" name="account_type' + idx + '" value="nomina"/>';
+                            });
+                            bankFilled.value = 'filled';
+                            bankFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                            updateBankDeleteBtn();
+                        }
+
+                        function updateBankDeleteBtn() {
+                            var checked = bankTbody.querySelectorAll('.bank-check:checked');
+                            btnDeleteBank.style.display = checked.length > 0 ? 'block' : 'none';
+                        }
+
+                        bankTbody.addEventListener('change', function(e) {
+                            if (e.target.classList.contains('bank-check')) updateBankDeleteBtn();
+                        });
+
+                        btnAddBank.addEventListener('click', function() {
+                            if (banks.length >= 2) { alert('Máximo 2 cuentas bancarias.'); return; }
+                            openBankModal();
+                        });
+
+                        cancelBankBtn.addEventListener('click', closeBankModal);
+                        bankModal.addEventListener('click', function(e) {
+                            if (e.target === bankModal) closeBankModal();
+                        });
+
+                        saveBankBtn.addEventListener('click', function() {
+                            var valid    = true;
+                            var accVal   = modalAccNum.value.replace(/\D/g, '');
+                            var clabeVal = modalClabe.value.replace(/\D/g, '');
+                            var bankVal  = modalBankName.value.trim();
+
+                            if (accVal.length !== 10) {
+                                modalAccNum.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalAccNum.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (clabeVal.length !== 18) {
+                                modalClabe.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalClabe.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!bankVal) {
+                                modalBankName.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalBankName.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!valid) return;
+
+                            var entry = {
+                                account_number:      accVal,
+                                interbank_clabe:     clabeVal,
+                                bank:                bankVal,
+                                payroll_card_number: modalPayroll.value.replace(/\D/g, '').slice(0, 16),
+                                account_type:        'nomina',
+                            };
+                            var idx = parseInt(bankEditIdx.value);
+                            if (idx >= 0) { banks[idx] = entry; } else { banks.push(entry); }
+                            renderBankTable();
+                            closeBankModal();
+                        });
+
+                        // Máscara tarjeta nómina (16 dígitos)
+                        if (modalPayroll) {
+                            modalPayroll.addEventListener('input', function() {
+                                this.value = this.value.replace(/\D/g, '').slice(0, 16);
+                            });
+                        }
+
+                        btnDeleteBank.addEventListener('click', function() {
+                            var checked  = bankTbody.querySelectorAll('.bank-check:checked');
+                            var toDelete = [];
+                            checked.forEach(function(cb) { toDelete.push(parseInt(cb.getAttribute('data-index'))); });
+                            toDelete.sort(function(a,b){return b-a;});
+                            toDelete.forEach(function(i) { banks.splice(i, 1); });
+                            renderBankTable();
+                        });
+
+                        renderBankTable();
+
+                        // ════════════════════════════════════════
+                        // BENEFICIARIOS
+                        // ════════════════════════════════════════
+                        var beneficiaryModal      = document.getElementById('beneficiaryModal');
+                        var btnAddBeneficiary     = document.getElementById('btn_add_beneficiary');
+                        var btnDeleteBeneficiary  = document.getElementById('btn_delete_beneficiary');
+                        var saveBeneficiaryBtn    = document.getElementById('save_beneficiary');
+                        var cancelBeneficiaryBtn  = document.getElementById('cancel_beneficiary');
+                        var beneficiaryTbody      = document.getElementById('beneficiary_tbody');
+                        var beneficiaryHidden     = document.getElementById('beneficiary_hidden_inputs');
+                        var beneficiaryFilled     = document.getElementById('beneficiary_filled');
+                        var beneficiaryEditIdx    = document.getElementById('beneficiary_editing_index');
+                        var modalBenName          = document.getElementById('modal_beneficiary_name');
+                        var modalBenRel           = document.getElementById('modal_beneficiary_relationship');
+                        var modalBenPct           = document.getElementById('modal_beneficiary_percentage');
+                        var modalOtherRelSec      = document.getElementById('modal_other_rel_section');
+                        var modalOtherRel         = document.getElementById('modal_other_relationship');
+                        var modalBenTitle         = document.getElementById('beneficiary_modal_title');
+                        var pctWarning            = document.getElementById('beneficiary_percentage_warning');
+                        var beneficiaries         = [];
+
+                        var RELATIONSHIP_LABELS = {
+                            mother: 'Madre', father: 'Padre', sibling: 'Hermano(a)',
+                            child: 'Hijo(a)', spouse: 'Cónyuge', other: 'Otro'
+                        };
+
+                        modalBenRel.addEventListener('change', function() {
+                            modalOtherRelSec.style.display = this.value === 'other' ? 'block' : 'none';
+                            if (this.value !== 'other') modalOtherRel.value = '';
+                        });
+
+                        function openBeneficiaryModal(idx) {
+                            modalBenName.value  = '';
+                            modalBenRel.value   = '';
+                            modalBenPct.value   = '';
+                            modalOtherRel.value = '';
+                            modalOtherRelSec.style.display = 'none';
+                            pctWarning.style.display = 'none';
+                            [modalBenName, modalBenRel, modalBenPct, modalOtherRel].forEach(function(el) { el.style.borderColor = ''; });
+                            beneficiaryEditIdx.value = idx !== undefined ? idx : -1;
+                            if (idx !== undefined) {
+                                modalBenTitle.textContent = 'Editar beneficiario';
+                                var b = beneficiaries[idx];
+                                modalBenName.value  = b.name;
+                                modalBenRel.value   = b.relationship;
+                                modalBenPct.value   = b.percentage;
+                                modalOtherRel.value = b.other_relationship || '';
+                                modalOtherRelSec.style.display = b.relationship === 'other' ? 'block' : 'none';
+                            } else {
+                                modalBenTitle.textContent = 'Agregar beneficiario';
+                                var usedPct = beneficiaries.reduce(function(s,b){ return s + parseFloat(b.percentage||0); }, 0);
+                                modalBenPct.value = Math.max(0, 100 - usedPct);
+                            }
+                            kualeOpenModal(beneficiaryModal);
+                        }
+
+                        function closeBeneficiaryModal() {
+                            kualeCloseModal(beneficiaryModal);
+                        }
+
+                        function renderBeneficiaryTable() {
+                            beneficiaryTbody.innerHTML  = '';
+                            beneficiaryHidden.innerHTML = '';
+                            if (beneficiaries.length === 0) {
+                                var tr = document.createElement('tr');
+                                tr.innerHTML = '<td colspan="4" style="text-align:center; padding:16px; color:#aaa; font-style:italic;">Sin beneficiarios agregados</td>';
+                                beneficiaryTbody.appendChild(tr);
+                                btnDeleteBeneficiary.style.display = 'none';
+                                beneficiaryFilled.value = '';
+                                beneficiaryFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                                return;
+                            }
+                            beneficiaries.forEach(function(b, i) {
+                                var idx = i + 1;
+                                var relLabel = b.relationship === 'other'
+                                    ? (b.other_relationship || 'Otro')
+                                    : (RELATIONSHIP_LABELS[b.relationship] || b.relationship);
+                                var tr = document.createElement('tr');
+                                tr.style.cssText = 'border-bottom:1px solid #eee; cursor:pointer;';
+                                tr.setAttribute('data-index', i);
+                                tr.innerHTML =
+                                    '<td style="text-align:center; padding:8px 12px;">' +
+                                        '<input type="checkbox" class="beneficiary-check" data-index="' + i + '" ' +
+                                        'style="width:15px;height:15px;cursor:pointer;accent-color:#FA0000"/>' +
+                                    '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (b.name || '-') + '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + relLabel + '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (b.percentage || '0') + '%</td>';
+                                tr.addEventListener('click', function(e) {
+                                    if (e.target.classList.contains('beneficiary-check')) return;
+                                    openBeneficiaryModal(i);
+                                });
+                                beneficiaryTbody.appendChild(tr);
+                                beneficiaryHidden.innerHTML +=
+                                    '<input type="hidden" name="beneficiary_name' + idx + '" value="' + (b.name || '') + '"/>' +
+                                    '<input type="hidden" name="beneficiary_relationship' + idx + '" value="' + (b.relationship || '') + '"/>' +
+                                    '<input type="hidden" name="other_relationship' + idx + '" value="' + (b.other_relationship || '') + '"/>' +
+                                    '<input type="hidden" name="beneficiary_percentage' + idx + '" value="' + (b.percentage || '') + '"/>';
+                            });
+                            beneficiaryFilled.value = 'filled';
+                            beneficiaryFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                            updateBeneficiaryDeleteBtn();
+                        }
+
+                        function updateBeneficiaryDeleteBtn() {
+                            var checked = beneficiaryTbody.querySelectorAll('.beneficiary-check:checked');
+                            btnDeleteBeneficiary.style.display = checked.length > 0 ? 'block' : 'none';
+                        }
+
+                        beneficiaryTbody.addEventListener('change', function(e) {
+                            if (e.target.classList.contains('beneficiary-check')) updateBeneficiaryDeleteBtn();
+                        });
+
+                        btnAddBeneficiary.addEventListener('click', function() {
+                            if (beneficiaries.length >= 4) { alert('Máximo 4 beneficiarios.'); return; }
+                            openBeneficiaryModal();
+                        });
+
+                        cancelBeneficiaryBtn.addEventListener('click', closeBeneficiaryModal);
+                        beneficiaryModal.addEventListener('click', function(e) {
+                            if (e.target === beneficiaryModal) closeBeneficiaryModal();
+                        });
+
+                        saveBeneficiaryBtn.addEventListener('click', function() {
+                            var valid = true;
+                            pctWarning.style.display = 'none';
+
+                            if (!modalBenName.value.trim()) {
+                                modalBenName.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalBenName.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!modalBenRel.value) {
+                                modalBenRel.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalBenRel.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!modalBenPct.value || parseFloat(modalBenPct.value) <= 0) {
+                                modalBenPct.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalBenPct.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (modalBenRel.value === 'other' && !modalOtherRel.value.trim()) {
+                                modalOtherRel.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalOtherRel.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!valid) return;
+
+                            var editIdx = parseInt(beneficiaryEditIdx.value);
+                            var usedPct = beneficiaries.reduce(function(s, b, i) {
+                                return editIdx === i ? s : s + parseFloat(b.percentage || 0);
+                            }, 0);
+                            var newPct = parseFloat(modalBenPct.value || 0);
+                            if (usedPct + newPct > 100) {
+                                pctWarning.style.display = 'block';
+                                pctWarning.textContent = 'La suma de porcentajes no puede exceder 100%. Disponible: ' + (100 - usedPct) + '%';
+                                return;
+                            }
+                            var entry = {
+                                name:               modalBenName.value.trim(),
+                                relationship:       modalBenRel.value,
+                                other_relationship: modalBenRel.value === 'other' ? modalOtherRel.value.trim() : '',
+                                percentage:         modalBenPct.value
+                            };
+                            if (editIdx >= 0) { beneficiaries[editIdx] = entry; } else { beneficiaries.push(entry); }
+                            renderBeneficiaryTable();
+                            closeBeneficiaryModal();
+                        });
+
+                        btnDeleteBeneficiary.addEventListener('click', function() {
+                            var checked  = beneficiaryTbody.querySelectorAll('.beneficiary-check:checked');
+                            var toDelete = [];
+                            checked.forEach(function(cb) { toDelete.push(parseInt(cb.getAttribute('data-index'))); });
+                            toDelete.sort(function(a,b){return b-a;});
+                            toDelete.forEach(function(i) { beneficiaries.splice(i, 1); });
+                            renderBeneficiaryTable();
+                        });
+
+                        renderBeneficiaryTable();
+
+                        if (modalAccNum) modalAccNum.addEventListener('input', function() {
+                            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+                        });
+                        if (modalClabe) modalClabe.addEventListener('input', function() {
+                            this.value = this.value.replace(/\D/g, '').slice(0, 18);
+                        });
+
+                        // ── Checkbox términos y condiciones ──────────────────────────
+                        var termsLabel  = document.getElementById('terms_label');
+                        var termsCb     = document.getElementById('terms_conditions');
+                        var termsCustom = document.getElementById('terms_custom_check');
+
+                        function updateTermsVisual() {
+                            if (termsCb.checked) {
+                                termsCustom.style.background    = '#FA0000';
+                                termsCustom.style.setProperty('border', '2px solid #FA0000', 'important');
+                                termsCustom.innerHTML = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><polyline points="1,6 4,9 11,2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+                            } else {
+                                termsCustom.style.background  = '#fff';
+                                termsCustom.style.setProperty('border', '2px solid #ccc', 'important');
+                                termsCustom.innerHTML = '';
+                            }
+                        }
+
+                        if (termsLabel) {
+                            termsLabel.addEventListener('click', function(e) {
+                                if (e.target.id === 'open_terms_modal') return;
+                                termsCb.checked = !termsCb.checked;
+                                updateTermsVisual();
+                            });
+                        }
+
+                        // ── Modal términos y condiciones ─────────────────────────────
+                        var termsModal    = document.getElementById('termsModal');
+                        var openTermsBtn  = document.getElementById('open_terms_modal');
+                        var acceptTerms   = document.getElementById('accept_terms');
+                        var declineTerms  = document.getElementById('decline_terms');
+
+                        if (openTermsBtn) {
+                            openTermsBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                kualeOpenModal(termsModal);
+                            });
+                        }
+                        if (acceptTerms) {
+                            acceptTerms.addEventListener('click', function() {
+                                termsCb.checked = true;
+                                updateTermsVisual();
+                                kualeCloseModal(termsModal);
+                            });
+                        }
+                        if (declineTerms) {
+                            declineTerms.addEventListener('click', function() {
+                                kualeCloseModal(termsModal);
+                            });
+                        }
+                        termsModal.addEventListener('click', function(e) {
+                            if (e.target === termsModal) kualeCloseModal(termsModal);
+                        });
+
+                        // ════════════════════════════════════════
+                        // CONTACTOS DE EMERGENCIA
+                        // ════════════════════════════════════════
+                        var emergencyModal     = document.getElementById('emergencyModal');
+                        var btnAddEmergency    = document.getElementById('btn_add_emergency');
+                        var saveEmergencyBtn   = document.getElementById('save_emergency');
+                        var cancelEmergencyBtn = document.getElementById('cancel_emergency');
+                        var emergencyTbody     = document.getElementById('emergency_tbody');
+                        var emergencyHidden    = document.getElementById('emergency_hidden_inputs');
+                        var emergencyFilled    = document.getElementById('emergency_filled');
+                        var emergencyEditIdx   = document.getElementById('emergency_editing_index');
+                        var modalEmgName       = document.getElementById('modal_emergency_name');
+                        var modalEmgRel        = document.getElementById('modal_emergency_relationship');
+                        var modalEmgPhone      = document.getElementById('modal_emergency_phone');
+                        var emergencyModalTitle= document.getElementById('emergency_modal_title');
+                        var emergencies        = [];
+
+                        var EMG_REL_LABELS = {
+                            mother: 'Madre', father: 'Padre', sibling: 'Hermano(a)',
+                            child: 'Hijo(a)', spouse: 'Cónyuge', other: 'Otro'
+                        };
+
+                        function openEmergencyModal(idx) {
+                            modalEmgName.value  = '';
+                            modalEmgRel.value   = '';
+                            modalEmgPhone.value = '';
+                            [modalEmgName, modalEmgRel, modalEmgPhone].forEach(function(el) {
+                                el.style.borderColor = '';
+                            });
+                            emergencyEditIdx.value = idx !== undefined ? idx : -1;
+                            if (idx !== undefined) {
+                                emergencyModalTitle.textContent = 'Editar contacto de emergencia';
+                                var e = emergencies[idx];
+                                modalEmgName.value  = e.name;
+                                modalEmgRel.value   = e.relationship;
+                                modalEmgPhone.value = e.phone_number;
+                            } else {
+                                emergencyModalTitle.textContent = 'Agregar contacto de emergencia';
+                            }
+                            kualeOpenModal(emergencyModal);
+                        }
+
+                        function closeEmergencyModal() {
+                            kualeCloseModal(emergencyModal);
+                        }
+
+                        function renderEmergencyTable() {
+                            emergencyTbody.innerHTML  = '';
+                            emergencyHidden.innerHTML = '';
+                            if (emergencies.length === 0) {
+                                var tr = document.createElement('tr');
+                                tr.innerHTML = '<td colspan="4" style="text-align:center; padding:16px; ' +
+                                            'color:#aaa; font-style:italic;">Sin contactos agregados</td>';
+                                emergencyTbody.appendChild(tr);
+                                emergencyFilled.value = '';
+                                emergencyFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                                return;
+                            }
+                            emergencies.forEach(function(e, i) {
+                                var idx = i + 1;
+                                var relLabel = EMG_REL_LABELS[e.relationship] || e.relationship;
+                                var tr = document.createElement('tr');
+                                tr.style.cssText = 'border-bottom:1px solid #eee; cursor:pointer;';
+                                tr.innerHTML =
+                                    '<td style="text-align:center; padding:8px 12px;">' +
+                                        '<input type="checkbox" class="emergency-check" data-index="' + i + '" ' +
+                                        'style="width:15px;height:15px;cursor:pointer;accent-color:#FA0000"/>' +
+                                    '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (e.name || '-') + '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + relLabel + '</td>' +
+                                    '<td style="text-align:center; padding:8px 12px;">' + (e.phone_number || '-') + '</td>';
+                                tr.addEventListener('click', function(ev) {
+                                    if (ev.target.classList.contains('emergency-check')) return;
+                                    openEmergencyModal(i);
+                                });
+                                emergencyTbody.appendChild(tr);
+                                emergencyHidden.innerHTML +=
+                                    '<input type="hidden" name="emergency_name' + idx + 
+                                    '" value="' + (e.name || '') + '"/>' +
+                                    '<input type="hidden" name="emergency_relationship' + idx + 
+                                    '" value="' + (e.relationship || '') + '"/>' +
+                                    '<input type="hidden" name="emergency_phone' + idx + 
+                                    '" value="' + (e.phone_number || '') + '"/>';
+                            });
+                            emergencyFilled.value = 'filled';
+                            emergencyFilled.dispatchEvent(new Event('change', {bubbles: true}));
+                        }
+
+                        btnAddEmergency.addEventListener('click', function() {
+                            openEmergencyModal();
+                        });
+
+                        cancelEmergencyBtn.addEventListener('click', closeEmergencyModal);
+                        emergencyModal.addEventListener('click', function(e) {
+                            if (e.target === emergencyModal) closeEmergencyModal();
+                        });
+
+                        saveEmergencyBtn.addEventListener('click', function() {
+                            var valid = true;
+                            if (!modalEmgName.value.trim()) {
+                                modalEmgName.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalEmgName.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!modalEmgRel.value) {
+                                modalEmgRel.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalEmgRel.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!modalEmgPhone.value.trim()) {
+                                modalEmgPhone.style.setProperty('border', '2px solid #FA0000', 'important');
+                                valid = false;
+                            } else {
+                                modalEmgPhone.style.setProperty('border', '1px solid #ced4da', 'important');
+                            }
+                            if (!valid) return;
+
+                            var entry = {
+                                name:         modalEmgName.value.trim(),
+                                relationship: modalEmgRel.value,
+                                phone_number: modalEmgPhone.value.trim()
+                            };
+                            var editIdx = parseInt(emergencyEditIdx.value);
+                            if (editIdx >= 0) { emergencies[editIdx] = entry; } 
+                            else { emergencies.push(entry); }
+                            renderEmergencyTable();
+                            closeEmergencyModal();
+                        });
+
+                        if (modalEmgPhone) {
+                            modalEmgPhone.addEventListener('input', function() {
+                                // Quitar todo lo que no sea dígito
+                                var digits = this.value.replace(/\D/g, '').slice(0, 10);
+                                // Aplicar máscara (XXX)-XXX-XXXX
+                                var formatted = '';
+                                if (digits.length === 0) {
+                                    formatted = '';
+                                } else if (digits.length <= 3) {
+                                    formatted = '(' + digits;
+                                } else if (digits.length <= 6) {
+                                    formatted = '(' + digits.slice(0,3) + ')-' + digits.slice(3);
+                                } else {
+                                    formatted = '(' + digits.slice(0,3) + ')-' + digits.slice(3,6) + '-' + digits.slice(6);
+                                }
+                                this.value = formatted;
+                            });
+                        }
+
+                        renderEmergencyTable();
+
+                    }); // fin DOMContentLoaded
+
+                    // ── Submit del complemento ───────────────────────────────────────
+                    var submitBtn = document.getElementById('complement_submit_btn');
+                    if (submitBtn) {
+                        submitBtn.addEventListener('click', function() {
+                            // Validar términos
+                            var cb = document.getElementById('terms_conditions');
+                            if (cb && !cb.checked) {
+                                var customCheck = document.getElementById('terms_custom_check');
+                                if (customCheck) customCheck.style.setProperty('border', '2px solid #FFA500', 'important');
+                                var alertModal = document.querySelector('#alertModal');
+                                var modalBody  = alertModal ? alertModal.querySelector('.modal-body') : null;
+                                if (modalBody) {
+                                    modalBody.innerHTML = "<p>Por favor, completa los siguientes campos antes de continuar:</p><ul style='text-align:left; margin-top:8px;'><li style='margin-bottom:4px;'><strong>Términos y condiciones</strong></li></ul>";
+                                }
+                                if (alertModal && window.$ && typeof window.$(alertModal).modal === 'function') {
+                                    window.$(alertModal).modal('show');
+                                    var acceptBtn2 = alertModal.querySelector('#acceptAlertModal');
+                                    if (acceptBtn2) {
+                                        var newBtn = acceptBtn2.cloneNode(true);
+                                        acceptBtn2.parentNode.replaceChild(newBtn, acceptBtn2);
+                                        newBtn.addEventListener('click', function() { window.$(alertModal).modal('hide'); });
+                                    }
+                                }
+                                cb.scrollIntoView({behavior: 'smooth', block: 'center'});
+                                return;
+                            }
+
+                            // Mostrar modal de confirmación
+                            var confirmModal = document.getElementById('kualeConfirmModal');
+                            kualeOpenModal(confirmModal);
+                        });
+                    }
+
+                    // ── Confirmación envío ───────────────────────────────────────────
+                    var confirmOk     = document.getElementById('kualeConfirmOk');
+                    var confirmCancel = document.getElementById('kualeConfirmCancel');
+                    var confirmModal  = document.getElementById('kualeConfirmModal');
+                    var loadingModal  = document.getElementById('kualeLoadingModal');
+
+                    if (confirmCancel) {
+                        confirmCancel.addEventListener('click', function() {
+                            kualeCloseModal(confirmModal);
+                        });
+                    }
+
+                    if (confirmOk) {
+                        confirmOk.addEventListener('click', function() {
+                            kualeCloseModal(confirmModal);
+                            kualeOpenModal(loadingModal);
+
+                            // Sincronizar colonias
+                            var ci = document.getElementById('colonyInput');
+                            var ch = document.getElementById('colony');
+                            if (ci && ch && ci.value) ch.value = ci.value;
+                            var cfi = document.getElementById('colonyFiscalInput');
+                            var cfh = document.getElementById('colony_fiscal');
+                            if (cfi && cfh && cfi.value) cfh.value = cfi.value;
+
+                            var form = document.getElementById('hr_recruitment_form2');
+                            var csrf = document.querySelector('input[name="csrf_token"]');
+                            if (!csrf) {
+                                var csrfInput = document.createElement('input');
+                                csrfInput.type  = 'hidden';
+                                csrfInput.name  = 'csrf_token';
+                                csrfInput.value = (typeof odoo !== 'undefined' && odoo.csrf_token) ? odoo.csrf_token : '';
+                                form.appendChild(csrfInput);
+                            }
+
+                            var fd = new FormData(form);
+                            fetch(form.action, { method: 'POST', body: fd })
+                                .then(function(r) { return r.json(); })
+                                .then(function(data) {
+                                    kualeCloseModal(loadingModal);
+                                    if (data.id) {
+                                        window.location.href = '/job-thank-you-c';
+                                    } else {
+                                        alert('Error al enviar. Intenta de nuevo.');
+                                        console.error('Error respuesta:', data);
+                                    }
+                                })
+                                .catch(function(err) {
+                                    kualeCloseModal(loadingModal);
+                                    console.error('Error de red:', err);
+                                    alert('Error de conexión. Intenta de nuevo.');
+                                });
+                        });
+                    }
+                //]]>
+                </script>
+ 
+            </div>
+        </t>
+    </template>
+ 
+    <!-- Thank You Complemento -->
+    <record id="thankyou_c" model="website.page">
+        <field name="url">/job-thank-you-c</field>
+        <field name="is_published">True</field>
+        <field name="website_indexed" eval="False"/>
+        <field name="name">¡Gracias! (Complemento)</field>
+        <field name="type">qweb</field>
+        <field name="key">reclutamiento__kuale.thankyou_c</field>
+        <field name="arch" type="xml">
+            <t name="Thank you Complement" t-name="reclutamiento__kuale.thankyou_c">
+                <t t-call="website.layout">
+                    <div id="wrap" class="kuale-thankyou">
+
+                        <style>#top { display: none !important; }</style>
+
+                        <!-- Confetti canvas -->
+                        <canvas id="kuale-confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></canvas>
+
+                        <!-- Topbar -->
+                        <div class="kuale-landing__topbar">
+                            <div class="kuale-landing__brand">
+                                <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo.png" alt="Grupo Kuale"/>
+                                <span class="kuale-landing__brand-text">
+                                    <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                                    RECLUTAMIENTO
+                                </span>
+                            </div>
+                            <div class="kuale-landing__topbar-actions">
+                                <div class="kuale-user-badge" id="kualeUserBadge">
+                                    <span class="kuale-user-badge__name" t-esc="' '.join(request.env.user.name.split()[:2]) if request.env.user.name else ''"/>
+                                    <span class="kuale-user-badge__avatar">
+                                        <t t-esc="''.join([p[0].upper() for p in request.env.user.name.split()[:2]])"/>
+                                    </span>
+                                    <div class="kuale-user-dropdown" id="kualeUserDropdown">
+                                        <a href="/mis-aplicaciones" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                            Mis Aplicaciones
+                                        </a>
+                                        <a href="#" data-kuale-perfil="open" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                                <circle cx="12" cy="7" r="4"/>
+                                            </svg>
+                                            Mi cuenta
+                                        </a>
+                                        <div class="kuale-user-dropdown__divider"/>
+                                        <a href="/kuale/logout" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                            Cerrar sesi&#xF3;n
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hero -->
+                        <section class="kuale-ty-hero">
+                            <div class="kuale-ty-hero__bg"></div>
+                            <div class="container kuale-ty-hero__content">
+                                <div class="kuale-ty-hero__check">
+                                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="40" cy="40" r="38" stroke="#fff" stroke-width="3" class="kuale-ty-circle"/>
+                                        <polyline points="22,42 34,54 58,28" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="kuale-ty-check"/>
+                                    </svg>
+                                </div>
+                                <h1 class="kuale-ty-hero__title">&#xA1;Vas muy bien!</h1>
+                                <p class="kuale-ty-hero__subtitle">
+                                    Tu informaci&#xF3;n complementaria ha sido recibida.<br/>
+                                    Est&#xE1;s a un paso de formar parte del equipo Kuale.
+                                </p>
+                            </div>
+                        </section>
+
+                        <!-- Contenido -->
+                        <section class="kuale-ty-body">
+                            <div class="container">
+                                <div class="row justify-content-center g-4">
+
+                                    <!-- Card principal -->
+                                    <div class="col-12 col-lg-7 kuale-ty-fade">
+                                        <div class="kuale-ty-card">
+                                            <div class="kuale-ty-card__icon">&#127775;</div>
+                                            <h2 class="kuale-ty-card__title">&#xBF;Qu&#xE9; sigue?</h2>
+                                            <ul class="kuale-ty-steps">
+                                                <li>
+                                                    <span class="kuale-ty-steps__num">1</span>
+                                                    <span>Nuestro equipo revisar&#xE1; tu informaci&#xF3;n en los pr&#xF3;ximos d&#xED;as h&#xE1;biles.</span>
+                                                </li>
+                                                <li>
+                                                    <span class="kuale-ty-steps__num">2</span>
+                                                    <span>Si tu perfil es compatible, te contactaremos por tel&#xE9;fono o correo.</span>
+                                                </li>
+                                                <li>
+                                                    <span class="kuale-ty-steps__num">3</span>
+                                                    <span>&#xA1;Est&#xE1;s muy cerca! Prepara tus documentos y mant&#xE9;n tu tel&#xE9;fono a la mano, pronto tendr&#xE1;s noticias de nosotros.</span>
+                                                </li>
+                                            </ul>
+                                            <div class="kuale-ty-card__actions">
+                                                <a href="/mis-aplicaciones" 
+                                                    onclick="cerrarYRecargar(); return false;"
+                                                    class="kuale-btn-ty kuale-btn-ty--primary">
+                                                        Mis aplicaciones
+                                                        <span id="kuale-countdown"
+                                                            style="display:inline-block; background:rgba(255,255,255,0.25);
+                                                                    border-radius:999px; padding:2px 10px; font-size:13px;
+                                                                    margin-left:8px; font-weight:900;">10</span>
+                                                </a>
+                                                <a href="/" class="kuale-btn-ty kuale-btn-ty--ghost">
+                                                    Ir al inicio
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </section>
+
+                        <script>
+//<![CDATA[
+                            (function() {
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    var badge = document.getElementById('kualeUserBadge');
+                                    if (badge) {
+                                        badge.addEventListener('click', function(e) {
+                                            e.stopPropagation();
+                                            this.classList.toggle('is-open');
+                                        });
+                                        document.addEventListener('click', function() {
+                                            badge.classList.remove('is-open');
+                                        });
+                                    }
+                                    history.pushState(null, '', window.location.href);
+                                    window.addEventListener('popstate', function() {
+                                        window.location.replace('/mis-aplicaciones');
+                                    });
+
+                                    // ── Contador y cierre ────────────────────────────
+                                    var segundos = 10;
+                                    var countEl  = document.getElementById('kuale-countdown');
+
+                                    function tick() {
+                                        if (countEl) countEl.textContent = segundos;
+                                        if (segundos <= 0) {
+                                            cerrarYRecargar();
+                                            return;
+                                        }
+                                        segundos--;
+                                        setTimeout(tick, 1000);
+                                    }
+
+                                    function cerrarYRecargar() {
+                                        // Intentar notificar a la ventana anterior para que recargue
+                                        try {
+                                            if (window.opener && !window.opener.closed) {
+                                                window.opener.location.reload();
+                                            }
+                                        } catch(e) {}
+                                        window.close();
+                                        // Si no se puede cerrar, redirigir
+                                        setTimeout(function() {
+                                            window.location.href = '/mis-aplicaciones';
+                                        }, 300);
+                                    }
+
+                                    tick();
+                                });
+                            })();
+
+                            (function() {
+                                var canvas = document.getElementById('kuale-confetti');
+                                var ctx = canvas.getContext('2d');
+                                canvas.width = window.innerWidth;
+                                canvas.height = window.innerHeight;
+                                var pieces = [];
+                                var colors = ['#FA0000','#fff','#ffcc00','#ff6600','#cc0000'];
+                                for (var i = 0; i < 120; i++) {
+                                    pieces.push({
+                                        x: Math.random() * canvas.width,
+                                        y: Math.random() * canvas.height - canvas.height,
+                                        w: Math.random() * 10 + 5,
+                                        h: Math.random() * 6 + 3,
+                                        color: colors[Math.floor(Math.random() * colors.length)],
+                                        speed: Math.random() * 3 + 2,
+                                        angle: Math.random() * 360,
+                                        spin: Math.random() * 4 - 2,
+                                        opacity: 1
+                                    });
+                                }
+                                var frame = 0;
+                                function draw() {
+                                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                    pieces.forEach(function(p) {
+                                        ctx.save();
+                                        ctx.translate(p.x, p.y);
+                                        ctx.rotate(p.angle * Math.PI / 180);
+                                        ctx.globalAlpha = p.opacity;
+                                        ctx.fillStyle = p.color;
+                                        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                                        ctx.restore();
+                                        p.y += p.speed;
+                                        p.angle += p.spin;
+                                        if (p.y > canvas.height) p.opacity -= 0.02;
+                                    });
+                                    frame++;
+                                    if (frame < 300) requestAnimationFrame(draw);
+                                    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                }
+                                draw();
+                                window.addEventListener('resize', function() {
+                                    canvas.width = window.innerWidth;
+                                    canvas.height = window.innerHeight;
+                                });
+                            })();
+//]]>
+                        </script>
+
+                    </div>
+                </t>
+            </t>
+        </field>
+    </record>
+ 
+    <!-- ══ URL Expired ══ -->
+    <template id="expiredPage">
+        <t t-call="website.layout">
+            <t t-set="additional_title">Página expirada</t>
+            <div id="wrap">
+                <div class="oe_structure"/>
+                <div id="complement_expired" class="container text-center py-5">
+                    <h1 class="fw-bolder">¡Página expirada!</h1>
+                    <p class="fw-light">
+                        El enlace al que intenta acceder ha vencido.<br/>
+                        Contacte a Reclutamiento de Grupo Kuale para el reenvío del enlace.
+                    </p>
+                    <div class="mt-4">
+                        <a role="button" href="/" class="btn btn-primary btn-lg">Inicio</a>
+                        <a role="button" href="/vacancy" class="btn btn-primary btn-lg ms-3">Ver Vacantes</a>
+                    </div>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+ 
+</odoo>

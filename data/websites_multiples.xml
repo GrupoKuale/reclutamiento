@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="website_reclutamiento" model="website">
+            <field name="name">Reclutamiento</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="user_id" ref="base.public_user"/>
+            <field name="homepage_url">/reclutamiento</field>
+        </record>
+        <record id="website_publipuentes" model="website">
+            <field name="name">Publipuentes</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="user_id" ref="base.public_user"/>
+        </record>
+
+        <function model="website" name="write">
+            <function model="website" name="search">
+                <value eval="[('id', '=', ref('reclutamiento__kuale.website_reclutamiento'))]"/>
+            </function>
+            <value eval="{'homepage_url': '/reclutamiento'}"/>
+        </function>
+    </data>
+</odoo>

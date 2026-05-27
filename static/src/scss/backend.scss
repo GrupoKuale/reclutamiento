@@ -1,0 +1,257 @@
+.o_kanban_record_abandoned {
+    opacity: 0.55;
+    filter: grayscale(70%);
+    cursor: default !important;
+
+    * {
+        pointer-events: none !important;
+    }
+
+    .o_dropdown_kanban {
+        pointer-events: all !important;
+
+        * {
+            pointer-events: all !important;
+        }
+    }
+}
+
+// Vista lista
+.o_list_row_abandoned {
+    opacity: 0.55;
+    filter: grayscale(70%);
+    cursor: not-allowed !important;
+    pointer-events: none;
+
+    // Permitir checkbox de selección
+    td.o_list_record_selector {
+        pointer-events: all !important;
+        cursor: default !important;
+    }
+}
+
+.o_kanban_applicant .o_kanban_renderer {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+}
+
+
+/* ── ZK Fingerprint Enrollment Modal ── */
+.zk-scanner-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 20px 20px;
+    background: linear-gradient(145deg, #f0f4ff 0%, #e8f0fe 100%);
+    border-radius: 16px;
+    border: 1.5px solid #c7d7f9;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.5s, border-color 0.5s;
+    min-height: 220px;
+}
+
+/* Estados */
+.zk-scanner-area.state-waiting {
+    background: linear-gradient(145deg, #ede9fe 0%, #e0e7ff 100%);
+    border-color: #a5b4fc;
+}
+.zk-scanner-area.state-success {
+    background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: #86efac;
+}
+.zk-scanner-area.state-error {
+    background: linear-gradient(145deg, #fff1f1 0%, #fee2e2 100%);
+    border-color: #fca5a5;
+}
+
+/* Anillos de pulso */
+.zk-pulse-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid #6366f1;
+    opacity: 0;
+}
+.zk-pulse-ring.ring-1 { width: 80px;  height: 80px; }
+.zk-pulse-ring.ring-2 { width: 100px; height: 100px; }
+.zk-pulse-ring.ring-3 { width: 120px; height: 120px; }
+
+.zk-scanner-area.state-waiting .ring-1 { animation: zk-pulse 2s ease-out infinite; }
+.zk-scanner-area.state-waiting .ring-2 { animation: zk-pulse 2s ease-out 0.5s infinite; }
+.zk-scanner-area.state-waiting .ring-3 { animation: zk-pulse 2s ease-out 1s infinite; }
+
+.zk-scanner-area.state-success .ring-1 { border-color: #22c55e; animation: zk-pulse 1s ease-out 3; }
+.zk-scanner-area.state-success .ring-2 { border-color: #22c55e; animation: zk-pulse 1s ease-out 0.3s 3; }
+
+/* Línea de escaneo */
+.zk-scan-line {
+    position: absolute;
+    left: 10px; right: 10px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, #6366f1 50%, transparent 100%);
+    border-radius: 2px;
+    top: 20px;
+    opacity: 0;
+}
+.zk-scanner-area.state-waiting .zk-scan-line {
+    animation: zk-scanline 1.8s ease-in-out infinite;
+}
+.zk-scanner-area.state-scanning .zk-scan-line {
+    animation-duration: 0.3s;
+    opacity: 1;
+}
+
+/* Dedo SVG */
+.zk-finger-container {
+    position: relative;
+    z-index: 2;
+    width: 90px;
+    height: 108px;
+    margin-bottom: 14px;
+}
+.zk-finger-svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 12px rgba(99,102,241,0.25));
+    transition: filter 0.4s;
+}
+.zk-scanner-area.state-waiting .zk-finger-svg {
+    animation: zk-finger-pulse 2s ease-in-out infinite;
+}
+.zk-scanner-area.state-success .zk-finger-svg {
+    filter: drop-shadow(0 4px 12px rgba(34,197,94,0.4));
+}
+.zk-scanner-area.state-error .zk-finger-container {
+    animation: zk-shake 0.4s ease-in-out;
+}
+
+/* Badge de estado */
+.zk-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.4s;
+    z-index: 2;
+}
+.zk-status-badge.idle    { background: #e0e7ff; color: #4338ca; }
+.zk-status-badge.waiting { background: #ede9fe; color: #7c3aed; animation: zk-badge-pulse 2s ease-in-out infinite; }
+.zk-status-badge.success { background: #dcfce7; color: #15803d; }
+.zk-status-badge.error   { background: #fee2e2; color: #dc2626; }
+
+.zk-status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.zk-status-badge.waiting .zk-status-dot {
+    animation: zk-dot-blink 1s ease-in-out infinite;
+}
+
+/* ── Timer circular (reemplaza la barra de progreso) ── */
+.zk-timer-container {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    z-index: 2;
+}
+.zk-scanner-area.state-waiting .zk-timer-container {
+    display: flex;
+}
+
+.zk-timer-svg {
+    width: 44px;
+    height: 44px;
+    overflow: visible;
+}
+
+.zk-timer-track {
+    fill: none;
+    stroke: #e0e7ff;
+    stroke-width: 3;
+}
+
+.zk-timer-arc {
+    fill: none;
+    stroke: #6366f1;
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 100.5;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+    transform: rotate(-90deg);
+    transition: stroke-dashoffset 1s linear, stroke 0.5s ease;
+}
+
+/* Cambio de color según tiempo restante — aplicado por JS */
+.zk-timer-arc.warn  { stroke: #f59e0b; }
+.zk-timer-arc.danger { stroke: #ef4444; }
+
+.zk-timer-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #6366f1;
+    transition: color 0.5s;
+    pointer-events: none;
+}
+.zk-timer-label.warn   { color: #f59e0b; }
+.zk-timer-label.danger { color: #ef4444; }
+
+.zk-timer-wrapper {
+    position: relative;
+    width: 44px;
+    height: 44px;
+}
+
+/* Texto de instrucción */
+.zk-instruction {
+    font-size: 12px;
+    color: #6b7280;
+    text-align: center;
+    margin-top: 8px;
+    min-height: 18px;
+    z-index: 2;
+    transition: color 0.3s;
+}
+
+/* ── Keyframes ── */
+@keyframes zk-pulse {
+    0%   { transform: translate(-50%,-50%) scale(0.8); opacity: 0.6; }
+    100% { transform: translate(-50%,-50%) scale(1.9); opacity: 0; }
+}
+@keyframes zk-finger-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.75; transform: scale(0.96); }
+}
+@keyframes zk-scanline {
+    0%   { top: 10px;  opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 105px; opacity: 0; }
+}
+@keyframes zk-shake {
+    0%, 100% { transform: translateX(0); }
+    25%       { transform: translateX(-6px); }
+    75%       { transform: translateX(6px); }
+}
+@keyframes zk-badge-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.7; }
+}
+@keyframes zk-dot-blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.15; }
+}

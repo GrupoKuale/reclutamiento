@@ -1,0 +1,46 @@
+<odoo>
+    <data>
+        <record id="reclutamiento__kuale_settings_form" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.recruitment_settings.form</field>
+            <field name="model">reclutamiento__kuale.recruitment_settings</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Whatsapp">
+                            <field name="access_token_wsp"/>
+                            <field name="number_id"/>
+                            <field name="template_wsp"/>
+                        </group>
+                        <group string="Notificaciones">
+                            <field name="email_recruitment"/>
+                        </group>
+                        <div class="container custom_container">
+                            <div class="row">
+                                <div class="col">
+                                    <group string="Ciudades">
+                                        <field name="cities_created"/>
+                                        <button string="Importar archivo" name="import_postal_codes" type="object"
+                                                data-hotkey="x"/>
+                                    </group>
+                                </div>
+                                <div class="col">
+                                    <group string="Niveles Academicos">
+                                        <field name="schooling_created"/>
+                                        <button string="Importar archivo" name="import_schooling_catalog"
+                                                type="object"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_settings_action" model="ir.actions.act_window">
+            <field name="name">Configuración para Reclutamiento</field>
+            <field name="res_model">reclutamiento__kuale.recruitment_settings</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="reclutamiento__kuale_settings_form"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="reclutamiento__kuale.StatusBarField" owl="1">
+        <div class="o_statusbar_status ks_statusbar" t-ref="root" role="radiogroup" aria-label="Statusbar">
+
+            <button t-ref="after" type="button"
+                class="btn btn-secondary dropdown-toggle o_arrow_button o_first ks-hidden"
+                aria-label="Más...">
+                <Dropdown toggler="'parent'">
+                    <t t-foreach="items.after" t-as="item" t-key="item.value">
+                        <DropdownItem class="getDropdownItemClassNames(item)" onSelected="() => this.selectItem(item)">
+                            <span t-esc="item.label"/>
+                        </DropdownItem>
+                    </t>
+                </Dropdown>
+                ...
+            </button>
+
+            <t t-foreach="items.inline" t-as="item" t-key="item.value">
+                <div class="ks-step-wrap">
+                    <button type="button"
+                        class="btn btn-secondary o_arrow_button ks-step"
+                        t-att-class="{
+                            'ks-step-current': item.isSelected,
+                            o_first: item_first,
+                            o_last: item_last,
+                            o_arrow_button_current: item.isSelected,
+                        }"
+                        t-att-disabled="props.isDisabled || item.isSelected"
+                        role="radio"
+                        t-att-aria-checked="item.isSelected.toString()"
+                        t-att-aria-current="item.isSelected and 'step'"
+                        t-att-data-value="item.value"
+                        t-on-click="() => this.selectItem(item)">
+                        <span class="ks-step-label" t-esc="item.label"/>
+                    </button>
+                </div>
+            </t>
+
+            <button t-ref="before" type="button"
+                class="btn btn-secondary dropdown-toggle o_arrow_button o_last ks-hidden"
+                aria-label="Más...">
+                <Dropdown toggler="'parent'">
+                    <t t-foreach="items.before" t-as="item" t-key="item.value">
+                        <DropdownItem class="getDropdownItemClassNames(item)" onSelected="() => this.selectItem(item)">
+                            <span t-esc="item.label"/>
+                        </DropdownItem>
+                    </t>
+                </Dropdown>
+                ...
+            </button>
+
+            <button t-ref="dropdown" type="button" class="btn btn-secondary dropdown-toggle ks-hidden">
+                <Dropdown toggler="'parent'">
+                    <t t-foreach="getAllItems()" t-as="item" t-key="item.value">
+                        <DropdownItem class="getDropdownItemClassNames(item)" onSelected="() => this.selectItem(item)">
+                            <span t-esc="item.label"/>
+                        </DropdownItem>
+                    </t>
+                </Dropdown>
+                <t t-esc="getCurrentLabel()"/>
+            </button>
+
+        </div>
+    </t>
+</templates>

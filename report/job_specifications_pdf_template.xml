@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="jobSpecifications">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_jobSpecifications"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_jobSpecifications">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Análisis y Descripción de puestos.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        <tr>
+                            <td>
+                                <b>Nombre del puesto:</b>
+                            </td>
+                            <td colspan="2">
+                                <u>
+                                    <label t-out="o.name_kuale"/>
+                                </u>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Nombre del puesto externo:</b>
+                            </td>
+                            <td colspan="2">
+                                <label t-out="o.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Departamento:</b>
+                            </td>
+                            <td>
+                                <label t-out="o.department_id.name"/>
+                            </td>
+                            <td>
+                                <b>Reporta a:</b>
+                            </td>
+                            <td>
+                                <label t-out="o.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Motivo de requisición:</b>
+                            </td>
+                            <td>
+                                <label t-out="o.name"></label>
+                            </td>
+                            <td>
+                                <b>Ultima actualización:</b>
+                            </td>
+                            <td>14-10-2024</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Justificación de la vacante.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <label t-out="o.justify"></label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Objetivo.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <label t-out="o.objective"></label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Funciones específicas del puesto
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <t t-foreach="o.activities_ids" t-as="activities">
+                                        <li>
+                                            <label t-out="activities.name"/>
+                                        </li>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Funciones y Actividades específicas del puesto.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <t t-foreach="o.activities_ids" t-as="activities">
+                                   <strong><label t-out="activities.name"/></strong><br/>
+                                    <label t-out="activities.description"/><br/>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table ">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Horario y jornada laboral.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                Tipo:
+                                 <t t-if="o.type_workday == 'fixed_shift'">
+                                    Turno fijo
+                                </t>
+                                <t t-elif="o.type_workday == 'rotating_shift'">
+                                    Turno rotativo
+                                </t>
+                                <br/>
+                                Jornada: <label t-out="o.workday"></label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Perfil
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">
+                                Escolaridad
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Deseable/Óptima</td>
+                            <td colspan="3">
+                                <label t-out="o.schooling_id.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Experiencia</td>
+                        </tr>
+                        <tr>
+                            <td>Deseable/Óptima</td>
+                            <td colspan="3">
+                                <label t-out="o.schooling_id.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Edad</td>
+                        </tr>
+                        <tr>
+                            <td>Deseable/Óptima</td>
+                            <td colspan="3">
+                                <label t-out="o.age_id"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Sexo</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <label t-out="o.gender_id.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Conocimientos técnicos (Software)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <ul>
+                                    <t t-foreach="o.software_ids" t-as="software">
+                                        <li>
+                                            <label t-out="software.name"/>
+                                            <t t-if="software.description">
+                                                :
+                                                <label t-out="software.description"/>
+                                            </t>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Lenguajes</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center">
+                                <t t-foreach="o.language_k_ids" t-as="languaje">
+                                    <label t-out="languaje.name"></label><br/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">Características, Requisitos y
+                                Habilidades
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <t t-foreach="o.experiences_ids" t-as="experience">
+                                        <li>
+                                            <label t-out="experience.name"/>
+                                            <t t-if="experience.comments">
+                                                <br/>
+                                                <label t-out="experience.comments"/>
+                                            </t>
+                                        </li>
+                                    </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">Competencias</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                         <t t-foreach="o.competence_ids" t-as="competence">
+                            <tr>
+                                <td t-out="competence.name">
+                                </td>
+                                <td colspan="3" t-out="competence.description">
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead>
+                        <tr col="3">
+                            <td colspan="3" class="text-center" style="background-color: #315d7c;color: white;">Firmas</td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr col="3">
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                        </tr>
+                        <tr col="3">
+                            <td> La Gente es primero</td>
+                            <td> Pasión por el cliente</td>
+                            <td> Dirección General</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table ">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Anexos
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Capacitación
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4">
+                                <ul>
+                                     <t t-foreach="o.slide_for_ids" t-as="slide">
+                                        <li>
+                                            <label t-out="slide.name"/>
+                                        </li>
+                                    </t>
+                                    <t t-foreach="o.slide_during_ids" t-as="slide2">
+                                        <li>
+                                            <label t-out="slide2.name"/>
+                                        </li>
+                                    </t>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table">
+                    <thead class="table-light">
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                                Relaciones internas y externas
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="text-center"  style="background-color: #dadee1;">
+                                Internas
+                            </td>
+                        </tr>
+                        <t t-foreach="o.int_rel_ids" t-as="internal_rel">
+                            <tr>
+                                <td t-out="internal_rel.name">
+                                </td>
+                                <td colspan="3" t-out="internal_rel.description">
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #dadee1;">
+                                Externas
+                            </td>
+                        </tr>
+                        <t t-foreach="o.ext_rel_ids" t-as="external_rel">
+                            <tr>
+                                <td t-out="external_rel.name">
+                                </td>
+                                <td colspan="3" t-out="external_rel.description">
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;" >
+                                Estándares de rendimiento
+                            </td>
+                        </tr>
+                        <t t-foreach="o.perf_st_ids" t-as="standar">
+                            <tr>
+                                <td colspan="4" t-out="standar.name">
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+
+    <template id="job_specifications_wizard_preview">
+    <style t-out="preview_css"/>
+    <t t-call="web.external_layout">
+        <t t-set="o" t-value="job"/>
+        <div class="page">
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Análisis y Descripción de puestos.
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Nombre del puesto:</b></td>
+                        <td colspan="2"><u><label t-out="o.name_kuale"/></u></td>
+                    </tr>
+                    <tr>
+                        <td><b>Nombre del puesto externo:</b></td>
+                        <td colspan="2"><label t-out="o.name"/></td>
+                    </tr>
+                    <tr>
+                        <td><b>Departamento:</b></td>
+                        <td><label t-out="o.department_id.name"/></td>
+                        <td><b>Reporta a:</b></td>
+                        <td><label t-out="o.name"/></td>
+                    </tr>
+                    <tr>
+                        <td><b>Motivo de requisición:</b></td>
+                        <td><label t-out="o.name"/></td>
+                        <td><b>Ultima actualización:</b></td>
+                        <td>14-10-2024</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Justificación de la vacante.
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4"><label t-out="o.justify"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Objetivo.
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4"><label t-out="o.objective"/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Funciones específicas del puesto
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <t t-foreach="o.activities_ids" t-as="activities">
+                                <li><label t-out="activities.name"/></li>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-borderless">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Funciones y Actividades específicas del puesto.
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            <t t-foreach="o.activities_ids" t-as="activities">
+                                <strong><label t-out="activities.name"/></strong><br/>
+                                <label t-out="activities.description"/><br/>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">
+                            Horario y jornada laboral.
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4">
+                            Tipo:
+                            <t t-if="o.type_workday == 'fixed_shift'">Turno fijo</t>
+                            <t t-elif="o.type_workday == 'rotating_shift'">Turno rotativo</t>
+                            <br/>
+                            Jornada: <label t-out="o.workday"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">Perfil</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Escolaridad</td>
+                    </tr>
+                    <tr>
+                        <td>Deseable/Óptima</td>
+                        <td colspan="3"><label t-out="o.schooling_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Edad</td>
+                    </tr>
+                    <tr>
+                        <td>Deseable/Óptima</td>
+                        <td colspan="3"><label t-out="o.age_id"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Sexo</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center"><label t-out="o.gender_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Conocimientos técnicos (Software)</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <ul>
+                                <t t-foreach="o.software_ids" t-as="software">
+                                    <li>
+                                        <label t-out="software.name"/>
+                                        <t t-if="software.description">: <label t-out="software.description"/></t>
+                                    </li>
+                                </t>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Lenguajes</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center">
+                            <t t-foreach="o.language_k_ids" t-as="languaje">
+                                <label t-out="languaje.name"/><br/>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #dadee1;">Características, Requisitos y Habilidades</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <t t-foreach="o.experiences_ids" t-as="experience">
+                                <li>
+                                    <label t-out="experience.name"/>
+                                    <t t-if="experience.comments"><br/><label t-out="experience.comments"/></t>
+                                </li>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="4" class="text-center" style="background-color: #315d7c;color: white;">Competencias</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="o.competence_ids" t-as="competence">
+                        <tr>
+                            <td t-out="competence.name"/>
+                            <td colspan="3" t-out="competence.description"/>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td colspan="3" class="text-center" style="background-color: #315d7c;color: white;">Firmas</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><br/><br/><br/></td>
+                        <td><br/><br/><br/></td>
+                        <td><br/><br/><br/></td>
+                    </tr>
+                    <tr>
+                        <td>La Gente es primero</td>
+                        <td>Pasión por el cliente</td>
+                        <td>Dirección General</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</template>
+
+</odoo>

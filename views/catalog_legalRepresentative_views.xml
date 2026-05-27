@@ -1,0 +1,52 @@
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_legalRep_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.legal.representative.view.tree</field>
+            <field name="model">reclutamiento__kuale.legal.representative</field>
+            <field name="arch" type="xml">
+                <tree string="Representantes legales">
+                    <field name="name" />
+                    <field name="company_branch" />
+                    <field name="street" />
+                    <field name="zip_code" />
+                    <field name="phone" />
+                    <field name="mobile" />
+                    <field name="description" />
+                    <field name="status" />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_legalRep_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.legal.representative.view.form</field>
+            <field name="model">reclutamiento__kuale.legal.representative</field>
+            <field name="arch" type="xml">
+                <form string="Representante legal">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="company_branch" />
+                                <field name="street" />
+                                <field name="zip_code" />
+                                <field name="phone" />
+                                <field name="mobile" />
+                                <field name="description" />
+                                <field name="status" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_legalRep_action" model="ir.actions.act_window">
+            <field name="name">Representantes legales</field>
+            <field name="res_model">reclutamiento__kuale.legal.representative</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nuevo Representante legal
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

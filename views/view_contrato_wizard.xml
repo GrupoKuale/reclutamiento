@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════
+         WIZARD: Generar Contrato de Trabajo
+    ══════════════════════════════════════════════════════ -->
+    <record id="view_contrato_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.contrato_wizard.form</field>
+        <field name="model">reclutamiento__kuale.contrato_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generar Contrato de Trabajo">
+                <sheet>
+                    <div style="margin-bottom:16px;">
+                        <h4 style="color:#0097a7;">Contrato de Trabajo</h4>
+                        <p class="text-muted" style="font-size:0.9em;">
+                            Selecciona el tipo de contrato y genera el PDF.
+                        </p>
+                    </div>
+
+                    <field name="applicant_id"       invisible="1"/>
+                    <field name="formatos_wizard_id" invisible="1"/>
+                    <field name="is_determinado"     invisible="1"/>
+
+                    <group>
+                        <field name="contrato_id"
+                               string="Tipo de contrato"
+                               options="{'no_create': True, 'no_open': True}"/>
+                        <field name="contract_duration"
+                            string="Duración de contrato"
+                            invisible="not is_determinado"
+                            required="is_determinado"
+                            widget="radio"
+                            options="{'horizontal': true}"/>
+                    </group>
+
+                    <!-- Info de qué datos se incluirán -->
+                    <div role="status" class="alert alert-info mt-2"
+                         style="font-size:0.85em;">
+                        <strong>Datos que se incluirán:</strong>
+                        Nombre completo, nacionalidad, estado civil, CURP, NSS,
+                        edad, dirección, teléfono, puesto, salario, beneficiarios
+                        y datos de la empresa.
+                    </div>
+
+                    <!-- Aviso extra para contratos determinados -->
+                    <div role="status" class="alert alert-warning mt-2"
+                         invisible="not is_determinado"
+                         style="font-size:0.85em;">
+                        Este contrato es por <strong>tiempo determinado</strong>.
+                        Por favor selecciona la duración.
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_generate"
+                            type="object"
+                            string="Generar y descargar PDF"
+                            class="btn btn-primary"/>
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancelar"
+                            class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

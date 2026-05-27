@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_applicant_list_view_kuale" model="ir.ui.view">
+            <field name="name">hr.applicant.list.kuale</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.crm_case_tree_view_job"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-muted">abandoned == True</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='application_status']" position="replace">
+                    <field name="application_status" column_invisible="1"/>
+                    <field name="refuse_reason_id" column_invisible="1"/>
+                    <field name="abandoned" column_invisible="1"/>
+                    <field name="active" column_invisible="1"/>
+                    <field name="status_with_reason" string="Estado" optional="show"/>
+                </xpath>
+
+                <xpath expr="//tree/field[last()]" position="after">
+                    <field name="abandonment_display" string="Motivo abandono"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

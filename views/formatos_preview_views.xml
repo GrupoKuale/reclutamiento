@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_hoja_membretada_tree" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.hoja_membretada.tree</field>
+        <field name="model">reclutamiento__kuale.hoja_membretada</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="filename"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hoja_membretada_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.hoja_membretada.form</field>
+        <field name="model">reclutamiento__kuale.hoja_membretada</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="filename"/>
+                        <field name="active" widget="boolean_toggle"/>
+                        <field name="image_url" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hoja_membretada" model="ir.actions.act_window">
+        <field name="name">Hojas Membretadas</field>
+        <field name="res_model">reclutamiento__kuale.hoja_membretada</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_formatos_preview_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.formatos_preview_wizard.form</field>
+        <field name="model">reclutamiento__kuale.formatos_preview_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Vista previa del documento"
+                  js_class="kuale_formatos_preview">
+                <sheet>
+
+                    <!-- Barra superior -->
+                    <div style="display:flex; align-items:center; gap:10px;
+                                padding:10px 14px; background:#f8f9fa;
+                                border-radius:6px; margin-bottom:12px;">
+                        <strong style="color:#0097a7;">Hoja membretada:</strong>
+                        <div style="min-width:200px;">
+                            <field name="hoja_id"
+                                   options="{'no_create': True, 'no_open': True}"
+                                   nolabel="1"/>
+                        </div>
+                        <button name="action_download_word" type="object"
+                                string="Abrir en Word"
+                                class="btn btn-primary"/>
+                        <button name="action_close" type="object"
+                                string="Cerrar"
+                                class="btn btn-secondary"/>
+                    </div>
+
+                    <!-- Campos invisibles -->
+                    <field name="applicant_id" invisible="1"/>
+                    <field name="format_id" invisible="1"/>
+                    <field name="hoja_url" invisible="1"/>
+
+                    <!-- Vista previa con hoja membretada -->
+                    <div id="kuale_doc_preview"
+                         style="position: relative;
+                                width: 816px;
+                                margin: 0 auto;
+                                box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+                                border-radius: 4px;
+                                overflow: hidden;
+                                background: white;">
+
+                        <div id="kuale_membretada_bg"
+                             style="position: absolute;
+                                    top: 0; left: 0;
+                                    width: 100%; height: 100%;
+                                    z-index: 1;
+                                    pointer-events: none;
+                                    background-size: 100% 100%;
+                                    background-repeat: no-repeat;
+                                    border-radius: 4px;"/>
+
+                        <div style="position: relative;
+                                    z-index: 2;
+                                    padding: 220px 75px 150px 75px;
+                                    min-height: 1056px;">
+                            <field name="body_html"
+                                   widget="html"
+                                   nolabel="1"
+                                   readonly="1"
+                                   style="min-height: 800px; background: transparent !important;"/>
+                        </div>
+                    </div>
+
+                    <footer>
+                        <div style="display:none"/>
+                    </footer>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

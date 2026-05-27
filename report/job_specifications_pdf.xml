@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="job_specifications_pdf" model="ir.actions.report">
+            <field name="name">Especificaciones del puesto de trabajo</field>
+            <field name="model">hr.job</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.jobSpecifications</field>
+            <field name="report_file">reclutamiento__kuale.jobSpecifications</field>
+            <field name="print_report_name">'Especificaciones - %s' % (object.name_kuale)</field>
+            <field name="binding_model_id" ref="model_hr_job"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

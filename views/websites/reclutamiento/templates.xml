@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="reclutamiento_template_ejemplo" name="Ejemplo Reclutamiento">
+            <t t-call="website.layout">
+                <t t-set="no_header" t-value="1"/>
+                <section class="kuale-landing">
+
+                    <!-- Topbar -->
+                    <div class="kuale-landing__topbar">
+                        <div class="kuale-landing__brand">
+                            <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo.png" alt="Grupo Kuale"/>
+                            <span class="kuale-landing__brand-text">
+                                <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                                RECLUTAMIENTO
+                            </span>
+                        </div>
+                        <div class="kuale-landing__topbar-actions">
+                            <t t-if="not request.session.uid">
+                                <a href="#" data-kuale-signup="open" class="kuale-landing__btn-signup">CREAR CUENTA</a>
+                                <a href="#" data-kuale-login="open" class="kuale-landing__btn-login">INICIAR SESIÓN</a>
+                            </t>
+                            <t t-else="">
+                                <div class="kuale-user-badge" id="kualeUserBadge">
+                                    <span class="kuale-user-badge__name" t-esc="' '.join(request.env.user.name.split()[:2]) if request.env.user.name else ''"/>
+                                    <span class="kuale-user-badge__avatar">
+                                        <t t-esc="''.join([p[0].upper() for p in request.env.user.name.split()[:2]])"/>
+                                    </span>
+                                    <div class="kuale-user-dropdown" id="kualeUserDropdown">
+                                        <a href="/mis-aplicaciones" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                            Mis Aplicaciones
+                                        </a>
+                                        <a href="#" data-kuale-perfil="open" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                                <circle cx="12" cy="7" r="4"/>
+                                            </svg>
+                                            Mi cuenta
+                                        </a>
+                                        <div class="kuale-user-dropdown__divider"/>
+                                        <a href="/kuale/logout" class="kuale-user-dropdown__item">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                            Cerrar sesión
+                                        </a>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="kuale-landing__content">
+                        <div class="kuale-landing__copy">
+                            <h1>Únete a nosotros<br/>para <strong>crecer juntos.</strong> </h1>
+                            <p>
+                                En Grupo Kuale, sabemos que una empresa líder, <br/>
+                                necesita gente líder y siempre estamos en búsqueda <br/>
+                                del mejor talento en donde estemos; nuestro objetivo es tu desarrollo.<br/>
+                                <span class="kuale-landing__question">
+                                    ¿Te gustaría formar parte de nosotros?
+                                </span>
+                            </p>
+                            <a class="kuale-landing__cta" href="/vacancy">Conoce nuestras vacantes</a>
+                        </div>
+
+                        <div class="kuale-landing__mosaic">
+                            <!-- Imagen-4 con flip → Tinto.png -->
+                            <div class="kuale-landing__card kuale-landing__img--top-left kuale-flip-card">
+                                <div class="kuale-flip-card__inner">
+                                    <div class="kuale-flip-card__front">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/Imagen-4.png"/>
+                                    </div>
+                                    <div class="kuale-flip-card__back">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/tintocinco-logo.jpg"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Imagen-5 con flip → CJr.png -->
+                            <div class="kuale-landing__card kuale-landing__img--right kuale-flip-card">
+                                <div class="kuale-flip-card__inner">
+                                    <div class="kuale-flip-card__front">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/Imagen-5.png"/>
+                                    </div>
+                                    <div class="kuale-flip-card__back">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/CJr.png"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Imagen-1 con flip → DQ.png -->
+                            <div class="kuale-landing__card kuale-landing__img--bottom-left kuale-flip-card">
+                                <div class="kuale-flip-card__inner">
+                                    <div class="kuale-flip-card__front">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/Imagen-1.jpeg"/>
+                                    </div>
+                                    <div class="kuale-flip-card__back">
+                                        <img src="/reclutamiento__kuale/static/src/images/landing/DQ.png"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kuale-landing__brands-strip">
+                        <div class="kuale-landing__brands-text">
+                            <img class="kuale-landing__brands-diamond" src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                            <p>Diversas marcas,<br/>una misma <strong class="kuale-landing__brands-highlight">filosofía Kuale.</strong></p>
+                        </div>
+                        <div class="kuale-landing__brands-logos">
+                            <img src="/reclutamiento__kuale/static/src/images/landing/carlsjr-logo.png" alt="Carl's Jr."/>
+                            <img src="/reclutamiento__kuale/static/src/images/landing/dairyqueen-logo.png" alt="Dairy Queen"/>
+                            <img src="/reclutamiento__kuale/static/src/images/landing/tintocinco-logo.jpg" alt="Tintocinco"/>
+                            <img src="/reclutamiento__kuale/static/src/images/landing/hidrologica-logo.png" alt="Hidrologica"/>
+                            <img src="/reclutamiento__kuale/static/src/images/landing/sprocket-logo.png" alt="Sprocket"/>
+                            <img src="/reclutamiento__kuale/static/src/images/landing/publipuentes-logo.png" alt="Publipuentes"/>
+                        </div>
+                    </div>
+
+                    <div class="kuale-landing__family">
+                        <h2 class="kuale-landing__family-title">
+                            <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                            <strong>Nuestro equipo</strong> hoy:
+                            <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                        </h2>
+                        <div class="kuale-landing__stats">
+                            <div class="kuale-landing__stat-card">
+                                <span class="kuale-landing__stat-number">6</span>
+                                <span class="kuale-landing__stat-label">marcas</span>
+                            </div>
+                            <div class="kuale-landing__stat-card">
+                                <span class="kuale-landing__stat-number">24</span>
+                                <span class="kuale-landing__stat-label">sucursales</span>
+                            </div>
+                            <div class="kuale-landing__stat-card">
+                                <span class="kuale-landing__stat-number">7</span>
+                                <span class="kuale-landing__stat-label">ciudades</span>
+                            </div>
+                            <div class="kuale-landing__stat-card">
+                                <span class="kuale-landing__stat-number">450</span>
+                                <span class="kuale-landing__stat-label">miembros operativos</span>
+                            </div>
+                            <div class="kuale-landing__stat-card">
+                                <span class="kuale-landing__stat-number">36</span>
+                                <span class="kuale-landing__stat-label">miembros administrativos</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </t>
+
+            <script>
+                (function () {
+                    // Animación brands strip
+                    const text  = document.querySelector('.kuale-landing__brands-text');
+                    const logos = document.querySelector('.kuale-landing__brands-logos');
+
+                    function runAnimation() {
+                        text.classList.remove('anim-enter', 'anim-exit');
+                        logos.classList.remove('anim-show', 'anim-hide');
+
+                        setTimeout(() => { text.classList.add('anim-enter'); }, 300);
+                        setTimeout(() => { text.classList.remove('anim-enter'); text.classList.add('anim-exit'); }, 2500);
+                        setTimeout(() => { logos.classList.add('anim-show'); }, 3300);
+                        setTimeout(() => { logos.classList.remove('anim-show'); logos.classList.add('anim-hide'); }, 6000);
+                        setTimeout(() => { runAnimation(); }, 6700);
+                    }
+
+                    runAnimation();
+
+                    // Dropdown usuario
+                    window.addEventListener('DOMContentLoaded', function() {
+                        var badge = document.getElementById('kualeUserBadge');
+                        if (badge) {
+                            badge.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                                this.classList.toggle('is-open');
+                            });
+                            document.addEventListener('click', function() {
+                                badge.classList.remove('is-open');
+                            });
+                        }
+                    });
+                })();
+            </script>
+
+        </template>
+
+        <!-- Legacy global homepage override: keep it disabled so other websites use Odoo default home. -->
+        <!-- <record id="kuale_homepage_override" model="ir.ui.view" forcecreate="0">
+            <field name="active">False</field>
+        </record> -->
+    </data>
+</odoo>

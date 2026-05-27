@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Nuevo: sequence 1  -->
+        <function model="hr.recruitment.stage" name="write">
+            <value model="hr.recruitment.stage" eval="obj().sudo().search([('name', 'like', 'New')]).id"/>
+            <value model="hr.recruitment.stage" eval="{'sequence': 1}"/>
+        </function>
+
+        <!-- Calificación inicial: sequence 2  -->
+        <function model="hr.recruitment.stage" name="write">
+            <value model="hr.recruitment.stage" eval="obj().sudo().search([('name', 'like', 'Initial Qualification')]).id"/>
+            <value model="hr.recruitment.stage" eval="{'sequence': 2}"/>
+        </function>
+
+        <!-- Prefiltrados: sequence 3 -->
+        <record id="hr_recruitment_stage_selected" model="hr.recruitment.stage">
+            <field name="name">Prefiltrados</field>
+            <field name="sequence">3</field>
+            <field name="legend_blocked">Bloqueado</field>
+            <field name="legend_done">Listo para el proximo paso</field>
+            <field name="legend_normal">En progreso</field>
+        </record>
+
+        <!-- Primera entrevista: sequence 4  -->
+        <function model="hr.recruitment.stage" name="write">
+            <value model="hr.recruitment.stage" eval="obj().sudo().search([('name', 'like', 'First Interview')]).id"/>
+            <value model="hr.recruitment.stage" eval="{'sequence': 4}"/>
+        </function>
+
+        <!-- Segunda entrevista: sequence 5  -->
+        <function model="hr.recruitment.stage" name="write">
+            <value model="hr.recruitment.stage" eval="obj().sudo().search([('name', 'like', 'Second Interview')]).id"/>
+            <value model="hr.recruitment.stage" eval="{'sequence': 5}"/>
+        </function>
+
+        <!-- Propuesta de contrato: sequence 6 -->
+        <function model="hr.recruitment.stage" name="write">
+            <value model="hr.recruitment.stage" eval="obj().sudo().search([('name', 'like', 'Contract Proposal')]).id"/>
+            <value model="hr.recruitment.stage" eval="{'sequence': 6}"/>
+        </function>
+
+        <!-- Proceso de contratación: sequence 7 -->
+        <record id="hr_recruitment_stage_contract" model="hr.recruitment.stage">
+            <field name="name">Proceso de contratación</field>
+            <field name="sequence">7</field>
+            <field name="legend_blocked">Bloqueado</field>
+            <field name="legend_done">Listo para el proximo paso</field>
+            <field name="legend_normal">En progreso</field>
+        </record>
+    </data>
+</odoo>

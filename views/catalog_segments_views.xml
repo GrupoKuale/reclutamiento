@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_segments_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.segments.view.tree</field>
+            <field name="model">reclutamiento__kuale.segments</field>
+            <field name="arch" type="xml">
+                <tree string="Segmentos">
+                    <field name="active" column_invisible="True" />
+                    <field name="name" />
+                    <field name="company_id" groups="base.group_multi_company" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_segments_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.segments.view.form</field>
+            <field name="model">reclutamiento__kuale.segments</field>
+            <field name="arch" type="xml">
+                <form string="Segmentos">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1" />
+                                <field name="name" />
+                            </group>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company" />
+                                <field name="company_id" groups="!base.group_multi_company" invisible="1" />
+                            </group>
+                            <group>
+                                <field name="description" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_segments_action" model="ir.actions.act_window">
+            <field name="name">Segmentos</field>
+            <field name="res_model">reclutamiento__kuale.segments</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear un nuevo segmento
+                </p>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

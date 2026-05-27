@@ -1,0 +1,18 @@
+<odoo>
+    <data>
+        <record id="menu_publipuentes_root" model="website.menu">
+            <field name="name">Publipuentes Menu</field>
+            <field name="sequence" type="int">10</field>
+            <field name="website_id" ref="website_publipuentes"/>
+        </record>
+
+        <record id="menu_publipuentes_page1" model="website.menu">
+            <field name="name">Pagina 1 publipuentes</field>
+            <field name="url">/publipuentes</field>
+            <field name="parent_id" ref="menu_publipuentes_root"/>
+            <field name="sequence" type="int">20</field>
+            <field name="website_id" ref="website_publipuentes"/>
+        </record>
+
+    </data>
+</odoo>

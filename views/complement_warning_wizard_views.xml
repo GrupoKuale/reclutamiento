@@ -1,0 +1,144 @@
+<odoo>
+    <record id="view_complement_warning_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.complement_warning_wizard.form</field>
+        <field name="model">reclutamiento__kuale.complement_warning_wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <!-- Campos de control -->
+                <field name="step"               invisible="1"/>
+                <field name="missing_bank"        invisible="1"/>
+                <field name="missing_beneficiary" invisible="1"/>
+                <field name="missing_docs_names"  invisible="1"/>
+                <field name="missing_formatos"    invisible="1"/>
+                <field name="can_skip"            invisible="1"/>
+
+                <!-- ══ Paso 1: detalle de lo que falta ══ -->
+                <div invisible="step != 1">
+                    <div style="text-align:center; padding:20px 16px 8px;">
+                        <p style="font-size:40px; margin:0;">⚠️</p>
+                        <h3 style="color:#e65100; margin:10px 0 4px;">Información incompleta</h3>
+                        <p style="color:#666; font-size:13px; margin-bottom:16px; line-height:1.5;">
+                            Revisa los siguientes puntos antes de crear el empleado.
+                        </p>
+                    </div>
+
+                    <div style="margin:0 16px 16px;">
+
+                        <!-- Documentación — OMITIBLE -->
+                        <div invisible="not missing_docs_names"
+                            style="display:flex; align-items:flex-start; gap:12px;
+                                    background:#fff8f0; border:1px solid #fdba74;
+                                    border-radius:8px; padding:12px; margin-bottom:10px;">
+                            <span style="font-size:24px; line-height:1;">📄</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#c2410c; font-size:14px;">
+                                    Documentación de contratación
+                                </div>
+                                <div style="font-size:12px; color:#555; margin-top:3px; line-height:1.5;">
+                                    Pendientes:<br/>
+                                    <span style="color:#c2410c; font-weight:500;">
+                                        <field name="missing_docs_names" readonly="1" nolabel="1"/>
+                                    </span>
+                                </div>
+                                <div style="font-size:11px; color:#ea580c; margin-top:4px; font-weight:600;">
+                                    ○ Puedes completarlo después en el perfil del empleado
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formatos — BLOQUEANTE -->
+                        <div invisible="not missing_formatos"
+                             style="display:flex; align-items:flex-start; gap:12px;
+                                    background:#fff0f0; border:1px solid #fca5a5;
+                                    border-radius:8px; padding:12px; margin-bottom:10px;">
+                            <span style="font-size:24px; line-height:1;">📋</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#c62828; font-size:14px;">
+                                    Formatos de contratación
+                                </div>
+                                <div style="font-size:12px; color:#555; margin-top:3px;">
+                                    Los formatos no han sido confirmados.
+                                </div>
+                                <div style="font-size:11px; color:#e53935; margin-top:4px; font-weight:600;">
+                                    ● Requerido — usa el botón "Formatos" para completarlos
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datos bancarios — OMITIBLE -->
+                        <div invisible="not missing_bank"
+                             style="display:flex; align-items:flex-start; gap:12px;
+                                    background:#fff8f0; border:1px solid #fdba74;
+                                    border-radius:8px; padding:12px; margin-bottom:10px;">
+                            <span style="font-size:24px; line-height:1;">💳</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#c2410c; font-size:14px;">
+                                    Datos bancarios
+                                </div>
+                                <div style="font-size:12px; color:#555; margin-top:3px;">
+                                    No se han registrado cuentas bancarias.
+                                </div>
+                                <div style="font-size:11px; color:#ea580c; margin-top:4px; font-weight:600;">
+                                    ○ Puedes completarlo después en el perfil del empleado
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Beneficiarios — OMITIBLE -->
+                        <div invisible="not missing_beneficiary"
+                             style="display:flex; align-items:flex-start; gap:12px;
+                                    background:#fff8f0; border:1px solid #fdba74;
+                                    border-radius:8px; padding:12px; margin-bottom:10px;">
+                            <span style="font-size:24px; line-height:1;">👥</span>
+                            <div style="flex:1;">
+                                <div style="font-weight:700; color:#c2410c; font-size:14px;">
+                                    Beneficiarios
+                                </div>
+                                <div style="font-size:12px; color:#555; margin-top:3px;">
+                                    No se han registrado beneficiarios.
+                                </div>
+                                <div style="font-size:11px; color:#ea580c; margin-top:4px; font-weight:600;">
+                                    ○ Puedes completarlo después en el perfil del empleado
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ══ Paso 2: confirmación omitir bancarios/beneficiarios ══ -->
+                <div invisible="step != 2">
+                    <div style="text-align:center; padding:24px 16px 16px;">
+                        <p style="font-size:40px; margin:0;">❓</p>
+                        <h3 style="color:#c62828; margin:10px 0 4px;">¿Estás seguro?</h3>
+                        <p style="color:#555; font-size:13px; line-height:1.6; margin-bottom:0;">
+                            El empleado será creado con información pendiente.<br/>
+                            Se mostrará una notificación en su perfil hasta que
+                            la información sea completada.
+                        </p>
+                    </div>
+                </div>
+
+                <footer>
+                    <!-- Footer paso 1 -->
+                    <div invisible="step != 1" style="display:flex; gap:8px;">
+                        <button name="action_cancel" type="object"
+                                string="Cerrar" class="btn btn-secondary"/>
+                        <!-- Omitir solo si documentación y formatos están completos -->
+                        <button name="action_skip" type="object"
+                                string="Omitir y continuar"
+                                class="btn btn-warning"
+                                invisible="not can_skip"/>
+                    </div>
+                    <!-- Footer paso 2 -->
+                    <div invisible="step != 2" style="display:flex; gap:8px;">
+                        <button name="action_cancel"       type="object"
+                                string="Cancelar"          class="btn btn-secondary"/>
+                        <button name="action_confirm_skip" type="object"
+                                string="Sí, crear empleado" class="btn btn-danger"/>
+                    </div>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

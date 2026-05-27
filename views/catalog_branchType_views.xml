@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_branchType_view_tree" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.branch.type.view.tree</field>
+            <field name="model">reclutamiento__kuale.branch.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de sucursal">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="status" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="reclutamiento_kuale_branchType_view_form" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.branch.type.view.form</field>
+            <field name="model">reclutamiento__kuale.branch.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de sucursal">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="status" />
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="reclutamiento__kuale_branch_type_action" model="ir.actions.act_window">
+            <field name="name">Tipo de sucursal</field>
+            <field name="res_model">reclutamiento__kuale.branch.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nuevo Tipo de sucursal
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

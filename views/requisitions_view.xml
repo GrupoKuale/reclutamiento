@@ -1,0 +1,353 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+        <record id="view_reclutamiento_kuale_requisitions_form" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.requisitions.form</field>
+            <field name="model">reclutamiento__kuale.requisitions</field>
+            <field name="arch" type="xml">
+                <form string="Requisiciones">
+                    <field name="company_id" invisible="1"/>
+                    <field name="department_id" invisible="1"/>
+                    <field name="status" invisible="1"/>
+                    <field name="can_authorize" invisible="1"/>
+
+                    <header>
+                        <!--<button string="Create Employee" name="create_employee_from_applicant" type="object" data-hotkey="q" groups="hr_recruitment.group_hr_recruitment_user"
+                                class="o_create_employee" invisible="emp_id or not active or not date_closed"/>-->
+                        <button string="Authorize" name="authorize_requisition" type="object"
+                                invisible="status != 20 or not can_authorize" data-hotkey="d"/>
+                        <button string="Refuse" name="refuse_requisition" type="object"
+                                invisible="status in [10,60,70]"/>
+                        <button string="Cancel" name="cancel_requisition" type="object" invisible="status in [60,70]"/>
+
+                        <!--<button string="Restore" name="toggle_active" type="object" invisible="active" data-hotkey="x"/>
+                        <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}" invisible="not active and not emp_id"/>-->
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                        <field name="active" invisible="1"/>
+                        <div class="row oe_title">
+                            <div class="col-8">
+                                <label for="name" string="Folio"/>
+                                <h1>
+                                    <field name="name" placeholder="Folio" readonly="1"/>
+                                </h1>
+                            </div>
+                            <div class="col-4">
+                                <label class="text-primary" for="status_requisition" string="Estatus"/>
+                                <h1 class="text-primary">
+                                    <field name="status_requisition"/>
+                                </h1>
+                            </div>
+
+                        </div>
+                        <group>
+                            <group>
+                                <field name="company_id" options="{'no_create': True}"
+                                       domain="[('is_parent_id_set', '=', False)]" groups="base.group_multi_company"/>
+                                <field name="branch_ids" options="{'no_open': True, 'no_create': True}"
+                                       domain="[('parent_id', '=', company_id)]"
+                                       invisible="not company_id"/>
+                                <field name="department_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="job_id" options="{'no_create': True, 'no_open': True}" 
+                                    domain="[('department_id', '=', department_id), ('is_Parent_Job', '=', True)]"/>
+                                <field name="date_entry"/>
+                                <field name="date_end"/>
+                                <field name="inmediate_job_id" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="total_employee_current" readonly="1"/>
+                                <field name="total_employee_absents" readonly="1"/>
+                                <!--<field name="reason_id"/>-->
+                                <field name="gender"/>
+                                <field name="age_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="is_age_other" invisible="1"/>
+                                <field name="age_other" invisible="is_age_other == False"
+                                       required="is_age_other == True"/>
+                                <field name="workday_calendar_id" options="{'no_create': True, 'no_open': True}" />
+                                <!--<field name="no_requisitions_auth"/>-->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Vacantes" name="vacancies">
+                                <group>
+                                    <field name="reason_vacancy"/>
+                                </group>
+                                <field name="details" nolabel="1" required="1">
+                                    <tree>
+                                        <field name="quantity" required="1"/>
+                                        <field name="shift" required="1"/>
+                                        <field name="student" required="1"/>
+                                        <field name="reason" required="1"/>
+                                        <field name="description"/>
+                                        <field name="quantity_auth"/>
+                                    </tree>
+                                </field>
+
+                            </page>
+                            <page string="Solicitudes" name="applicants">
+                                <field name="applicant_ids" nolabel="1" required="1">
+                                    <tree readonly="true" no_open="1">
+                                        <field name="partner_name"/>
+                                        <field name="create_date" widget="date"/>
+                                        <field name="stage_id"/>
+                                        <field name="priority" widget="priority"/>
+                                        <button name="get_formview_action" string="View" type="object"
+                                                class="btn-primary"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <!--<div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids"/>
+                    </div>-->
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" options="{'open_attachments': True}"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="view_reclutamiento_kuale_requisitions_details_form" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.requisitions_details.form</field>
+            <field name="model">reclutamiento__kuale.requisitions_details</field>
+            <field name="arch" type="xml">
+                <form string="Vacante">
+                     <group>
+                        <field name="quantity" required="1"/>
+                        <field name="shift" required="1"/>
+                        <field name="student" required="1"/>
+                        <field name="reason" required="1"/>
+                        <field name="description"/>
+                        <field name="quantity_auth"/>
+                     </group>
+                </form>
+            </field>
+        </record>
+        <record id="view_reclutamiento_kuale_requisitions_tree" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.requisitions.tree</field>
+            <field name="model">reclutamiento__kuale.requisitions</field>
+            <field name="arch" type="xml">
+                <tree string="Requisiciones" sample="1">
+                    <field name="company_id" column_invisible="True"/>
+                    <field name="department_id" column_invisible="True"/>
+                    <field name="name"/>
+                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                    <field name="branch_ids"/>
+                    <field name="inmediate_job_id"/>
+                    <field name="job_id"/>
+                    <field name="no_requisitions"/>
+                    <field name="status_requisition"/>
+                    <!--<field name="manager_id" widget="many2one_avatar_user"/>-->
+                    <!--<field name="total_employee" string="Employees"/>
+                   <field name="parent_id"/>
+                   <field name="color" widget="color_picker" string="Color"/>-->
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_reclutamiento_kuale_requisitions_filter" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.requisitions.search</field>
+            <field name="model">reclutamiento__kuale.requisitions</field>
+            <field name="arch" type="xml">
+                <search string="Requisiciones">
+                    <field name="name" string="Department"/>
+                    <!--<field name="manager_id" />-->
+                    <!--<filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]" groups="mail.group_mail_notification_type_inbox"/>-->
+                    <separator/>
+                    <filter string="Archivado" name="inactive" domain="[('active','=',False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="reclutamiento_kuale_requisitions_view_kanban" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.requisitions.kanban</field>
+            <field name="model">reclutamiento__kuale.requisitions</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_dashboard o_hr_department_kanban o_kanban_small_column" sample="1">
+                    <field name="status" invisible="1"/>
+                    <field name="name"/>
+                    <field name="company_id"/>
+                    <field name="branch_ids"/>
+                    <field name="inmediate_job_id"/>
+                    <field name="job_id"/>
+                    <field name="no_requisitions"/>
+                    <field name="no_requisitions_auth"/>
+                    <field name="application_count"/>
+                    <field name="status_requisition"/>
+                    <field name="color"/>
+                    <!--<field name="manager_id"/>-->
+                    <!--<field name="color"/>
+                    <field name="total_employee"/>-->
+                    <templates>
+                        <t t-name="kanban-menu" t-if="!selection_mode">
+                            <!--<div class="o_kanban_card_manage_section">
+                                <div role="menuitem" class="o_kanban_manage_reports">
+                                    <div class="o_kanban_card_manage_title ps-4 pb-1">
+                                        <span class="fw-bolder">Reporting</span>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <a t-if="widget.editable" role="menuitem" class="dropdown-item" type="edit">Configuration
+                            </a>
+                            <!--<span class="dropdown-item" invisible="status in [10,20,40]">Refuse</span>-->
+                            <a name="refuse_requisition" type="object" class="dropdown-item"
+                               invisible="status in [10,60,70]">Refuse
+                            </a>
+
+                            <ul t-if="widget.editable" class="oe_kanban_colorpicker" data-field="color" role="menu"/>
+                        </t>
+                        <t t-name="kanban-box">
+                            <!--<div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">-->
+                            <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}">
+                                <div class="ribbon ribbon-top-right" invisible="status != 20">
+                                    <span class="text-bg-warning"></span>
+                                    <field name="status_requisition"/>
+                                </div>
+                                <div class="ribbon ribbon-top-right" invisible="status != 30">
+                                    <span class="text-bg-success"></span>
+                                    <field name="status_requisition"/>
+                                </div>
+                                <div class="ribbon ribbon-top-right" invisible="status != 50">
+                                    <span class="text-bg-blue"></span>
+                                    <field name="status_requisition"/>
+                                </div>
+                                <div class="ribbon ribbon-top-right" invisible="status in [10,20,30,40,50]">
+                                    <span class="text-bg-gray"></span>
+                                    <field name="status_requisition"/>
+                                </div>
+                                <div t-attf-class="o_kanban_card_header oe_kanban_details">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <a type="edit">
+                                                <field name="name"/>
+                                            </a>
+                                        </div>
+                                        <div class="o_secondary" groups="base.group_multi_company">
+                                            <small>
+                                                <i class="fa fa-building-o" role="img" aria-label="Company"
+                                                   title="Company"/>
+                                                <field name="company_id"/>
+                                                -
+                                                <field name="branch_ids"/>
+                                            </small>
+                                            <br/>
+                                            <small>
+                                                <field name="job_id"/>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="container o_kanban_card_content" t-if="!selection_mode">
+                                    <div class="row o_kanban_card_upper_content">
+                                        <div class="col-12">
+                                                <field name="no_requisitions"/> <span> requested</span><br/>
+                                                <field name="no_requisitions_auth"/><span> authorized</span> <br/>
+                                                <field name="no_requisitions"/><span> </span>
+                                        </div>
+                                    </div>
+                                    <div class="o_kanban_card_lower_content text-primary font-weight-bold"
+                                         style="justify-content: end">
+                                        <span>Estatus: </span><field name="status_requisition"/>
+                                    </div>
+                                </div>-->
+                                <div class="container o_recruitment_job_container o_kanban_card_content mt-0 mt-sm-3">
+                                    <div class="row">
+                                        <ul class="col-5 o_job_activities">
+                                            <li>
+                                                <span t-attf-class="{{ record.no_requisitions.raw_value > 0 ? 'text-primary fw-normal' : 'text-secondary' }}">
+                                                    <field name="no_requisitions"/>
+                                                    Requisiciones
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span t-attf-class="{{ record.no_requisitions_auth.raw_value > 0 ? 'text-primary fw-bolder' : 'text-secondary' }}">
+                                                    <field name="no_requisitions_auth"/>
+                                                    Autorizados
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span t-attf-class="{{ record.application_count.raw_value > 0 ? 'text-primary fw-bolder' : 'text-secondary' }}">
+                                                    <field name="application_count"/>
+                                                    Aplicaciones
+                                                </span>
+                                            </li>
+                                            <!--<li class="text-warning" t-if="record.activities_today.raw_value > 0">
+                                                <a name="action_open_today_activities" type="object" class="text-warning"><field name="activities_today"/> Activities Today</a>
+                                            </li>-->
+                                        </ul>
+                                        <div class="o_kanban_card_lower_content text-primary font-weight-bold"
+                                             style="justify-content: end">
+                                            <span>Status:</span>
+                                            <field name="status_requisition"/>
+                                            <!-- placeholder for bottom content -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_right div_left">
+                                        <span>Manager</span>
+                                        <field name="inmediate_job_id" widget="many2one_avatar_user"
+                                               domain="[('share', '=', False)]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="reclutamiento_kuale_requisitions_kanban_action" model="ir.actions.act_window">
+            <field name="name">Requisiciones</field>
+            <field name="res_model">reclutamiento__kuale.requisitions</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="search_view_id" ref="view_reclutamiento_kuale_requisitions_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nueva requisición
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_requisitions_tree_action" model="ir.actions.act_window">
+            <field name="name">Requisiciones</field>
+            <field name="res_model">reclutamiento__kuale.requisitions</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="search_view_id" ref="view_reclutamiento_kuale_requisitions_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nueva requisición
+                </p>
+                <p>
+
+                </p>
+            </field>
+        </record>
+
+        <!-- Top menu item -->
+
+        <!--<menuitem name="Requisiciones" id="reclutamiento__kuale.menu_root"/>-->
+
+        <!-- menu categories -->
+
+        <!--<menuitem name="Menu 1" id="reclutamiento__kuale.menu_1" parent="reclutamiento__kuale.menu_root"/>
+        <menuitem name="Configuración" id="reclutamiento__kuale.menu_2" parent="reclutamiento__kuale.menu_root"/>-->
+
+
+        <!-- actions -->
+
+        <!--<menuitem name="List" id="reclutamiento__kuale.menu_1_list" parent="reclutamiento__kuale.menu_1"
+                  action="reclutamiento__kuale.action_window"/>
+        <menuitem name="Server to list" id="reclutamiento__kuale" parent="reclutamiento__kuale.menu_2"
+                  action="reclutamiento__kuale.action_server"/>-->
+
+    </data>
+</odoo>

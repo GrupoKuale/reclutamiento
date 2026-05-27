@@ -1,0 +1,294 @@
+<odoo>
+    
+        <!--     Biometric     -->
+
+        <menuitem id="biometric_device_details_menu"
+                  name="Dispositivo biométrico"
+                  parent="hr_attendance.menu_hr_attendance_root"
+                  sequence="21"/>
+
+        <menuitem id="zkteco_biometric_logs_menu"
+                  name="Registro de Asistencia"
+                  parent="biometric_device_details_menu"
+                  action="action_zkteco_log"
+                  sequence="10"/>
+
+        <menuitem id="zkteco_biometric_users_menu"
+                  name="Datos Biométricos"
+                  parent="biometric_device_details_menu"
+                  action="action_biometric_user"
+                  sequence="20"/>
+    <!-- ============================================================
+         ZK DEVICE
+    ============================================================ -->
+    <record id="view_zk_device_list" model="ir.ui.view">
+        <field name="name">zk.device.list</field>
+        <field name="model">zk.device</field>
+        <field name="arch" type="xml">
+            <tree string="Dispositivos ZKTeco">
+                <field name="name"/>
+                <field name="ip"/>
+                <field name="port"/>
+                <field name="branch_id"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'online'"
+                    decoration-danger="state == 'error'"
+                    decoration-muted="state == 'offline'"/>
+                <field name="last_sync"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zk_device_form" model="ir.ui.view">
+        <field name="name">zk.device.form</field>
+        <field name="model">zk.device</field>
+        <field name="arch" type="xml">
+            <form string="Dispositivo ZKTeco">
+                <header>
+                    <button name="action_ping" type="object"
+                        string="Probar conexión" class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Datos de red">
+                            <field name="name"/>
+                            <field name="ip"/>
+                            <field name="port"/>
+                            <field name="timeout"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Estado">
+                            <field name="branch_id"/>
+                            <field name="state" widget="badge"
+                                decoration-success="state == 'online'"
+                                decoration-danger="state == 'error'"
+                                decoration-muted="state == 'offline'"/>
+                            <field name="last_sync"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sincronizaciones">
+                            <field name="sync_status_ids">
+                                <tree>
+                                    <field name="employee_id"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'done'"
+                                        decoration-warning="state == 'pending'"
+                                        decoration-danger="state == 'error'"/>
+                                    <field name="last_sync"/>
+                                    <field name="retry_count"/>
+                                    <field name="error_message"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zk_device" model="ir.actions.act_window">
+        <field name="name">Dispositivos ZKTeco</field>
+        <field name="res_model">zk.device</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ============================================================
+         MENÚ RAÍZ — debe ir antes que los hijos
+    ============================================================ -->
+
+    <menuitem id="menu_zk_device"
+        name="Dispositivos"
+        parent="reclutamiento__kuale.biometric_device_details_menu"
+        action="action_zk_device"
+        sequence="10"/>
+
+    <!-- ============================================================
+         ZK SYNC STATUS
+    ============================================================ -->
+    <record id="view_zk_sync_status_list" model="ir.ui.view">
+        <field name="name">zk.sync.status.list</field>
+        <field name="model">zk.sync.status</field>
+        <field name="arch" type="xml">
+            <tree string="Estado de sincronización"
+                decoration-danger="state == 'error'"
+                decoration-success="state == 'done'"
+                decoration-warning="state == 'pending'">
+                <field name="employee_id"/>
+                <field name="device_id"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'done'"
+                    decoration-warning="state == 'pending'"
+                    decoration-danger="state == 'error'"/>
+                <field name="last_sync"/>
+                <field name="retry_count"/>
+                <field name="error_message" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zk_sync_status_form" model="ir.ui.view">
+        <field name="name">zk.sync.status.form</field>
+        <field name="model">zk.sync.status</field>
+        <field name="arch" type="xml">
+            <form string="Estado de sincronización">
+                <header>
+                    <button name="mark_pending" type="object"
+                        string="Reintentar" class="btn-secondary"
+                        invisible="state == 'done'"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="device_id"/>
+                        <field name="state" widget="badge"
+                            decoration-success="state == 'done'"
+                            decoration-warning="state == 'pending'"
+                            decoration-danger="state == 'error'"/>
+                        <field name="last_sync"/>
+                        <field name="retry_count"/>
+                        <field name="error_message"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zk_sync_status" model="ir.actions.act_window">
+        <field name="name">Sincronizaciones</field>
+        <field name="res_model">zk.sync.status</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_zk_sync_status"
+        name="Sincronizaciones"
+        parent="reclutamiento__kuale.biometric_device_details_menu"
+        action="action_zk_sync_status"
+        sequence="20"/>
+
+    <!-- ============================================================
+         ZK BIOMETRIC TEMPLATE
+    ============================================================ -->
+    <record id="view_zk_biometric_template_list" model="ir.ui.view">
+        <field name="name">zk.biometric.template.list</field>
+        <field name="model">zk.biometric.template</field>
+        <field name="arch" type="xml">
+            <tree string="Templates biométricos">
+                <field name="employee_id"/>
+                <field name="biometric_type"/>
+                <field name="finger_index"/>
+                <field name="source_device_id"/>
+                <field name="valid" widget="boolean_toggle"/>
+                <field name="uid"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_zk_biometric_template_form" model="ir.ui.view">
+        <field name="name">zk.biometric.template.form</field>
+        <field name="model">zk.biometric.template</field>
+        <field name="arch" type="xml">
+            <form string="Template biométrico">
+                <sheet>
+                    <group>
+                        <group string="Empleado">
+                            <field name="employee_id"/>
+                            <field name="device_employee_id"/>
+                            <field name="source_device_id"/>
+                        </group>
+                        <group string="Biometría">
+                            <field name="biometric_type"/>
+                            <field name="finger_index"/>
+                            <field name="uid"/>
+                            <field name="valid" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_zk_biometric_template" model="ir.actions.act_window">
+        <field name="name">Templates biométricos</field>
+        <field name="res_model">zk.biometric.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_zk_biometric_template"
+        name="Templates biométricos"
+        parent="reclutamiento__kuale.biometric_device_details_menu"
+        action="action_zk_biometric_template"
+        sequence="30"/>
+    
+    <record id="view_zk_biometric_verify_wizard_form" model="ir.ui.view">
+        <field name="name">zk.biometric.verify.wizard.form</field>
+        <field name="model">zk.biometric.verify.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Verificar Huella">
+                <sheet>
+                    <div class="zk-enroll-wrapper" t-att-data-enrolled="'1' if already_enrolled else '0'">
+
+                        <div class="zk-scanner-area state-waiting" id="zk_scanner_area">
+                            <div class="zk-pulse-ring ring-1"/>
+                            <div class="zk-pulse-ring ring-2"/>
+                            <div class="zk-pulse-ring ring-3"/>
+                            <div class="zk-scan-line"/>
+
+                            <div class="zk-finger-container">
+                                <svg class="zk-finger-svg" viewBox="0 0 100 120" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="50" cy="58" rx="30" ry="38"
+                                            fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+                                    <path id="zk_finger_fill"
+                                        d="M50 96 C28 96 20 78 20 58 C20 36 32 20 50 20
+                                        C68 20 80 36 80 58 C80 78 72 96 50 96 Z"
+                                        fill="#6366f1" opacity="0.45"/>
+                                    <path d="M50 34 C40 34 33 43 33 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C38 40 30 50 30 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C36 46 27 57 27 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 34 C60 34 67 43 67 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C62 40 70 50 70 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C64 46 73 57 73 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <circle cx="50" cy="54" r="4" fill="#6366f1" opacity="0.6"/>
+                                    <path d="M32 90 L32 100 Q32 110 50 110 Q68 110 68 100 L68 90
+                                            Q60 96 50 96 Q40 96 32 90 Z"
+                                        fill="#6366f1" opacity="0.1"/>
+                                </svg>
+                            </div>
+
+                            <div class="zk-status-badge waiting" id="zk_status_badge">
+                                <div class="zk-status-dot"/>
+                                <span id="zk_status_text">Esperando huella…</span>
+                            </div>
+
+                            <div class="zk-timer-container">
+                                <div class="zk-timer-wrapper">
+                                    <svg class="zk-timer-svg" viewBox="0 0 40 40">
+                                        <circle class="zk-timer-track" cx="20" cy="20" r="16"/>
+                                        <circle class="zk-timer-arc" id="zk_timer_arc"
+                                                cx="20" cy="20" r="16"/>
+                                    </svg>
+                                    <div class="zk-timer-label" id="zk_timer_label">2:15</div>
+                                </div>
+                            </div>
+
+                            <div class="zk-instruction" id="zk_instruction">
+                                Coloca el dedo en el sensor del reloj para verificar
+                            </div>
+                        </div>
+
+                        <field name="user_id"      invisible="1"/>
+                        <field name="ip"           invisible="1"/>
+                        <field name="port"         invisible="1"/>
+                        <field name="opened_at"    invisible="1"/>
+                        <field name="applicant_id" invisible="1"/>
+
+                    </div>
+                </sheet>
+                <footer>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

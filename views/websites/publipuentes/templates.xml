@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="publipuentes_template_ejemplo" name="Ejemplo Publipuentes">
+            <t t-call="website.layout">
+                <div class="container">
+                    <h1>Publipuentes</h1>
+                    <p>Este contenido solo pertenece al website Publipuentes</p>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

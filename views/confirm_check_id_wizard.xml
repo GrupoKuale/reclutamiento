@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="confirm_check_id_wizard_form" model="ir.ui.view">
+        <field name="name">confirm.check.id.wizard.form</field>
+        <field name="model">reclutamiento__kuale.confirm_check_id</field>
+        <field name="arch" type="xml">
+            <form string="Confirmar verificación">
+                <sheet>
+                    <div class="oe_title">
+                        <h3>¿La verificación fue exitosa?</h3>
+                        <p>Confirma que los datos son válidos y la verificación Check ID fue exitosa.</p>
+                    </div>
+                    <field name="applicant_id" invisible="1"/>
+                </sheet>
+                <footer>
+                    <button string="Aceptar" name="action_confirm"
+                            type="object" class="btn btn-success"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

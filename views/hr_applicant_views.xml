@@ -1,0 +1,1649 @@
+<odoo>
+    <record id="hr_applicant_view_form_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.applicant.form_reclutamiento_kuale</field>
+        <field name="model">hr.applicant</field>
+        <field name="priority">20</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//form[hasclass('o_applicant_form')]" position="inside">
+                    <!-- Modal cámara -->
+                    <div id="camera_modal" style="display:none; position:fixed; inset:0; z-index:99999;
+                        background:rgba(0,0,0,.75); align-items:center; justify-content:center;">
+                        <div style="background:#fff; border-radius:16px; overflow:hidden; width:460px;
+                                    box-shadow:0 24px 64px rgba(0,0,0,.4);">
+
+                            <!-- Header -->
+                            <div style="background:#f8f9fa; padding:16px 24px; display:flex;
+                                        align-items:center; justify-content:space-between;
+                                        border-bottom:1px solid #dee2e6;">
+                                <h4 style="margin:0; color:#212529; font-weight:700;">Tomar foto</h4>
+                                <span id="camera_close" style="color:#6c757d; cursor:pointer; font-size:20px; line-height:1;">&#x2715;</span>
+                            </div>
+
+                            <!-- Instrucción de estado -->
+                            <div id="camera_hint" style="text-align:center; font-size:13px; font-weight:600;
+                                padding:8px 16px 0; color:#6c757d; letter-spacing:.3px;">
+                                Coloca tu rostro dentro del óvalo
+                            </div>
+
+                            <!-- Área de video + silueta superpuesta -->
+                            <div style="padding:12px 16px 8px; text-align:center;">
+                                <div id="camera_viewport" style="position:relative; display:inline-block;
+                                    border-radius:12px; overflow:hidden; line-height:0;">
+
+                                    <video id="camera_video" autoplay="1" playsinline="1"
+                                        style="width:100%; border-radius:12px; background:#000;
+                                            transform-origin:center center; transition:transform .2s;"></video>
+
+                                    <!-- Silueta SVG superpuesta -->
+                                    <svg id="camera_guide" viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg"
+                                        style="position:absolute; top:0; left:0; width:100%; height:100%;
+                                                pointer-events:none;">
+
+                                        <!-- Oscurecimiento fuera del óvalo -->
+                                        <defs>
+                                            <mask id="face_mask">
+                                                <rect width="420" height="320" fill="white"/>
+                                                <!-- Óvalo facial -->
+                                                <ellipse cx="210" cy="130" rx="80" ry="100" fill="black"/>
+                                                <!-- Hombros -->
+                                                <path d="M80 320 Q120 240 150 230 Q180 222 210 222
+                                                        Q240 222 270 230 Q300 240 340 320 Z" fill="black"/>
+                                            </mask>
+                                        </defs>
+
+                                        <!-- Overlay oscuro fuera de la silueta -->
+                                        <rect width="420" height="320" fill="rgba(0,0,0,0.45)" mask="url(#face_mask)"/>
+
+                                        <!-- Borde del óvalo (animado) -->
+                                        <ellipse id="face_oval" cx="210" cy="130" rx="80" ry="100"
+                                                fill="none" stroke="#ffffff" stroke-width="2.5"
+                                                stroke-dasharray="8 4" opacity="0.9"/>
+
+                                        <!-- Contorno de hombros -->
+                                        <path d="M80 320 Q120 240 150 230 Q180 222 210 222
+                                                Q240 222 270 230 Q300 240 340 320"
+                                            fill="none" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+
+                                        <!-- Esquinas decorativas -->
+                                        <!-- Superior izquierda -->
+                                        <path d="M100 40 L100 60 M100 40 L120 40"
+                                            stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                        <!-- Superior derecha -->
+                                        <path d="M320 40 L320 60 M320 40 L300 40"
+                                            stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                        <!-- Inferior izquierda -->
+                                        <path d="M100 280 L100 260 M100 280 L120 280"
+                                            stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+                                        <!-- Inferior derecha -->
+                                        <path d="M320 280 L320 260 M320 280 L300 280"
+                                            stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+
+                                        <!-- Indicador de estado (círculo pequeño arriba del óvalo) -->
+                                        <circle id="camera_status_dot" cx="210" cy="18" r="6"
+                                                fill="#adb5bd" opacity="0.9"/>
+                                    </svg>
+
+                                    <canvas id="camera_canvas" style="display:none;"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Control de zoom -->
+                            <div style="padding:4px 24px 10px; display:flex; align-items:center; gap:10px;">
+                                <span style="font-size:13px; color:#6c757d; white-space:nowrap;">&#128269; Zoom</span>
+                                <input id="camera_zoom" type="range" min="100" max="300" value="100" step="10"
+                                    style="flex:1; accent-color:#0d6efd; height:4px; cursor:pointer;"/>
+                                <span id="camera_zoom_label" style="font-size:13px; font-weight:600;
+                                    color:#0d6efd; min-width:36px; text-align:right;">1.0×</span>
+                            </div>
+
+                            <!-- Botón capturar -->
+                            <div style="padding:0 16px 20px; display:flex; gap:12px; justify-content:center;">
+                                <span id="camera_capture"
+                                    style="background:#0d6efd; color:#fff; border-radius:999px;
+                                            padding:11px 36px; font-weight:700; cursor:pointer; font-size:14px;
+                                            display:inline-block; letter-spacing:.3px; transition:background .15s;">
+                                    &#128247; Capturar
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                </xpath>
+
+                <xpath expr="//button[@name='create_employee_from_applicant']" position="before">
+                    <button string="Generar Contrato" name="generate_Contract"
+                            invisible="pre_hired != True" class="oe_stat_button"
+                            type="object" data-hotkey="x"/>
+                    <div class="dropdown" invisible="status_stage_id != 7">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Formatos
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <li>
+                                <button string="Reglamento recibido" name="format_regulation" type="object"
+                                        class="oe_stat_button"
+                                        data-hotkey="x"/>
+                            </li>
+                            <li>
+                                <button string="Carta de confidencialidad" name="format_confidentiality" type="object"
+                                        class="oe_stat_button"
+                                        data-hotkey="y"/>
+                            </li>
+                            <li>
+                                <button string="Vale de uniforme" name="format_uniform_voucher" type="object"
+                                        class="oe_stat_button"
+                                        data-hotkey="x"/>
+                            </li>
+                            <li>
+                                <button string="Pagaré" name="format_promissory" type="object"
+                                        class="oe_stat_button"
+                                        data-hotkey="y"/>
+                            </li>
+                            <li>
+                                <button string="Formato contratación" name="generate_contract_summary"
+                                        invisible="pre_hired != True" class="oe_stat_button"
+                                        type="object" data-hotkey="x"/>
+                            </li>
+                        </ul>
+                    </div>
+                </xpath>
+
+                <xpath expr="//header/button[@name='create_employee_from_applicant']" position="replace">
+                </xpath>
+                
+                <xpath expr="//button[@name='toggle_active']" position="attributes">
+                    <attribute name="invisible">active or process != 'viable'</attribute>
+                </xpath>
+                <xpath expr="//sheet" position="replace">
+                    <sheet class="container ps-0 py-0">
+                        <div class="oe_button_box" name="button_box">
+                            <button name="create_employee_from_applicant"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-id-card-o"
+                                    groups="hr_recruitment.group_hr_recruitment_user"
+                                    invisible="emp_id or not active or not date_closed or status_stage_id != 7">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Crear empleado</span>
+                                </div>
+                            </button>
+                            <button name="action_open_employee"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-id-card-o"
+                                    groups="hr.group_hr_user"
+                                    invisible="not (emp_id or emp_is_active)">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="employee_name" readonly="1"/>
+                                    </span>
+                                    <span class="o_stat_text">Employee</span>
+                                </div>
+                            </button>
+                            <button name="action_applications_email"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil"
+                                    type="object"
+                                    context="{'active_test': False}"
+                                    invisible="application_count == 0">
+                                <field name="application_count" widget="statinfo" string="Other applications"/>
+                            </button>
+                            <button name="action_makeMeeting" class="oe_stat_button" icon="fa-calendar" type="object"
+                                    invisible="not id">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">
+                                        <field name="meeting_display_text"/>
+                                    </span>
+                                    <span class="o_stat_value">
+                                        <field name="meeting_display_date" readonly="1"/>
+                                    </span>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="col-8 pe-0">
+                                <widget name="web_ribbon" title="Rechazado" bg_color="text-bg-danger"
+                                        invisible="application_status != 'refused'"/>
+                                <widget name="web_ribbon" title="Contratado" bg_color="text-bg-success"
+                                    class="process_ribbon"
+                                    invisible="not formatos_verified"/>
+                                <widget name="web_ribbon" title="En proceso" bg_color="text-bg-warning"
+                                    class="process_ribbon"
+                                    invisible="formatos_verified or status_stage_id != 7"/>
+                                <widget name="web_ribbon" title="Archivado" bg_color="text-bg-warning"
+                                    class="process_ribbon"
+                                    invisible="process != 'archived'"/>
+                                <div invisible="pre_hired != True">
+                                    <widget name="web_ribbon" title="Pre contratado"
+                                        invisible="status_stage_id != 7 and status_stage_id != 8"/>
+                                </div>
+                                <widget name="web_ribbon" title="Nuevo" bg_color="text-bg-secondary"
+                                        invisible="process != 'new'"/>
+                                <div invisible="process != 'progress' or status_stage_id == 1 or status_stage_id == 7 or status_stage_id == 8">
+                                    <widget name="web_ribbon" title="En progreso" bg_color="text-bg-warning"
+                                            class="process_ribbon"
+                                            invisible="status_stage_id == 0 or status_stage_id == 1 or status_stage_id == 7 or status_stage_id == 8"/>
+                                </div>
+                                <widget name="web_ribbon" title="No viable" bg_color="text-bg-danger"
+                                        class="process_ribbon"
+                                        invisible="process != 'no_viable'"/>
+                                <widget name="web_ribbon" title="Viable" bg_color="text-bg-success"
+                                    class="process_ribbon"
+                                    invisible="process != 'viable'"/>
+                                <div invisible="process != 'progress' or status_stage_id == 1 or status_stage_id == 7 or status_stage_id == 8">
+                                    <widget name="web_ribbon" title="En progreso" bg_color="text-bg-warning"
+                                            class="process_ribbon"
+                                            invisible="status_stage_id == 0 or status_stage_id == 1 or status_stage_id == 7 or status_stage_id == 8"/>
+                                </div>
+                                <field name="active" invisible="1"/>
+                                <field name="legend_normal" invisible="1"/>
+                                <field name="legend_blocked" invisible="1"/>
+                                <field name="legend_done" invisible="1"/>
+                                <field name="process" invisible="1"/>
+                                <div class="oe_title pe-0 border border-light-p border-5 px-4 py-4 pe-4">
+                                    <label for="name" class="oe_edit_only"/>
+                                    <h1 class="d-flex justify-content-between align-items-center">
+                                        <field name="name" options="{'line_breaks': False}" widget="text"
+                                               placeholder="e.g. Sales Manager 2 year experience"/>
+                                        <field name="kanban_state" widget="state_selection"/>
+                                    </h1>
+                                    <div style="display:flex; gap:12px; align-items:stretch;">
+                                        <!-- Columna izquierda -->
+                                        <div style="flex:1; display:flex; flex-direction:column; gap:6px;">
+                                            <!-- Fila nombres -->
+                                            <div style="display:flex; gap:8px;">
+                                                <div style="flex:3;">
+                                                    <label for="partner_name" string="Nombre(s)" class="oe_edit_only"/>
+                                                    <field name="partner_name" placeholder="Nombre(s)"/>
+                                                </div>
+                                                <div style="flex:3;">
+                                                    <label for="last_name" class="oe_edit_only"/>
+                                                    <field name="last_name" placeholder="Apellido paterno"/>
+                                                </div>
+                                                <div style="flex:4;">
+                                                    <label for="last_name2" class="oe_edit_only"/>
+                                                    <field name="last_name2" placeholder="Apellido materno"/>
+                                                </div>
+                                            </div>
+                                            <!-- Fila CURP -->
+                                            <div style="display:flex; gap:8px;">
+                                                <div style="flex:3;">
+                                                    <label for="curp" class="oe_edit_only"/>
+                                                    <field name="curp" placeholder="CURP"/>
+                                                </div>
+                                                <div style="flex:3;">
+                                                    <label for="rfc_number" class="oe_edit_only"/>
+                                                    <field name="rfc_number" placeholder="RFC"/>
+                                                </div>
+                                                <div style="flex:4;">
+                                                    <label for="social_security_number" class="oe_edit_only"/>
+                                                    <field name="social_security_number" placeholder="NSS"/>
+                                                </div>
+                                            </div>
+                                            <!-- Fila teléfono/correo -->
+                                            <div style="display:flex; gap:8px;">
+                                                <div style="flex:3; display:flex; flex-direction:column;" invisible="not partner_mobile">
+                                                    <label for="partner_mobile" string="Celular"/>
+                                                    <field name="partner_mobile" widget="phone" nolabel="1"/>
+                                                </div>
+                                                <div style="flex:3; display:flex; flex-direction:column;" invisible="not partner_phone">
+                                                    <label for="partner_phone" string="Teléfono"/>
+                                                    <field name="partner_phone" widget="phone" nolabel="1"/>
+                                                </div>
+                                                <div style="flex:3; display:flex; flex-direction:column;" invisible="not desk_phone">
+                                                    <label for="desk_phone" string="Teléfono fijo"/>
+                                                    <field name="desk_phone" widget="phone" nolabel="1"/>
+                                                </div>
+                                                <div style="flex:4; display:flex; flex-direction:column;" invisible="not email_from">
+                                                    <label for="email_from" string="Correo electrónico"/>
+                                                    <field name="email_from" widget="email" nolabel="1"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Columna derecha: foto -->
+                                        <div style="flex:0 0 100px; display:flex; align-items:center; justify-content:center;" id="photo_container">
+                                            <field name="applicant_photo"
+                                                widget="image"
+                                                options="{'size': [100, 100]}"
+                                                style="width:100px; height:100px; object-fit:cover;"/>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chips -->
+                                    <div id="chips_container" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; overflow:hidden; width:100%; margin-top:6px;">
+                                        <field name="has_family_working_with_us" invisible="1"/>
+
+                                        <span style="display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
+                                                    background:#fff3e0; border:1px solid #ffb74d;
+                                                    border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="has_family_working_with_us != 'yes'">
+                                            <span style="color:#e65100; font-weight:600;">⚠ Familiar en empresa: Sí</span>
+                                            <span style="color:#e65100;">|</span>
+                                            <span style="color:#e65100; font-weight:500;">Familiar:</span>
+                                            <field name="family_worker_name" readonly="1"
+                                                style="color:#e65100; font-weight:600; margin:0; padding:0; white-space:nowrap;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:center; gap:4px; white-space:nowrap;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px;
+                                                    font-size:11px; line-height:1.4;"
+                                            invisible="has_family_working_with_us != 'no'">
+                                            <span style="color:#666; font-weight:500;">Familiar en empresa:</span>
+                                            <span style="color:#111; font-weight:600;">No</span>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not age">
+                                            <span style="color:#666; font-weight:500;">Edad:</span>
+                                            <field name="age" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                            <span style="color:#666;">años</span>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not gender">
+                                            <span style="color:#666; font-weight:500;">Género:</span>
+                                            <field name="gender" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not marital_status">
+                                            <span style="color:#666; font-weight:500;">E. civil:</span>
+                                            <field name="marital_status" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not lives_with">
+                                            <span style="color:#666; font-weight:500;">Vive con:</span>
+                                            <field name="lives_with" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                            <field name="lives_with_other" readonly="1" nolabel="1"
+                                                invisible="lives_with != 'other'"
+                                                style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not is_studying">
+                                            <span style="color:#666; font-weight:500;">Estudia:</span>
+                                            <field name="is_studying" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not desired_monthly_salary">
+                                            <span style="color:#666; font-weight:500;">Sal. esperado:</span>
+                                            <field name="desired_monthly_salary" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="not has_experience">
+                                            <span style="color:#666; font-weight:500;">Laboró antes:</span>
+                                            <field name="has_experience" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+
+                                        <span style="display:inline-flex; align-items:baseline; gap:3px;
+                                                    background:#f1f3f4; border-radius:6px; padding:2px 8px; font-size:11px; line-height:1.4;"
+                                            invisible="job_id.show_driverLicense != 'true' or not has_driver_license">
+                                            <span style="color:#666; font-weight:500;">Licencia:</span>
+                                            <field name="has_driver_license" readonly="1" style="color:#111; font-weight:600; margin:0; padding:0;"/>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="border pe-0 border-light-p border-5 px-4 py-4 pe-4 scrollable-div">
+
+                                    <notebook>
+                                        <page string="Información personal">
+                                            <!-- Sección Datos Personales -->
+
+                                            <table class="table table-bordered o_group border mb-0">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#personal_data_table" style="cursor: pointer;">
+                                                        Datos personales
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="personal_data_table" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <label for="has_ine" string="INE:"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="has_ine" widget="radio"
+                                                                   options="{'horizontal': true}"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="ine_validity" string="Vigencia:"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="ine_validity"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <div>
+                                                                <label for="state_birth_Select"
+                                                                       string="Entidad federativa de nacimiento:"/>
+                                                                <field name="state_birth_Select"
+                                                                       context="{'name_format': 'state'}"/>
+                                                            </div>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <div>
+                                                                <label for="birthplace_select"
+                                                                       string="Ciudad de nacimiento:"/>
+                                                                <field name="birthplace_select"
+                                                                       context="{'name_format': 'city'}"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#current_address" style="cursor: pointer;">
+                                                        Domicilio actual
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="current_address" class="collapse show">
+                                                <!-- Sección Domicilio Actual -->
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="postal_code"/>
+                                                                <field name="postal_code"/>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="state"/>
+                                                                <field name="state"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="municipality"/>
+                                                                <field name="municipality"/>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="colony"/>
+                                                                <field name="colony"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="type_road"/>
+                                                                <field name="type_road"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="current_address"/>
+                                                                <field name="current_address"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="exterior_number"/>
+                                                                <field name="exterior_number"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="interior_number"/>
+                                                                <field name="interior_number"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label for="additional_ref"/>
+                                                            <field name="additional_ref"/>
+                                                        </td>
+                                                        <td colspan="2">
+                                                            <label for="address_details"/>
+                                                            <field name="address_details"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <!-- Sección Domicilio Fiscal -->
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <th colspan="8" class="text-start ps-3">Domicilio fiscal</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="state_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="state_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="municipality_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="municipality_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="colony_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="colony_fiscal"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="fiscal_address"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="fiscal_address"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="exterior_number_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="exterior_number_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="interior_number_fiscal"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="interior_number_fiscal"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#studies" style="cursor: pointer;">
+                                                        Estudios
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                            <div id="studies" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td class="px-3 py-2">
+                                                            <label for="is_studying" string="Estudia:"/>
+                                                        </td>
+                                                        <td class="px-3 py-2">
+                                                            <field name="is_studying" widget="radio"
+                                                                options="{'horizontal': true}"/>
+                                                        </td>
+                                                    </tr>
+                                                   <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="scholarship_Related" string="Nivel de estudios:"/>
+                                                                <field name="scholarship_Related"/>
+                                                                <field name="is_bachelor_degree" invisible="1"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="specify_career" string="¿Cuál es tu licenciatura?"
+                                                                    invisible="scholarship_Related != 1"/>
+                                                                <field name="specify_career"
+                                                                    placeholder="Especifica tu licenciatura"
+                                                                    nolabel="1"
+                                                                    invisible="scholarship_Related != 1"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="career" string="Carrera o especialidad:"
+                                                                    invisible="scholarship_Related != 1"/>
+                                                                <field name="career"
+                                                                    placeholder="Carrera o especialidad"
+                                                                    nolabel="1"
+                                                                    invisible="scholarship_Related != 1"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="academic_situation" string="Situación académica:"/>
+                                                                <field name="academic_situation"
+                                                                    placeholder="Situación académica" nolabel="1"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="school_name" string="Escuela o instituto:"/>
+                                                                <field name="school_name"
+                                                                    placeholder="Escuela o instituto" nolabel="1"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="graduation_year" string="Año de egreso:"/>
+                                                                <field name="graduation_year"
+                                                                    placeholder="Año de egreso" nolabel="1"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="px-3 py-2" colspan="4">
+                                                            <label for="other_studies_ids"/>
+                                                            <field name="other_studies_ids">
+                                                                <tree create="true" editable="bottom">
+                                                                    <field name="name_study"/>
+                                                                    <field name="school_studies"/>
+                                                                    <field name="has_document"/>
+                                                                    <field name="document_type"/>
+                                                                </tree>
+                                                            </field>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <field name="schedule_student"
+                                                   invisible="is_studying != 'yes'"
+                                                   string="Horario de estudiante">
+                                                <tree create="true" editable="bottom">
+                                                    <field name="day"/>
+                                                    <field name="time_start"/>
+                                                    <field name="time_end"/>
+                                                </tree>
+                                            </field>
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#knowledge" style="cursor: pointer;">
+                                                        Conocimientos y Herramientas
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="knowledge" class="collapse show">
+                                                <field name="knowledge_ids" nolabel="1">
+                                                    <tree editable="bottom" create="true">
+                                                        <field name="tipo"/>
+                                                        <field name="name"/>
+                                                    </tree>
+                                                </field>
+                                                <field name="language_ids" nolabel="1" string="Idiomas">
+                                                    <tree editable="bottom" create="true">
+                                                        <field name="language_id"/>
+                                                        <field name="level_id"/>
+                                                    </tree>
+                                                </field>
+                                            </div>
+                                            
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#competencies" style="cursor: pointer;">
+                                                        Competencias
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="competencies" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <label for="competencies_ids"/>
+                                                            <field name="competencies_ids" widget="many2many_tags"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="ability_ids"/>
+                                                            <field name="ability_ids" widget="many2many_tags"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <label for="abilities" string="Hobbies"/>
+                                                            <field name="abilities"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#experience" style="cursor: pointer;">
+                                                        Experiencia
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="experience" class="collapse show">
+
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <label for="has_experience"/>
+                                                            <field name="has_experience" widget="radio"
+                                                                   options="{'horizontal': true}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr invisible="has_experience != 'yes'">
+                                                        <td colspan="3">
+                                                            <!-- Aquí iría la tabla dinámica de experiencia laboral -->
+                                                            <field name="experiencies_ids" string="Experiencia Laboral">
+                                                                <tree string="Experiencia Laboral" editable="bottom">
+                                                                    <field name="companyE" string="Empresa"/>
+                                                                    <field name="cityE" string="Ciudad"/>
+                                                                    <field name="periodEIn" string="Inicio"/>
+                                                                    <field name="periodEOut" string="Fin"
+                                                                           invisible="currently"/>
+                                                                    <field name="currently" string="Actualmente"/>
+                                                                    <field name="positionE" string="Puesto"/>
+                                                                    <field name="salaryE" string="Sueldo"/>
+                                                                    <field name="reasonE" string="Motivo de salida"/>
+                                                                    <field name="supervisorE" string="Supervisor"/>
+                                                                    <field name="referenceE" string="Referencia"/>
+                                                                </tree>
+                                                            </field>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#aditionalInfo" style="cursor: pointer;">
+                                                        Información adicional
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="aditionalInfo" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr style="vertical-align: top;">
+                                                        <td>
+                                                            <label for="about_vacancy"/>
+                                                            <field name="about_vacancy"/>
+                                                        </td>
+                                                        <td invisible="about_vacancy != 'other'">
+                                                            <label for="other_reason" string="Especificó"/>
+                                                            <field name="other_reason" readonly="1" nolabel="1"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="previous_experience"/>
+                                                            <field name="previous_experience"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="start_job"/>
+                                                            <field name="start_job"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="children"/>
+                                                            <field name="children"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="number_children"/>
+                                                            <field name="number_children"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="receive_offer_whatsapp"
+                                                                   string="Me gustaría recibir ofertas de empleo acordes a mi perfil"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="receive_offer_whatsapp"/>
+                                                            <label for="receive_offer_whatsapp"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="receive_offer_call"/>
+                                                            <label for="receive_offer_call"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="receive_offer_email"/>
+                                                            <label for="receive_offer_email"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="facebook_profile"/>
+                                                            <field name="facebook_profile" widget="url"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="other_network_profile"/>
+                                                            <field name="other_network_profile" widget="url"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="linkedin_profile"/>
+                                                            <field name="linkedin_profile" widget="url"
+                                                                   invisible="job_id.show_linkedIn != 'true'"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="preferred_time"/>
+                                                            <field name="preferred_time"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="can_travel"/>
+                                                            <label for="can_travel"/>
+                                                        </td>
+                                                        <td>
+                                                            <field name="can_move"/>
+                                                            <label for="can_move"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <label for="desired_monthly_salary"/>
+                                                            <field name="desired_monthly_salary"/>
+                                                        </td>
+                                                        <td>
+                                                            <label for="actual_benefits"/>
+                                                            <field name="actual_benefits"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <label for="description" string="Información adicional"/>
+                                                            <field name="description"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </page>
+                                        <page string="Adicionales" name="additional">
+                                            <table class="table table-bordered o_group border mb-0">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#additional" style="cursor: pointer;">
+                                                        Generales
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="additional" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="medical_unity"/>
+                                                                <field name="medical_unity"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="marital_status"/>
+                                                                <field name="marital_status"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="nationality"/>
+                                                                <field name="nationality"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="other_nationality"
+                                                                       invisible="nationality != 'other'"/>
+                                                                <field name="other_nationality"
+                                                                       invisible="nationality != 'other'"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                            <table class="table table-bordered o_group border mb-0 mt-2">
+                                                <tr style="background-color: #f5f5f5;">
+                                                    <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                        data-bs-target="#additional_health" style="cursor: pointer;">
+                                                        Salud
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                            <div id="additional_health" class="collapse show">
+                                                <table class="table table-bordered o_group border">
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="blood_type"/>
+                                                                <field name="blood_type"/>
+                                                            </div>
+                                                        </td>
+
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="has_allergy"/>
+                                                                <field name="has_allergy"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="allergy" invisible="has_allergy != 'yes'"/>
+                                                                <field name="allergy" invisible="has_allergy != 'yes'"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="has_medical_tx"/>
+                                                                <field name="has_medical_tx"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="medical_tx"
+                                                                       invisible="has_medical_tx != 'yes'"/>
+                                                                <field name="medical_tx"
+                                                                       invisible="has_medical_tx != 'yes'"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <div>
+                                                                <label for="has_chronic_disease"/>
+                                                                <field name="has_chronic_disease"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div>
+                                                                <label for="chronic_disease"
+                                                                    invisible="has_chronic_disease != 'yes'"/>
+                                                                <field name="chronic_disease"
+                                                                    invisible="has_chronic_disease != 'yes'"/>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                <table class="table table-bordered o_group border mb-0 mt-2">
+                                                    <tr style="background-color: #f5f5f5;">
+                                                        <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                            data-bs-target="#additional_bank" style="cursor: pointer;">
+                                                            Cuentas Bancarias
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                                <div id="additional_bank" class="collapse show">
+                                                    <field name="bank_account_ids" nolabel="1">
+                                                        <tree create="false" delete="false" editable="">
+                                                            <field name="account_type"        string="Tipo"/>
+                                                            <field name="bank"                string="Banco"/>
+                                                            <field name="account_number"      string="No. de Cuenta"/>
+                                                            <field name="interbank_clabe"     string="CLABE Interbancaria"/>
+                                                            <field name="payroll_card_number" string="No. Tarjeta Nómina"/>
+                                                        </tree>
+                                                    </field>
+                                                </div>
+
+                                                <table class="table table-bordered o_group border mb-0 mt-2">
+                                                    <tr style="background-color: #f5f5f5;">
+                                                        <th colspan="4" class="text-start ps-3" data-bs-toggle="collapse"
+                                                            data-bs-target="#additional_beneficiaries" style="cursor: pointer;">
+                                                            Beneficiarios
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                                <div id="additional_beneficiaries" class="collapse show">
+                                                    <field name="beneficiaries_ids" nolabel="1">
+                                                        <tree create="false" delete="false" editable="">
+                                                            <field name="beneficiary_name" string="Nombre"/>
+                                                            <field name="beneficiary_relationship" string="Parentesco"/>
+                                                            <field name="other_relationship" string="Otro" optional="show"/>
+                                                            <field name="beneficiary_percentage" string="Porcentaje %"/>
+                                                        </tree>
+                                                    </field>
+                                                </div>
+                                                <table class="table table-bordered o_group border mb-0 mt-2">
+                                                    <tr style="background-color: #f5f5f5;">
+                                                        <th colspan="4" class="text-start ps-3" 
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#emergency_contacts_section" 
+                                                            style="cursor: pointer;">
+                                                            Contactos de emergencia
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                                <div id="emergency_contacts_section" class="collapse show">
+                                                    <field name="emergency_contacts" nolabel="1">
+                                                        <tree editable="bottom" create="true">
+                                                            <field name="name" string="Nombre"/>
+                                                            <field name="relationship" string="Parentesco"/>
+                                                            <field name="phone_number" string="Teléfono"/>
+                                                        </tree>
+                                                    </field>
+                                                </div>
+                                            </div>
+                                        </page>
+
+                                        <page string="Talla Uniforme" name="clothing_size">
+                                            <button name="update_garments" string="Actualizar" type="object"/>
+                                            <field name="clothing_size" nolabel="1">
+                                                <tree editable="top" string="Clothing Size">
+                                                    <field name="allowed_product_templates" column_invisible="1"/>
+                                                    <field name="product_template_id" string="Prenda"/>
+                                                    <field name="product_id" string="Variante"/>
+                                                    <field name="quantity" string="Cantidad"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+
+                                        <page string="Otras aplicaciones vigentes" name="current_applications">
+                                            <field name="related_records" nolabel="1">
+                                                <tree create="false">
+                                                    <field name="curp"/>
+                                                    <field name="job_id"/>
+                                                    <field name="department_id"/>
+                                                    <field name="company_id" column_invisible="1"
+                                                           options='{"no_open":True}'/>
+                                                    <field name="branch" string="Sucursal y Horario"/>
+                                                    <field name="stage_id"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                        <page string="Seguimiento" name="timer_stage">
+                                            <field name="stage_history_ids">
+                                                <tree create="false">
+                                                    <field name="stage_id"/>
+                                                    <field name="start_time"/>
+                                                    <field name="end_time"/>
+                                                    <!--field name="duration"/-->
+                                                    <field name="duration_readable"/>
+                                                </tree>
+                                            </field>
+                                        </page>
+                                        <page string="Configuración" name="settings_related">
+                                            <group class="mt-2">
+                                                <group>
+                                                    <field name="partner_id" invisible="1"/>
+                                                    <field name="refuse_reason_id" invisible="active"/>
+                                                    <field name="email_cc" groups="base.group_no_one" invisible="1"/>
+                                                    <field name="type_id" placeholder="Degree" invisible="1"/>
+                                                    <field name="interviewer_ids"
+                                                           options="{'no_create': True, 'no_create_edit': True}"
+                                                           widget="many2many_avatar_user"/>
+                                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                                    <field name="date_closed" invisible="not date_closed"/>
+                                                    <field name="priority" widget="priority"/>
+                                                    <field name="source_id" invisible="1"/>
+                                                    <field name="medium_id" invisible="1"/>
+                                                    <field name="availability" placeholder="Directly Available"/>
+                                                    <field name="categ_ids" placeholder="Tags" widget="many2many_tags"
+                                                           options="{'color_field': 'color', 'no_create_edit': True}"/>
+                                                </group>
+                                                <group string="Contrato" name="recruitment_contract">
+                                                    <label for="job_tab_id"/>
+                                                    <div class="o_row">
+                                                        <field name="job_tab_id"/>
+                                                    </div>
+                                                    <label for="salary_expected"/>
+                                                    <div class="o_row">
+                                                        <field name="salary_expected"/>
+                                                        <span invisible="not salary_expected_extra">+</span>
+                                                        <field name="salary_expected_extra"
+                                                               placeholder="Extra advantages..."/>
+                                                    </div>
+                                                    <label for="salary_proposed"/>
+                                                    <div class="o_row">
+                                                        <field name="salary_proposed"/>
+                                                        <span invisible="not salary_proposed_extra">+</span>
+                                                        <field name="salary_proposed_extra"
+                                                               placeholder="Extra advantages..."/>
+                                                    </div>
+                                                    <field name="contract_start_date" string="Fecha de inicio de contrato"/>
+                                                </group>
+                                            </group>
+                                        </page>
+
+                                        <page string="Documentación"
+                                            name="documentation"
+                                            invisible="status_stage_id != 7">
+                                            <field name="documentation_ids"
+                                                widget="documentation_panel_widget"
+                                                nolabel="1"/>
+                                        </page>
+                                        
+                                        <page string="Historial Kuale" name="rehire" invisible="rehired != True">
+                                            <group>
+                                                <group name="recruitment_rehire">
+                                                    <field name="re_company"/>
+                                                    <field name="re_branch"/>
+                                                    <field name="re_boss"/>
+                                                    <field name="re_date"/>
+                                                    <field name="re_lastDay"/>
+                                                    <field name="termination_Date"/>
+                                                    <field name="re_reason"/>
+                                                    <field name="re_comments"/>
+                                                    <button name="rehire_action" string="Rehire" type="object"/>
+                                                </group><!---->
+                                            </group>
+                                        </page>
+                                    </notebook>
+                                </div>
+                                <field name="applicant_properties" columns="2"/>
+
+                            </div>
+                            <div class="col-4 border border-light-p border-5 px-0">
+
+                                <div class="p-3 d-flex flex-column" style="background: #ececec;" role="group"
+                                    aria-label="Botones laterales">
+                                    <field name="status_stage_id" invisible="1"/>
+                                    <field name="resend_complement" invisible="1"/>
+                                    <field name="pre_hired" invisible="1"/>
+                                    <field name="check_id" invisible="1"/>
+                                    <field name="check_id_verified" invisible="1"/>
+                                    <field name="huellas_verified" invisible="1"/>
+                                    <field name="formatos_verified" invisible="1"/>
+                                    <field name="check_id_opened" invisible="1"/>
+
+                                    <!-- Botones normales -->
+                                    <div class="d-flex flex-row gap-2 w-100" invisible="status_stage_id == 7">
+                                        <button string="Viable" name="set_viable" class="btn btn-primary flex-grow-1"
+                                                type="object" data-hotkey="x"
+                                                invisible="process != 'no_viable'"/>
+                                        <button string="Editar entrevista" name="interview_modal"
+                                                class="btn btn-primary flex-grow-1" type="object" data-hotkey="x"
+                                                invisible="status_stage_id != 4 or process == 'no_viable'"/>
+                                        <button string="Reenviar complemento" name="request_complement"
+                                                class="btn btn-primary flex-grow-1" type="object" data-hotkey="x"
+                                                invisible="status_stage_id != 5 or resend_complement == True or process == 'no_viable'"/>
+                                        <button string="Solicitar complemento" name="request_complement"
+                                                class="btn btn-primary flex-grow-1" type="object" data-hotkey="x"
+                                                invisible="status_stage_id != 5 or resend_complement == False or process == 'no_viable'"/>
+                                        <button string="Solicitar Documentacion" name="request_documentation"
+                                                class="btn btn-primary flex-grow-1" type="object" data-hotkey="x"
+                                                invisible="status_stage_id != 5 or process == 'no_viable'"/>
+                                        <button string="Enviar WhatsApp" name="send_whatsapp" type="object"
+                                                class="btn btn-primary flex-grow-1" data-hotkey="x"/>
+                                    </div>
+
+                                    <!-- Botones de proceso stage 7 -->
+                                    <div class="d-flex flex-row gap-2 mb-2 justify-content-center" invisible="status_stage_id != 7">
+                                       <button string="Check ID" name="action_open_check_id_modal"
+                                                type="object" class="btn btn-primary"
+                                                invisible="check_id_opened or check_id_verified"/>
+                                        <button string="Confirmar Check ID" name="action_open_confirm_check_id"
+                                                type="object" class="btn btn-warning"
+                                                invisible="not check_id_opened or check_id_verified"/>
+                                        <button string="Check ID ✓" name="action_open_check_id_modal"
+                                                type="object" class="btn btn-success"
+                                                invisible="not check_id_verified"/>
+                      
+                                        <!-- Huellas -->
+                                        <button string="Huellas ✓" name="action_open_enroll_wizard"
+                                                type="object" class="btn btn-success"
+                                                invisible="not huellas_verified"/>
+                                        <button string="Huellas" name="action_open_enroll_wizard"
+                                                type="object" class="btn btn-primary"
+                                                invisible="huellas_verified"/>
+
+                                        <button string="Formatos ✓" name="action_formatos_verified"
+                                                type="object" class="btn btn-success"
+                                                invisible="not formatos_verified"/>
+                                        <button string="Formatos" name="action_formatos_verified"
+                                                type="object" class="btn btn-primary"
+                                                invisible="formatos_verified"/>
+                                    </div>
+
+                                    <!-- Barra de progreso -->
+                                    <div invisible="status_stage_id != 7" class="d-flex align-items-center justify-content-center my-2 w-100">
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#27ae60;"
+                                            invisible="not check_id_verified">1</span>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#ccc;"
+                                            invisible="check_id_verified">1</span>
+                                        <div style="height:2px;width:50px;background-color:#ccc;"/>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#27ae60;"
+                                            invisible="not huellas_verified">2</span>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#ccc;"
+                                            invisible="huellas_verified">2</span>
+                                        <div style="height:2px;width:50px;background-color:#ccc;"/>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#27ae60;"
+                                            invisible="not formatos_verified">3</span>
+                                        <span class="rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                                            style="width:28px;height:28px;color:white;font-size:12px;background-color:#ccc;"
+                                            invisible="formatos_verified">3</span>
+                                    </div>
+
+                                    <!-- WhatsApp stage 8 -->
+                                    <button string="Enviar WhatsApp" name="send_whatsapp" type="object"
+                                            class="btn btn-primary w-100 mt-2"
+                                            invisible="status_stage_id != 7"
+                                            data-hotkey="x"/>
+                                </div>
+
+                                <div class="p-3 border border-light-p border-5 border-start-0 border-end-0">
+                                    <div class="o_employee_card">
+                                        <h1 class="d-flex justify-content-between align-items-center">
+                                            <field name="job_id" readonly="1"/>
+                                        </h1>
+                                        <div class="d-flex align-items-center">
+                                            <label for="department_id" class="oe_edit_only me-4 title_blue"/>
+                                            <field name="department_id"/>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <label for="branch" string="Sucursal y Horario"
+                                                   class="oe_edit_only me-4 title_blue"/>
+                                            <field name="branch"/>
+                                        </div>
+                                        <field name="company_id" groups="base.group_multi_company" invisible="1"
+                                               options='{"no_open":True}'/>
+                                        <div class="row">
+                                            <!-- Tipo de empleo -->
+                                            <div class="col-4">
+                                                Tipo de empleo:
+                                            </div>
+                                            <!-- Sueldo mensual -->
+                                            <div class="col-4">
+                                                Sueldo mensual:
+                                                <div class="btn-group">
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-2">
+                                            <!-- Jornada -->
+                                            <div class="col-4">
+                                                Jornada:
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                                <div class="p-3 border-top border-light-p border-5">
+                                    <label for="full_address" string="Dirección" class="title_blue"/>
+                                    <field name="full_address"/>
+                                    <label for="home_work_time" class="title_blue"/>
+                                    <field name="home_work_time"/>
+                                    <div style="width:100%; height:400px;">
+                                        <field name="map_iframe" widget="html" nolabel="1" 
+                                           style="width:100%;height:400px;overflow:hidden;padding:0;margin:0;"/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="border-top border-light-p border-5 p-3 ms-3">
+                                <notebook class="p-4 me-5">
+                                    <page string="Resumen" name="application_summary" invisible="1">
+                                        <field name="description" placeholder="Motivations..."/>
+                                    </page>
+                                    <page string="Solicitud de empleo" name="employee_request" invisible="1">
+                                        <group>
+                                            <group string="Solicitud de empleo" name="recruitment_jobRequest">
+                                                <field name="date_applicant"/>
+                                                <field name="days_elapsed"/>
+                                                <field name="about_vacancy" string="Origen"/>
+                                                <field name="home_work_time"/>
+                                                <field name="curp"/>
+                                                <field name="previous_experience"/>
+                                                <field name="birthdate"/>
+                                                <field name="birthplace_select" context="{'name_format': 'city'}"/>
+                                                <field name="state_birth_Select" context="{'name_format': 'state'}"/>
+                                                <field name="age"/>
+                                                <field name="gender"/>
+                                                <field name="scholarship"/>
+                                                <field name="type_id" placeholder="Degree"
+                                                       invisible="scholarship_Related != 'career'"/>
+                                                <field name="specify_career"
+                                                       invisible="scholarship_Related != 'career'"/>
+                                                <field name="is_studying"/>
+                                                <field name="schedule_student" invisible="is_studying != 'yes'"
+                                                       help="Horario por dia del estudiante">
+                                                    <tree create="true">
+                                                        <field name="day"/>
+                                                        <field name="time_start"/>
+                                                        <field name="time_end"/>
+                                                    </tree>
+                                                </field>
+                                                <field name="current_degree" invisible="is_studying != 'yes'"/>
+                                                <field name="has_ine"/>
+                                                <field name="ine_validity" invisible="has_ine != 'yes'"/>
+                                                <field name="ine_document" invisible="has_ine != 'yes'"/>
+                                                <field name="identification_options_ids" invisible="has_ine != 'no'"
+                                                       widget="many2many_checkboxes"/>
+
+                                                <field name="has_driver_license"
+                                                       invisible="job_id.show_driverLicense != 'true'"/>
+                                                <field name="driver_license_number"
+                                                       invisible="has_driver_license != 'yes'"/>
+                                                <field name="driver_license_validity"
+                                                       invisible="has_driver_license != 'yes'"/>
+                                                <field name="has_experience"/>
+                                                <field name="rehired" invisible="1"/>
+                                            </group>
+                                        </group>
+                                        <field name="experiencies_ids" string="" invisible="has_experience != 'yes'">
+                                            <tree editable="bottom">
+                                                <field name="companyE"/>
+                                                <field name="cityE"/>
+                                                <field name="periodEIn"/>
+                                                <field name="periodEOut"/>
+                                                <field name="positionE"/>
+                                                <field name="salaryE"/>
+                                                <field name="supervisorE"/>
+                                                <field name="referenceE"/>
+                                                <field name="reasonE"/>
+                                            </tree>
+                                        </field>
+                                        <group name="address_section">
+                                            <group string="Domicilio Actual" name="address"
+                                                   invisible="postal_code == ''">
+                                                <field name="postal_code"/>
+                                                <field name="state"/>
+                                                <field name="municipality"/>
+                                                <field name="colony"/>
+                                                <field name="current_address"/>
+                                                <field name="exterior_number"/>
+                                                <field name="interior_number"/>
+                                                <field name="between_streets"/>
+                                                <field name="additional_ref"/>
+                                                <field name="address_details"/>
+                                            </group>
+                                            <group string="Domicilio Actual" name="address"
+                                                   invisible="postal_code != ''">
+                                                <field name="postal_code_id" context="{'name_format': 'code'}"/>
+                                                <field name="allowed_state" invisible="1"/>
+                                                <field name="state_id" context="{'name_format': 'state'}"/>
+                                                <field name="allowed_municipality" invisible="1"/>
+                                                <field name="municipality_id"
+                                                       context="{'name_format': 'municipality'}"/>
+                                                <field name="allowed_colony" invisible="1"/>
+                                                <field name="colony_id" context="{'name_format': 'colony'}"/>
+                                            </group>
+                                            <group string="Domicilio Fiscal" name="address_fiscal">
+                                                <field name="full_fiscal_address"/>
+                                                <field name="state_fiscal"/>
+                                                <field name="municipality_fiscal"/>
+                                                <field name="colony_fiscal"/>
+                                                <field name="fiscal_address"/>
+                                                <field name="exterior_number_fiscal"/>
+                                                <field name="interior_number_fiscal"/>
+                                            </group>
+                                        </group>
+                                    </page>
+                                    <page string="Adicionales" name="additional" invisible="1">
+                                    </page>
+                                </notebook>
+
+
+                            </div>
+                        </div>
+
+                    </sheet>
+                </xpath>
+                <xpath expr="//field[@name='stage_id']" position="replace">
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}"
+                           invisible="not active and not emp_id" domain="[('visualize_form', '=', True)]"
+                           groups_readonly="reclutamiento__kuale.group_dh_access"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="applicant_get_refuse_reason_view_form_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">applicant.get.refuse.reason.form.reclutamiento_kuale</field>
+        <field name="model">applicant.get.refuse.reason</field>
+        <field name="inherit_id" ref="hr_recruitment.applicant_get_refuse_reason_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='refuse_reason_id']" position="replace">
+                    <field name="refuse_reason_id" options="{'horizontal': true, 'no_create': True, 'no_open': True}"/>
+                </xpath>
+                <xpath expr="//group[@invisible='not refuse_reason_id']" position="replace">
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="hr_recruitment_stage_form_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.recruitment.stage.form.reclutamiento_kuale</field>
+        <field name="model">hr.recruitment.stage</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_recruitment_stage_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='fold']" position="before">
+                    <field name="visualize_form"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="hr_applicant_kanban_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.applicant.kanban_reclutamiento_kuale</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_kanban_view_applicant"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//kanban" position="replace">
+                    <kanban default_group_by="stage_id" class="o_kanban_applicant o_kanban_small_column"
+                            quick_create_view="hr_recruitment.quick_create_applicant_form" sample="1">
+                        <field name="stage_id" options='{"group_by_tooltip": {"requirements": "Requirements"}}'/>
+                        <field name="date_closed"/>
+                        <field name="color"/>
+                        <field name="priority"/>
+                        <field name="user_id"/>
+                        <field name="user_email"/>
+                        <field name="partner_name"/>
+                        <field name="type_id"/>
+                        <field name="partner_id"/>
+                        <field name="job_id"/>
+                        <field name="department_id"/>
+                        <field name="attachment_number"/>
+                        <field name="active"/>
+                        <field name="activity_ids"/>
+                        <field name="activity_state"/>
+                        <field name="refuse_reason_id"/>
+                        <field name="application_status"/>
+                        <progressbar field="kanban_state" colors='{"done": "success", "blocked": "danger"}'/>
+                        <templates>
+                            <t t-name="kanban-menu">
+                                <a role="menuitem" name="action_makeMeeting" type="object" class="dropdown-item">
+                                    Schedule Interview
+                                </a>
+                                <a role="menuitem" name="archive_applicant" type="object" class="dropdown-item">Refuse
+                                </a>
+                                <a role="menuitem" name="archive_applicant" type="object" class="dropdown-item">
+                                    Archive
+                                </a>
+                                <t t-if="widget.deletable">
+                                    <a role="menuitem" type="delete" class="dropdown-item">Delete</a>
+                                </t>
+                                <div role="separator" class="dropdown-divider"></div>
+                                <ul class="oe_kanban_colorpicker text-center" data-field="color"/>
+                            </t>
+                            <t t-name="kanban-box">
+                                <div t-attf-class="{{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}} oe_kanban_card oe_kanban_global_click oe_applicant_kanban oe_semantic_html_override">
+                                    <field name="date_closed" invisible="1"/>
+                                    <field name="company_id" invisible="1"/>
+                                    <div class="ribbon ribbon-top-right" invisible="not date_closed">
+                                        <span class="text-bg-success">Contratado</span>
+                                    </div>
+                                    <span class="badge rounded-pill text-bg-danger float-end me-4"
+                                          invisible="application_status != 'refused'">Rechazado
+                                    </span>
+                                    <span class="badge rounded-pill text-bg-secondary float-end me-4"
+                                          invisible="application_status != 'archived'">Archived
+                                    </span>
+                                    <div class="oe_kanban_content">
+                                        <div class="o_kanban_record_top">
+                                            <div class="o_kanban_record_headings">
+                                                <b class="o_kanban_record_title mt8"
+                                                   t-if="record.partner_name.raw_value">
+                                                    <field name="partner_name"/>
+                                                    <br/>
+                                                </b>
+                                                <t t-else="1">
+                                                    <i class="o_kanban_record_title">
+                                                        <field name="name"/>
+                                                    </i>
+                                                    <br/>
+                                                </t>
+                                                <div class="o_kanban_record_subtitle"
+                                                     invisible="context.get('search_default_job_id', False)">
+                                                    <field name="job_id"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <field name="categ_ids" widget="many2many_tags"
+                                               options="{'color_field': 'color'}"/>
+                                        <t t-if="record.partner_mobile.raw_value">
+                                            <i class="fa fa-mobile mr4" role="img" aria-label="Mobile" title="Mobile"/>
+                                            <field name="partner_mobile" widget="phone"/>
+                                            <br/>
+                                        </t>
+                                        <field name="applicant_properties" widget="properties"/>
+                                        <div class="o_kanban_record_bottom mt4">
+                                            <div class="oe_kanban_bottom_left">
+                                                <div class="float-start mr4" groups="base.group_user">
+                                                    <field name="priority" widget="priority"/>
+                                                </div>
+                                                <div class="o_kanban_inline_block mr8">
+                                                    <field name="activity_ids" widget="kanban_activity"/>
+                                                </div>
+                                            </div>
+                                            <div class="oe_kanban_bottom_right">
+                                                <a name="action_open_attachments" type="object">
+                                                    <span title='Documents'>
+                                                        <i class='fa fa-paperclip' role="img" aria-label="Documents"/>
+                                                        <t t-esc="record.attachment_number.raw_value"/>
+                                                    </span>
+                                                </a>
+                                                <field name="kanban_state" widget="state_selection"/>
+                                                <field name="legend_normal" invisible="1"/>
+                                                <field name="legend_blocked" invisible="1"/>
+                                                <field name="legend_done" invisible="1"/>
+                                                <field name="user_id" widget="many2one_avatar_user"/>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </t>
+                        </templates>
+                    </kanban>
+                </xpath>
+                <xpath expr="//a[@name='action_makeMeeting']" position="after">
+                    <field name="color_process" invisible="1"/>
+                    <field name="process" invisible="1"/>
+                    <field name="allowed_stage_ids"/>
+                    <a role="menuitem" name="modal_selected" type="object" class="dropdown-item">Seleccionar</a>
+                </xpath>
+                <xpath expr="//t[@t-name='kanban-box']//div[contains(@t-attf-class, 'oe_kanban_card')]"
+                       position="replace">
+                    <div t-attf-class="{{'oe_kanban_color_' + kanban_getcolor(record.color_process.raw_value) + ' oe_kanban_color_' + record.process.raw_value }} oe_kanban_card oe_kanban_global_click oe_applicant_kanban oe_semantic_html_override">
+                        <field name="date_closed" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <div class="ribbon ribbon-top-right" invisible="not date_closed">
+                            <span class="text-bg-success">Contratado</span>
+                        </div>
+                        <span class="badge rounded-pill text-bg-danger float-end me-4"
+                              invisible="application_status != 'refused'">Rechazado
+                        </span>
+                        <span class="badge rounded-pill text-bg-secondary float-end me-4"
+                              invisible="application_status != 'archived'">Archived
+                        </span>
+                        <div class="oe_kanban_content">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <b class="o_kanban_record_title mt8" t-if="record.partner_name.raw_value">
+                                        <field name="partner_name"/>
+                                        <br/>
+                                    </b>
+                                    <t t-else="1">
+                                        <i class="o_kanban_record_title">
+                                            <field name="name"/>
+                                        </i>
+                                        <br/>
+                                    </t>
+                                    <div class="o_kanban_record_subtitle"
+                                         invisible="context.get('search_default_job_id', False)">
+                                        <field name="job_id"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <field name="categ_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <t t-if="record.partner_mobile.raw_value">
+                                <i class="fa fa-mobile mr4" role="img" aria-label="Mobile" title="Mobile"/>
+                                <field name="partner_mobile" widget="phone"/>
+                                <br/>
+                            </t>
+                            <field name="applicant_properties" widget="properties"/>
+                            <div class="o_kanban_record_bottom mt4">
+                                <div class="oe_kanban_bottom_left">
+                                    <div class="float-start mr4" groups="base.group_user">
+                                        <field name="priority" widget="priority"/>
+                                    </div>
+                                    <div class="o_kanban_inline_block mr8" style="display:inline-flex; align-items:center; gap:4px;">
+                                        <field name="activity_ids" widget="kanban_activity"/>
+                                        <span style="font-size:11px; color:#888;">
+                                            <field name="duration_actual"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                    <a name="action_open_attachments" type="object">
+                                        <span title='Documents'>
+                                            <i class='fa fa-paperclip' role="img" aria-label="Documents"/>
+                                            <t t-esc="record.attachment_number.raw_value"/>
+                                        </span>
+                                    </a>
+                                    <field name="kanban_state" widget="state_selection"/>
+                                    <field name="legend_normal" invisible="1"/>
+                                    <field name="legend_blocked" invisible="1"/>
+                                    <field name="legend_done" invisible="1"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </xpath>
+                <xpath expr="//ul[@class='oe_kanban_colorpicker text-center']" position="replace">
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="hr_applicant_search_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.applicant.search_reclutamiento_kuale</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="arch" type="xml">
+            <data>
+
+                <xpath expr="//filter[@name='refused']" position="after">
+                    <filter string="Bolsa de trabajo" name="work_1" domain="[('from_bolsa_trabajo', '=', True)]"/>
+                    <filter string="No viable" name="process_1" 
+                        domain="[('process', '=', 'no_viable')]"
+                        context="{'active_test': False}"/>
+                </xpath>
+                <xpath expr="//filter[@name='stage']" position="replace">
+                    <filter string="Stage" name="stage" domain="[]" context="{'group_by': 'stage_id'}"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

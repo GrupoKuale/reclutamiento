@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+
+        <record id="menu_reclutamiento_root" model="website.menu">
+            <field name="name">Reclutamiento Menu</field>
+            <field name="sequence" type="int">10</field>
+            <field name="website_id" ref="website_reclutamiento"/>
+        </record>
+
+        <record id="menu_reclutamiento_page1" model="website.menu">
+            <field name="name">Pagina 1</field>
+            <field name="url">/reclutamiento</field>
+            <field name="parent_id" ref="menu_reclutamiento_root"/>
+            <field name="sequence" type="int">20</field>
+            <field name="website_id" ref="website_reclutamiento"/>
+        </record>
+
+    </data>
+</odoo>

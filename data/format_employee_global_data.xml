@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="format_employee_regulation_global" model="reclutamiento__kuale.format_employee">
+            <field name="name">Formato de reglamento recibido</field>
+            <field name="job_id" eval="False"/>
+            <field name="body"><![CDATA[<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;"><t t-out="object.company_id.name"></t></strong>
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;">
+Por este medio hago constar que recibí copia del Reglamento Interior de Trabajo que regirán las relaciones entre <t t-out="object.company_id.name"></t> empresa dedicada a la contratación y colocación de personal representada por <t t-out="object.company_id.legal_representative.name"></t> con domicilio en <t t-out="object.company_id.street"></t>,<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t> y todos y cada uno de los trabajadores de dicha empresa en cualquiera de sus sucursales en el Estado de <t t-out="object.company_id.state_id.name"></t>. Dicho reglamento cuenta con la debida protocolización de la Junta Local de Conciliación y Arbitraje del Estado con fecha del <t t-out="object.actual_date"></t>.
+</p>
+<table class="table">
+<thead><tr><td class="text-center">Nombre Completo</td><td class="text-center">Fecha de recibido</td><td class="text-center">Firma de recibido y huella</td></tr></thead>
+<tbody>
+<tr><td><br/><br/><br/></td><td><br/><br/><br/></td><td><br/><br/><br/></td></tr>
+<tr><td><br/><br/><br/></td><td><br/><br/><br/></td><td><br/><br/><br/></td></tr>
+</tbody>
+</table>]]></field>
+        </record>
+
+        <record id="format_employee_confidentiality_global" model="reclutamiento__kuale.format_employee">
+            <field name="name">Carta de confidencialidad</field>
+            <field name="job_id" eval="False"/>
+            <field name="body"><![CDATA[<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;">CARTA DE CONFIDENCIALIDAD</strong>
+</p>
+<br/><br/>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t> A <t t-out="object.actual_date"></t>
+</p>
+<br/><br/>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:justify;">
+En virtud de que por los servicios que presta y en beneficio de la empresa, en mi relación como empleado y dado que tengo acceso y recibo información relativa a, diseño, clientes, productos, formulas, contraseñas, fichas de seguridad, fichas técnicas de información general de la empresa y por tanto poseo conocimiento de los asuntos, comerciales y administrativos de carácter reservado o confidenciales de la misma, me obligo en los términos de la Fracción XIII del Artículo 134 de la ley Federal del Trabajo, a guardarlos escrupulosamente en todo momento, es decir durante mi relación laboral y después de concluida esta, entendiendo que me está prohibido usarlos y/o externarlos en beneficio propio o de terceros sin el consentimiento por escrito de esta negociación ya que estoy consciente de que revelar tales secretos puedo incurrir en la comisión de un ilícito penal o de responsabilidad civil regulada por el artículos 1388 y 1389 del Código civil vigente en el Estado de Tamaulipas.
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:justify;">
+Por otra parte, por la naturaleza y características de las funciones mencionadas que ejecuto por cuenta y a favor de la empresa, estoy de acuerdo en que cualquier invención, innovación o mejora que se derive de dichas funciones y el derecho a la explotación de ella corresponderá a esta empresa, renunciando a cualquier derecho ante las instancias correspondientes referente al registro, uso y disfrute de patentes, marcas e invenciones vigilada por el INSTITUTO MEXICANO DE LA PROPIEDAD INDUSTRIAL.
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:justify;">
+Por ultimo doy la debida autorización a la presente empleadora de poder utilizar los datos personales que aquí entrego, con el fin administrativo o de servicios que requiera conforme a lo señalado en la ley y en los términos y condiciones de la misma.
+</p>
+<br/><br/><br/><br/>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+A T E N T A M E N T E.<br/><br/><br/>
+________________________________<br/>
+<t t-out="object.partner_name"></t> <t t-out="object.last_name"></t> <t t-out="object.last_name2"></t>
+</p>]]></field>
+        </record>
+
+        <record id="format_employee_uniform_voucher_global" model="reclutamiento__kuale.format_employee">
+            <field name="name">Vale de uniforme</field>
+            <field name="job_id" eval="False"/>
+            <field name="body"><![CDATA[<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+<br/>
+<strong style="box-sizing:border-box;font-weight:700;">VALE DE UNIFORME</strong>
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>. <t t-out="object.actual_date"></t>
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;">
+Hago constar que recibí de la empresa <t t-out="object.company_id.name"></t> uniformes que a continuación se detallan a mi entera conformidad:
+</p>
+<table class="table">
+<thead>
+  <tr>
+    <td class="text-center">Cantidad</td>
+    <td class="text-center">Prenda</td>
+    <td class="text-center">Talla</td>
+  </tr>
+</thead>
+<tbody>
+  <t t-foreach="object.clothing_size" t-as="p">
+    <tr>
+      <td style="text-align:center"><t t-out="p.quantity"/></td>
+      <td style="text-align:center"><t t-out="p.product_template_id.name or ''"/></td>
+      <td style="text-align:center"><t t-out="p.product_id.display_name or ''"/></td>
+    </tr>
+  </t>
+</tbody>
+</table>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;">
+Y me obligo en los términos del art 134 facción VI y 135 fracciones III y IX de la Ley Laboral a conservarlos en buen estado; a utilizarlos para lo que están destinados dentro de mi trabajo; y a restituirlos cuando me sean canjeados o el patrón me los requiera. Mismos que devolveré al momento de concluir la relación laboral con la empresa.
+*En caso de no devolver los uniformes al concluir la relación laboral, el importe de los mismos se descontará a precio de costo en el finiquito.
+</p>
+<br/><br/>
+Nombre completo: <t t-out="object.partner_name"></t> <t t-out="object.last_name"></t> <t t-out="object.last_name2"></t>
+<br/>Firma de conformidad:]]></field>
+        </record>
+
+        <record id="format_employee_promissory_global" model="reclutamiento__kuale.format_employee">
+            <field name="name">Formato pagare</field>
+            <field name="job_id" eval="False"/>
+            <field name="body"><![CDATA[<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;">P  A  G  A  R  E</strong>
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>, a <t t-out="object.actual_date"></t>
+</p>
+<br/><br/>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:right;">
+Bueno por $ 300.00 MXN
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;">
+Por el presente pagaré me obligo a pagar incondicionalmente a la orden de <t t-out="object.company_id.name"></t>, en <t t-out="object.company_id.street"></t>,<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>, la cantidad de $ 300.00 (TRESCIENTOS PESOS 00/100 MXN) el día ___________________________________. De modo expreso convengo que, si el importe materia de la obligación de pago no fuere cubierto en los términos y condiciones pactados, pagaré desde la fecha de su vencimiento un interés moratorio de 0.00% mensual.
+<br/>En el caso que para obtener el pago de este documento fuere necesario demandar judicialmente el pago, el deudor-suscriptor se somete a la competencia de los tribunales del segundo distrito judicial del estado de Tamaulipas, con residencia en la ciudad de ALTAMIRA, TAMAULIPAS.
+</p>
+DEUDOR<br/>
+Nombre: <t t-out="object.partner_name"></t> <t t-out="object.last_name"></t> <t t-out="object.last_name2"></t><br/>
+Domicilio: Estadio No. 203 Col. Petrolera C.P. 89110 Tampico, Tamaulipas<br/>
+Telefono: <t t-out="object.partner_mobile"></t> / <t t-out="object.desk_phone"></t>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom:0px;text-align:center;">
+<br/><br/><br/>
+______________________________________________<br/>
+Firma del trabajador<br/>
+<t t-out="object.partner_name"></t> <t t-out="object.last_name"></t> <t t-out="object.last_name2"></t>
+</p>]]></field>
+        </record>
+
+    </data>
+</odoo>

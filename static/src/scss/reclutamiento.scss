@@ -1,0 +1,111 @@
+.o_kanban_dashboard.o_hr_department_kanban .o_kanban_renderer {
+    --KanbanRecord-width: 450px;
+    --KanbanRecord-width-small: 350px;
+}
+
+.o_hr_employee_form_view .o_form_renderer {
+    .o_employee_chat_btn {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-bottom: 5px;
+        @include media-breakpoint-down(md) {
+            margin-left: 0!important;
+        }
+    }
+    .o_employee_avatar {
+        position: relative;
+        width: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        .o_employee_availability {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            padding-bottom: 1px;
+            border-radius: 50%;
+            background-color: $o-view-background-color;
+            height: 1rem;
+            width: 1rem;
+            * {
+                margin-bottom: -1px;
+                height: 1rem;
+                width: 1rem;
+            }
+        }
+    }
+    .oe_title {
+        flex: 1;
+    }
+}
+
+.o_hr_employee_kanban .o_kanban_renderer {
+    .o_employee_availability {
+        margin: unset !important;
+    }
+    .o_kanban_record_bottom {
+        margin: 0 var(--KanbanRecord-padding-h);
+        .fa.fa-comments {
+            margin-bottom: 5px;
+        }
+    }
+}
+
+.hr_tags {
+    margin-right: 20%;
+}
+
+.o_hr_narrow_field {
+    width: 8rem!important;
+    max-width: 8rem!important;
+    * {
+        max-width: 100%;
+    }
+}
+
+@for $size from 10 through 15 {
+    .o_hr_narrow_field-#{$size} {
+        width: #{$size}rem!important;
+        max-width: #{$size}rem!important;
+    }
+}
+/* Estilos para la lista de compañías */
+.company-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Estilos para cada tarjeta de compañía */
+.company-card {
+    width: calc(33.33% - 20px); /* Ajusta el ancho según tus necesidades */
+    margin: 10px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Estilos al pasar el ratón sobre la tarjeta */
+.company-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos para el título de la compañía */
+.company-card h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+/* Estilos para los párrafos */
+.company-card p {
+    margin: 0;
+    font-size: 1em;
+    color: #555;
+}
+.font-weight-bold{
+    font-weight: bold;
+}

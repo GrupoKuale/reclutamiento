@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de Formulario -->
+        <record id="view_form_employee_feedback" model="ir.ui.view">
+            <field name="name">employee.feedback.form</field>
+            <field name="model">reclutamiento__kuale.employee.feedback</field>
+            <field name="arch" type="xml">
+                <form string="Comentarios">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="folio" readonly="1"/>
+                                <field name="status"/>
+                                <field name="feedbackBy"/>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="feedbackType"/>
+                                    <field name="subject" string="Comentario sobre"/>
+                                </group>
+                            </group>
+                        </group>
+                        <group>
+                            <field name="feedback" string="Detalles"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de Árbol (Lista) -->
+        <record id="view_tree_employee_feedback" model="ir.ui.view">
+            <field name="name">employee.feedback.tree</field>
+            <field name="model">reclutamiento__kuale.employee.feedback</field>
+            <field name="arch" type="xml">
+                <tree string="Comentarios">
+                    <field name="folio"/>
+                    <field name="feedbackType"/>
+                    <field name="subject"/>
+                    <field name="status"/>
+                    <field name="feedbackBy"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vista de Búsqueda -->
+        <record id="view_search_employee_feedback" model="ir.ui.view">
+            <field name="name">employee.feedback.search</field>
+            <field name="model">reclutamiento__kuale.employee.feedback</field>
+            <field name="arch" type="xml">
+                <search string="Buscar comentarios del empleado">
+                    <field name="folio"/>
+                    <field name="feedbackType"/>
+                    <field name="status"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción para el modelo Employee Feedback -->
+        <record id="action_employee_feedback" model="ir.actions.act_window">
+            <field name="name">Comentarios del empleado</field>
+            <field name="res_model">reclutamiento__kuale.employee.feedback</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No hay comentarios de empleados.
+                </p>
+                <p>
+                    Crea el primer comentario de empleado.
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

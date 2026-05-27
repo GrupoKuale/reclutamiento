@@ -1,0 +1,53 @@
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;">
+<t t-out="object.company_id.name"></t>
+</strong>
+</p>
+                <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;">
+
+                    Por este medio hago constar que recibí copia del Reglamento Interior de Trabajo que regirán las relaciones entre <t t-out="object.company_id.name"></t> empresa dedicada
+                    a la contratación y colocación de personal representada por <t t-out="object.company_id.legal_representative.name"></t> con domicilio en
+                    <t t-out="object.company_id.street"></t>,<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t> y todos y cada uno de los
+                    trabajadores de dicha empresa en cualquiera de sus sucursales en el Estado de <t t-out="object.company_id.state_id.name"></t>.
+                    Dicho reglamento cuenta con la debida protocolización de la Junta Local de Conciliación y Arbitraje del Estado con fecha del <t t-out="object.actual_date"></t>.
+                </p>
+                <table class="table">
+                    <thead>
+                        <tr col="3">
+                            <td class="text-center">
+                               Nombre Completo
+                            </td>
+                            <td class="text-center">
+                               Fecha de recibido
+                            </td>
+                            <td class="text-center">
+                               Firma de recibido y huella
+                            </td>
+                        </tr>
+
+                    </thead>
+                    <tbody>
+                        <tr col="3">
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                        </tr>
+                        <tr col="3">
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                            <td>
+                                <br/><br/><br/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>

@@ -1,0 +1,60 @@
+.divider {
+    margin: 0px;
+}
+
+.title_table {
+    margin: 2px;
+}
+.g-col-sm-2 {
+    grid-column: auto / span 2;
+}
+
+.o_form_view .o_horizontal_separator:not(:empty) {
+    box-shadow: 0 1px 0 #e6e6e6;
+}
+
+.text-uppercase {
+    text-transform: uppercase !important;
+}
+.fw-bolder {
+    font-weight: bolder !important;
+}
+.small {
+    font-size: 0.8125rem;
+}
+
+.header_table_job{
+    background-color: #315d7c;
+    color: white;
+    }
+
+.wrap_input_custom {
+    label{
+        color: var(--biz-theme-primary-color);
+    }
+    .o_field_widget {
+        width: 100%;
+    }
+}
+
+.custom_container{
+    margin: 0;
+    padding: 0;
+}
+
+
+.col-division-right{
+    border-right: 2px solid var(--biz-theme-primary-color);
+}
+
+.custom_image{
+    object-fit: contain;
+    max-width: 350px;
+    height: auto;
+    margin: auto;
+}
+
+
+.clean_table_css tr td:nth-last-child(2){
+    display: none !important;
+}

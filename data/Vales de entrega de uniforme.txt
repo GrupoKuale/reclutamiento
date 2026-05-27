@@ -1,0 +1,32 @@
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+<br>
+<strong style="box-sizing:border-box;font-weight:700;">VALE DE UNIFORME</strong>
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px; text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>. <t t-out="object.actual_date"></t>
+ </p>
+ <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;">
+ Hago constar que recibí de la empresa <t t-out="object.company_id.name"></t>
+ uniformes que a continuación se detallan a mi entera conformidad:
+ <table class="table">
+    <thead>
+       <tr col="4">
+           <td class="text-center"> Cantidad</td>
+           <td class="text-center"> Prenda </td>
+           <td class="text-center"> Talla </td>
+       </tr>
+    </thead>
+    <tbody>
+    </tbody>
+ </table>
+ Y  me obligo en  los  términos del art  134 facción VI  y  135 fracciones III  y
+IX  de la  Ley  Laboral a conservarlos en  buen  estado; a  utilizarlos  para
+lo  que  están  destinados  dentro de  mi  trabajo;   y a  restituirlos  cuando
+me  sean  canjeados o el  patrón me  los requiera. Mismos que devolveré
+al momento de concluir la relación laboral con la empresa.
+ *En caso de no devolver los uniformes al concluir la relación laboral, el importe
+de los mismos se descontará a precio de costo en el finiquito.
+</p><br><br>
+Nombre completo: <t t-out="object.name"></t><t t-out="object.last_name"></t><t t-out="object.last_name2"></t>
+<br>
+Firma de conformidad:

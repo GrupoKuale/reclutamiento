@@ -1,0 +1,33 @@
+
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;">P  A  G  A  R  É
+</strong></p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px; text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>, a <t t-out="object.actual_date"></t>
+</p><br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px; text-align:right;">
+Bueno por $ 300.00 MXN
+</p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;">
+Por el presente pagaré me obligo a pagar incondicionalmente a la orden de <t t-out="object.company_id.name"></t>, en <t t-out="object.company_id.street"></t>,<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t>,
+la cantidad de $ 300.00 (TRESCIENTOS PESOS 00/100 MXN) el día ___________________________________.
+ De modo expreso convengo que, si el importe materia de la obligación de pago no fuere cubierto en los términos y condiciones pactados, pagaré desde la fecha de su vencimiento un interés moratorio de 0.00% mensual,
+ por todo el tiempo que estuviere parcial o totalmente insoluto.
+<br>
+En el caso que para obtener el pago de este documento fuere necesario demandar judicialmente el pago, el deudor-suscriptor y en su caso, el aval, se someten expresamente a la competencia de los tribunales del segundo distrito judicial
+del estado de Tamaulipas, con residencia en la ciudad de ALTAMIRA, TAMAULIPAS, renunciando expresamente a la competencia que les pudiera corresponder con motivo de sus domicilios presentes y futuros, renunciando igualmente
+a lo previsto en los artículos 1104 y 1105 del código de comercio en vigor.
+<br>
+</p>
+DEUDOR
+Nombre:   <t t-out="object.name"></t><t t-out="object.last_name"></t><t t-out="object.last_name2"></t>
+Domicilio: Estadio No. 203 Col. Petrolera C.P. 89110 Tampico, Tamaulipas
+Teléfono:  <t t-out="object.partner_mobile"></t>/ <t t-out="object.desk_phone"></t>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+<br><br><br>
+______________________________________________<br>
+Firma del trabajador<br>
+  <t t-out="object.name"></t><t t-out="object.last_name"></t><t t-out="object.last_name2"></t>
+</p>
+
+

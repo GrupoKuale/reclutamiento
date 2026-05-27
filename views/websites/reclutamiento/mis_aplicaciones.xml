@@ -1,0 +1,1189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="mis_aplicaciones_page" name="Kuale - Mis Aplicaciones">
+        <t t-call="website.layout">
+            <div id="wrap" class="kuale-jobs">
+
+                <style>
+                    #top { display: none !important; }
+
+                    #wrap.kuale-jobs { background: #F3F3F3 !important; }
+                    .oe_website_jobs { background: #F3F3F3 !important; }
+
+                    /* ── Botones de navegación topbar ── */
+                    .kuale-misapl-nav-btn {
+                        display: inline-block;
+                        padding: 10px 24px;
+                        border-radius: 6px;
+                        font-family: "Somerun", "Aloevera", system-ui, sans-serif;
+                        font-size: 13px;
+                        font-weight: 900;
+                        letter-spacing: 0.5px;
+                        text-decoration: none !important;
+                        cursor: pointer;
+                        transition: background .2s, color .2s;
+                    }
+                    .kuale-misapl-nav-btn--inactive {
+                        background: #e0e0e0;
+                        color: #111 !important;
+                        border: 2px solid transparent;
+                    }
+                    .kuale-misapl-nav-btn--inactive:hover {
+                        background: #d0d0d0;
+                        color: #111 !important;
+                        text-decoration: none !important;
+                    }
+                    .kuale-misapl-nav-btn--active {
+                        background: transparent;
+                        color: #FA0000 !important;
+                        border: none;
+                        box-shadow: none;
+                        padding-left: 0;
+                        padding-right: 0;
+                    }
+                    .kuale-misapl-nav-btn--active:hover {
+                        background: transparent;
+                        color: #FA0000 !important;
+                        text-decoration: none !important;
+                    }
+
+                    /* ── Fila abandonada: sombreado gris ── */
+                    .kuale-row--abandoned {
+                        background: #f0f0f0 !important;
+                        opacity: 0.72;
+                    }
+                    .kuale-row--abandoned td {
+                        color: #999 !important;
+                    }
+
+                    .kuale-status-help-modal {
+                        position: relative;
+                    }
+
+                    /* ── Botón Abandonar proceso ── */
+                    .kuale-btn-abandon {
+                        display: inline-flex !important;
+                        align-items: center;
+                        gap: 8px;
+                        border: 2px solid #ccc !important;
+                        background: #fff !important;
+                        color: #333 !important;
+                        border-radius: 6px !important;
+                        padding: 8px 18px !important;
+                        font-family: "Aloevera", system-ui, sans-serif !important;
+                        font-size: 13px !important;
+                        font-weight: 700 !important;
+                        cursor: pointer;
+                        text-decoration: none !important;
+                        transition: border-color .2s, color .2s;
+                    }
+                    .kuale-btn-abandon:hover {
+                        border-color: #FA0000 !important;
+                        color: #FA0000 !important;
+                        background: #fff !important;
+                        text-decoration: none !important;
+                    }
+
+                    /* ── Botón Quitar de mi lista ── */
+                    .kuale-btn-quitar-fila {
+                        display: inline-flex !important;
+                        align-items: center;
+                        gap: 6px;
+                        border: 2px solid #ddd !important;
+                        background: #f0f0f0 !important;
+                        color: #999 !important;
+                        border-radius: 6px !important;
+                        padding: 8px 16px !important;
+                        font-family: "Aloevera", system-ui, sans-serif !important;
+                        font-size: 13px !important;
+                        font-weight: 700 !important;
+                        cursor: pointer;
+                        text-decoration: none !important;
+                        transition: border-color .2s, color .2s, background .2s;
+                    }
+                    .kuale-btn-quitar-fila:hover {
+                        border-color: #aaa !important;
+                        color: #555 !important;
+                        background: #e8e8e8 !important;
+                        text-decoration: none !important;
+                    }
+
+                    /* ── Botón Ver todas las vacantes ── */
+                    .kuale-btn-ver-vacantes {
+                        display: inline-block;
+                        background: #FA0000;
+                        color: #fff !important;
+                        border: none;
+                        border-radius: 999px;
+                        padding: 14px 48px;
+                        font-family: "Somerun", "Aloevera", system-ui, sans-serif;
+                        font-size: 15px;
+                        font-weight: 900;
+                        text-decoration: none !important;
+                        letter-spacing: 0.4px;
+                        cursor: pointer;
+                        transition: background .2s;
+                    }
+                    .kuale-btn-ver-vacantes:hover {
+                        background: #E10000;
+                        color: #fff !important;
+                        text-decoration: none !important;
+                    }
+
+                    /* ── Badge de estatus ── */
+                    .kuale-status-badge {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 7px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        font-size: 13px;
+                        font-weight: 600;
+                        color: #111;
+                    }
+
+                    /* El punto (círculo) — color aplicado por JS, tooltip manejado por div flotante */
+                    .kuale-status-dot {
+                        font-size: 16px;
+                        line-height: 1;
+                        cursor: help;
+                        flex-shrink: 0;
+                    }
+
+                    /* ── Tooltip flotante único montado en el DOM por JS ── */
+                    #kualeStatusTooltip {
+                        position: fixed;
+                        z-index: 99999;
+                        background: #222;
+                        color: #fff;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        font-size: 12px;
+                        font-weight: 400;
+                        line-height: 1.5;
+                        padding: 8px 13px;
+                        border-radius: 7px;
+                        width: 230px;
+                        box-shadow: 0 4px 18px rgba(0,0,0,.22);
+                        pointer-events: none;
+                        opacity: 0;
+                        transition: opacity .15s;
+                        white-space: normal;
+                    }
+                    #kualeStatusTooltip.visible {
+                        opacity: 1;
+                    }
+
+                    /* ── Botón ? en encabezado Estatus ── */
+                    .kuale-status-help-btn {
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 18px;
+                        height: 18px;
+                        border-radius: 50%;
+                        border: 1.5px solid #aaa;
+                        background: #fff;
+                        color: #666;
+                        font-size: 11px;
+                        font-weight: 800;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        cursor: pointer;
+                        margin-left: 6px;
+                        vertical-align: middle;
+                        line-height: 1;
+                        padding: 0;
+                        transition: border-color .2s, color .2s;
+                    }
+                    .kuale-status-help-btn:hover {
+                        border-color: #FA0000;
+                        color: #FA0000;
+                    }
+
+                    /* ── Modal semáforo de estatus ── */
+                    .kuale-status-help-modal {
+                        background: #fff;
+                        border-radius: 14px;
+                        padding: 36px 32px 28px;
+                        width: 90%;
+                        max-width: 480px;
+                        box-shadow: 0 24px 64px rgba(0,0,0,.22);
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        max-height: 88vh;
+                        overflow-y: auto;
+                    }
+                    .kuale-status-help-modal h3 {
+                        font-size: 17px;
+                        font-weight: 800;
+                        color: #111;
+                        margin: 0 0 6px;
+                    }
+                    .kuale-shm-subtitle {
+                        font-size: 13px;
+                        color: #777;
+                        margin: 0 0 22px;
+                    }
+                    .kuale-shm-row {
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 14px;
+                        padding: 10px 0;
+                        border-bottom: 1px solid #f0f0f0;
+                    }
+                    .kuale-shm-row:last-of-type { border-bottom: none; }
+                    .kuale-shm-dot {
+                        width: 14px;
+                        height: 14px;
+                        border-radius: 50%;
+                        flex-shrink: 0;
+                        margin-top: 3px;
+                    }
+                    .kuale-shm-info strong {
+                        font-size: 13px;
+                        font-weight: 800;
+                        color: #111;
+                        display: block;
+                        margin-bottom: 2px;
+                    }
+                    .kuale-shm-info span {
+                        font-size: 12px;
+                        color: #666;
+                        line-height: 1.45;
+                    }
+                    .kuale-shm-close {
+                        display: block;
+                        margin: 20px auto 0;
+                        background: #f5f5f5;
+                        color: #333;
+                        border: none;
+                        border-radius: 999px;
+                        padding: 12px 40px;
+                        font-size: 14px;
+                        font-weight: 700;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        cursor: pointer;
+                        transition: background .2s;
+                    }
+                    .kuale-shm-close:hover { background: #e8e8e8; }
+
+                    .kuale-cell__sub {
+                        display: none;
+                    }
+
+                    /* =========================================================
+                    RESPONSIVIDAD MIS APLICACIONES
+                    ========================================================= */
+
+                    /* ── Tablet (≤ 992px) ── */
+                    @media (max-width: 992px) {
+
+                        .kuale-misapl-nav-btn {
+                            font-size: 11px !important;
+                            padding: 8px 14px !important;
+                            letter-spacing: 0.02em !important;
+                        }
+
+                        .kuale-tableWrap {
+                            overflow-x: auto !important;
+                            -webkit-overflow-scrolling: touch !important;
+                        }
+
+                        .kuale-table {
+                            min-width: 600px !important;
+                            font-size: 13px !important;
+                        }
+
+                        .kuale-table th,
+                        .kuale-table td {
+                            padding: 10px 8px !important;
+                        }
+
+                        .kuale-btn-abandon,
+                        .kuale-btn-quitar-fila {
+                            font-size: 11px !important;
+                            padding: 6px 10px !important;
+                        }
+                    }
+
+                    /* ── Móvil (≤ 576px) ── */
+                    @media (max-width: 576px) {
+
+                        #wrap.kuale-jobs .kuale-landing__topbar {
+                            display: grid !important;
+                            grid-template-columns: auto 1fr !important;
+                            grid-template-rows: auto auto !important;
+                            padding: 8px 10px !important;
+                            align-items: center !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-landing__brand {
+                            grid-column: 1 !important;
+                            grid-row: 1 !important;
+                            align-self: center !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-user-badge {
+                            grid-column: 2 !important;
+                            grid-row: 1 !important;
+                            display: flex !important;
+                            justify-content: flex-end !important;
+                            align-items: center !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-topbar-nav {
+                            grid-column: 1 / -1 !important;
+                            grid-row: 2 !important;
+                            display: flex !important;
+                            flex-direction: row !important;
+                            justify-content: center !important;
+                            gap: 8px !important;
+                            padding-top: 6px !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-misapl-nav-btn {
+                            font-size: 9px !important;
+                            padding: 5px 10px !important;
+                            letter-spacing: 0 !important;
+                            white-space: nowrap !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-misapl-nav-btn--active {
+                            padding-left: 4px !important;
+                            padding-right: 4px !important;
+                        }
+
+                        #wrap.kuale-jobs .kuale-landing__topbar-actions {
+                            display: contents !important;
+                        }
+
+                        /* Título y hint */
+                        .kuale-jobs-counter__title {
+                            font-size: 22px !important;
+                        }
+
+                        .kuale-jobs-counter__hint {
+                            font-size: 13px !important;
+                        }
+
+                        /* Tabla */
+                        .kuale-tableWrap {
+                            overflow-x: auto !important;
+                            -webkit-overflow-scrolling: touch !important;
+                            border-radius: 8px !important;
+                        }
+
+                        .kuale-table {
+                            min-width: unset !important;
+                            width: 100% !important;
+                            font-size: 12px !important;
+                        }
+
+                        /* Ocultar Ciudad, Sucursal y Marca */
+                        .kuale-table th:nth-child(2),
+                        .kuale-table td:nth-child(2),
+                        .kuale-table th:nth-child(3),
+                        .kuale-table td:nth-child(3),
+                        .kuale-table th:nth-child(4),
+                        .kuale-table td:nth-child(4) {
+                            display: none !important;
+                        }
+
+                        .kuale-table th {
+                            font-size: 11px !important;
+                            padding: 8px 6px !important;
+                            white-space: nowrap !important;
+                        }
+
+                        .kuale-table td {
+                            padding: 8px 6px !important;
+                            font-size: 12px !important;
+                        }
+
+                        /* Info extra debajo del puesto */
+                        .kuale-cell__sub {
+                            display: inline-block !important;
+                            font-size: 9px !important;
+                            color: #FA0000 !important;
+                            margin-top: 5px !important;
+                            line-height: 1.4 !important;
+                            font-family: "Aloevera", system-ui, sans-serif !important;
+                            background: #fff5f5 !important;
+                            border-radius: 4px !important;
+                            padding: 2px 7px !important;
+                            border-left: 2px solid #FA0000 !important;
+                        }
+
+                        .kuale-btn-abandon,
+                        .kuale-btn-quitar-fila {
+                            font-size: 9px !important;
+                            padding: 4px 6px !important;
+                            gap: 2px !important;
+                            white-space: nowrap !important;
+                        }
+
+                        /* Modal semáforo */
+                        .kuale-status-help-modal {
+                            width: 92% !important;
+                            max-width: 92% !important;
+                            padding: 20px 16px 16px !important;
+                            max-height: 80vh !important;
+                            overflow-y: auto !important;
+                            border-radius: 10px !important;
+                        }
+
+                        .kuale-status-help-modal h3 {
+                            font-size: 14px !important;
+                            margin-bottom: 4px !important;
+                        }
+
+                        .kuale-shm-subtitle {
+                            font-size: 11px !important;
+                            margin-bottom: 14px !important;
+                        }
+
+                        .kuale-shm-row {
+                            padding: 7px 0 !important;
+                            gap: 10px !important;
+                        }
+
+                        .kuale-shm-dot {
+                            width: 10px !important;
+                            height: 10px !important;
+                            min-width: 10px !important;
+                            margin-top: 4px !important;
+                        }
+
+                        .kuale-shm-info strong {
+                            font-size: 11px !important;
+                        }
+
+                        .kuale-shm-info span {
+                            font-size: 10px !important;
+                        }
+
+                        .kuale-shm-close {
+                            padding: 10px 28px !important;
+                            font-size: 13px !important;
+                            margin-top: 14px !important;
+                        }
+
+                        /* CTA inferior */
+                        .kuale-btn-ver-vacantes {
+                            font-size: 13px !important;
+                            padding: 12px 32px !important;
+                        }
+
+                        .kuale-status-label {
+                            font-size: 10px !important;
+                            line-height: 1.3 !important;
+                        }
+
+                        .kuale-status-badge {
+                            gap: 4px !important;
+                        }
+
+                        .kuale-status-dot {
+                            font-size: 12px !important;
+                            flex-shrink: 0 !important;
+                        }
+
+                       .kuale-btn-completar {
+                            font-size: 9px !important;
+                            padding: 3px 8px !important;
+                            gap: 3px !important;
+                            margin-top: 4px !important;
+                            white-space: nowrap !important;
+                        }
+                    }
+                </style>
+
+                <!-- ── Topbar ── -->
+                <div class="kuale-landing__topbar">
+                    <div class="kuale-landing__brand">
+                        <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo.png" alt="Grupo Kuale"/>
+                        <span class="kuale-landing__brand-text">
+                            <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                            RECLUTAMIENTO
+                        </span>
+                    </div>
+                    <div class="kuale-landing__topbar-actions">
+                        <div class="kuale-topbar-nav">
+                            <a href="/vacantes" class="kuale-misapl-nav-btn kuale-misapl-nav-btn--inactive">VACANTES</a>
+                            <a href="/mis-aplicaciones" class="kuale-misapl-nav-btn kuale-misapl-nav-btn--active">MIS APLICACIONES</a>
+                        </div>
+                        <div class="kuale-user-badge" id="kualeUserBadge">
+                            <span class="kuale-user-badge__name" t-esc="' '.join(request.env.user.name.split()[:2]) if request.env.user.name else ''"/>
+                            <span class="kuale-user-badge__avatar">
+                                <t t-esc="''.join([p[0].upper() for p in request.env.user.name.split()[:2]])"/>
+                            </span>
+                            <div class="kuale-user-dropdown" id="kualeUserDropdown">
+                                <a href="/mis-aplicaciones" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                                    Mis Aplicaciones
+                                </a>
+                                <a href="#" data-kuale-perfil="open" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                    Mi cuenta
+                                </a>
+                                <div class="kuale-user-dropdown__divider"/>
+                                <a href="/kuale/logout" class="kuale-user-dropdown__item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                    Cerrar sesi&#xF3;n
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── Contenido principal ── -->
+                <div class="container oe_website_jobs">
+                    <div class="row pt48 pb16">
+                        <div class="col-lg">
+
+                            <section class="kuale-jobs-counter" aria-label="Mis aplicaciones">
+                                <div class="kuale-jobs-counter__top">
+                                    <h2 class="kuale-jobs-counter__title">MIS APLICACIONES</h2>
+                                </div>
+                                <div class="kuale-jobs-counter__hint">
+                                    Revisa a continuaci&#xF3;n el estatus de las vacantes a las que has aplicado;
+                                    nos interesa que recibas informaci&#xF3;n a tiempo y certera del proceso
+                                    as&#xED; como te has interesado en formar parte de nosotros.
+                                </div>
+                            </section>
+
+                            <div class="row flex-column">
+                                <div class="col-lg">
+                                    <div class="tableWrap kuale-tableWrap">
+                                        <table class="kuale-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Puesto <span class="kuale-sortCaret">&#9662;</span></th>
+                                                    <th>Marca/Departamento <span class="kuale-sortCaret">&#9662;</span></th>
+                                                    <th>Ciudad <span class="kuale-sortCaret">&#9662;</span></th>
+                                                    <th>Sucursal <span class="kuale-sortCaret">&#9662;</span></th>
+                                                    <th>
+                                                        Estatus
+                                                        <button class="kuale-status-help-btn" id="kualeStatusHelpBtn" title="&#xBF;Qu&#xE9; significa cada estatus?">?</button>
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-if="aplicaciones">
+                                                    <t t-foreach="aplicaciones" t-as="item">
+                                                        <tr t-attf-class="kuale-row{{ ' kuale-row--abandoned' if item['app'].abandoned else '' }}">
+                                                            <td class="kuale-cell">
+                                                                <span t-esc="item['app'].job_id.name or 'N/A'"/>
+                                                                <div class="kuale-cell__sub">
+                                                                    <t t-esc="item['app'].company_id.name or ''"/>
+                                                                    <t t-if="item['app'].job_id.address_id and item['app'].job_id.address_id.city">
+                                                                        · <t t-esc="item['app'].job_id.address_id.city"/>
+                                                                    </t>
+                                                                    <t t-elif="item['app'].job_id.city_Job and item['app'].job_id.city_Job.city">
+                                                                        · <t t-esc="item['app'].job_id.city_Job.city"/>
+                                                                    </t>
+                                                                    <t t-if="item['branch'] and item['branch'] != 'N/A'">
+                                                                        <a href="#" class="kuale-branch-link"
+                                                                            t-att-data-branch="item['branch']"
+                                                                            t-att-data-company="item['app'].company_id.name"
+                                                                            style="color:#FA0000 !important; text-decoration:underline !important;">
+                                                                            <t t-esc="item['branch']"/>
+                                                                        </a>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        · <a href="#" class="kuale-branch-link"
+                                                                            data-branch="N/A"
+                                                                            t-att-data-company="item['app'].company_id.name"
+                                                                            style="color:#FA0000 !important; text-decoration:underline !important;">
+                                                                            N/A
+                                                                        </a>
+                                                                    </t>
+                                                                </div>
+                                                            </td>
+                                                            
+                                                            <td class="kuale-cell">
+                                                                <div class="kuale-brandCell">
+                                                                    <img t-attf-src="/logo.png?company=#{item['app'].company_id.id}"
+                                                                        t-att-alt="item['app'].company_id.name"
+                                                                        class="kuale-brandCell__logo"/>
+                                                                </div>
+                                                            </td>
+                                                            <td class="kuale-cell">
+                                                                <t t-if="item['app'].job_id.address_id and item['app'].job_id.address_id.city">
+                                                                    <t t-esc="item['app'].job_id.address_id.city"/>
+                                                                </t>
+                                                                <t t-elif="item['app'].job_id.city_Job and item['app'].job_id.city_Job.city">
+                                                                    <t t-esc="item['app'].job_id.city_Job.city"/>
+                                                                </t>
+                                                                <t t-else="">N/A</t>
+                                                            </td>
+                                                            <td class="kuale-cell">
+                                                                <a href="#" class="kuale-branch-link"
+                                                                    t-att-data-branch="item['branch']"
+                                                                    t-att-data-company="item['app'].company_id.name">
+                                                                    <t t-esc="item['branch']"/>
+                                                                </a>
+                                                            </td>
+
+                                                            <!-- ── COLUMNA ESTATUS ── -->
+                                                            <td class="kuale-cell">
+                                                                <t t-if="item['app'].refuse_reason_id">
+                                                                    <span class="kuale-status-badge">
+                                                                        <span class="kuale-status-dot" data-stage="refused">&#x25CF;</span>
+                                                                        <span class="kuale-status-label">Bolsa de trabajo</span>
+                                                                    </span>
+                                                                </t>
+                                                                <t t-elif="item['app'].abandoned">
+                                                                    <span class="kuale-status-badge">
+                                                                        <span class="kuale-status-dot" data-stage="abandoned">&#x25CF;</span>
+                                                                        <span class="kuale-status-label">Proceso abandonado</span>
+                                                                    </span>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <span class="kuale-status-badge">
+                                                                        <span class="kuale-status-dot"
+                                                                            t-att-data-stage="item['app'].stage_id.name or 'default'">&#x25CF;</span>
+                                                                        <span class="kuale-status-label"
+                                                                            t-att-data-stage-label="item['app'].stage_id.name or ''">
+                                                                            <t t-esc="item['app'].stage_id.name or 'Solicitud enviada'"/>
+                                                                        </span>
+                                                                    </span>
+                                                                </t>
+                                                                <!-- ── Botón complemento ── -->
+                                                                <t t-if="item.get('complement_url') and not item['app'].abandoned and not item['app'].refuse_reason_id">
+                                                                    <div style="margin-top: 8px;">
+                                                                        <a t-att-href="item['complement_url']"
+                                                                            target="_blank"
+                                                                            rel="opener"
+                                                                            class="kuale-btn-completar"
+                                                                            style="display:inline-flex; align-items:center; gap:6px;
+                                                                                    background:#FA0000; color:#fff !important;
+                                                                                    border-radius:6px; padding:6px 14px;
+                                                                                    font-family:'Aloevera',system-ui,sans-serif;
+                                                                                    font-size:12px; font-weight:700;
+                                                                                    text-decoration:none !important;
+                                                                                    transition:background .2s;">
+                                                                                Completar mi perfil &#x2192;
+                                                                        </a>
+                                                                    </div>
+                                                                </t>
+                                                            </td>
+
+                                                            <!-- ── COLUMNA ACCIONES ── -->
+                                                            <td class="kuale-cell kuale-cell--actions text-end">
+                                                                <t t-if="not item['app'].abandoned">
+                                                                    <button class="kuale-btn-abandon"
+                                                                        t-att-data-id="item['app'].id"
+                                                                        t-att-data-job="item['app'].job_id.name or ''">
+                                                                        Abandonar proceso &#x21A6;
+                                                                    </button>
+                                                                </t>
+                                                                <t t-else="">
+                                                                    <button class="kuale-btn-quitar-fila"
+                                                                        t-att-data-id="item['app'].id">
+                                                                        Quitar de mi lista &#xD7;
+                                                                    </button>
+                                                                </t>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <t t-else="">
+                                                    <tr>
+                                                        <td colspan="6" class="text-center py-5"
+                                                            style="color:#888; font-family:'Aloevera',system-ui,sans-serif;">
+                                                            A&#xFA;n no has aplicado a ninguna vacante.
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CTA inferior -->
+                            <div class="text-center py-5">
+                                <p style="font-family:'Somerun','Aloevera',system-ui,sans-serif; font-size:18px; font-weight:900;">
+                                    &#xBF;Te interesar&#xED;a aplicar en otra vacante?
+                                </p>
+                                <p style="font-family:'Aloevera',system-ui,sans-serif; color:#666; font-size:14px; margin-bottom:24px;">
+                                    Revisa nuestras opciones de trabajo disponibles y actualiza tu informaci&#xF3;n en tu solicitud si es necesario.
+                                </p>
+                                <a href="/vacantes" class="kuale-btn-ver-vacantes">
+                                    Ver todas las vacantes
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="kualeStatusTooltip"></div>
+
+                <!-- ══════════════════════════════════════════
+                     Modal: semáforo de estatus (botón ?)
+                ══════════════════════════════════════════ -->
+                <div id="kualeStatusHelpOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
+                    background:rgba(0,0,0,.52); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+                    <div class="kuale-status-help-modal">
+                        <button id="kualeStatusHelpCloseX" style="position:absolute; top:12px; right:14px;
+                            background:none; border:none; font-size:18px; font-weight:800; color:#999;
+                            cursor:pointer; line-height:1; padding:4px 8px; border-radius:4px;
+                            transition:color .2s;">&#10005;</button>
+                        <h3>&#xBF;Qu&#xE9; significa cada estatus?</h3>
+                        <p class="kuale-shm-subtitle">
+                            El c&#xED;rculo de color indica en qu&#xE9; etapa del proceso de selecci&#xF3;n te encuentras.
+                        </p>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#3498db;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Nuevo</strong>
+                                <span>Tu solicitud fue recibida y est&#xE1; pendiente de revisi&#xF3;n por el equipo de reclutamiento.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#f39c12;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Hemos visto tu perfil / Prefiltrados</strong>
+                                <span>El equipo est&#xE1; revisando tu perfil para determinar si cumples con los requisitos b&#xE1;sicos del puesto.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#9b59b6;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Primera entrevista / Segunda entrevista</strong>
+                                <span>Est&#xE1;s en proceso de entrevistas. Pronto nos pondremos en contacto para coordinar los detalles.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#8e44ad;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Proceso de segunda entrevista</strong>
+                                <span>Avanzaste a una segunda ronda de evaluaci&#xF3;n. El equipo analiza tu candidatura con mayor detalle.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#1abc9c;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Propuesta de contrato / Proceso de contrataci&#xF3;n</strong>
+                                <span>&#xA1;Excelentes noticias! Est&#xE1;s en la recta final. El equipo preparar&#xE1; los documentos de tu incorporaci&#xF3;n.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#27ae60;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Contrato firmado</strong>
+                                <span>&#xA1;Bienvenido/a al equipo! Tu contrato ha sido formalizado. Espera instrucciones sobre tu incorporaci&#xF3;n.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#e74c3c;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Bolsa de trabajo</strong>
+                                <span>Por el momento nuestros puestos se encuentran ocupados, pero en cuanto se abra alguna vacante nos contactamos contigo.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#aaaaaa;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Proceso abandonado</strong>
+                                <span>Decidiste no continuar con este proceso. Puedes aplicar nuevamente cuando lo desees.</span>
+                            </div>
+                        </div>
+                        <div class="kuale-shm-row">
+                            <div class="kuale-shm-dot" style="background:#ff8800;"></div>
+                            <div class="kuale-shm-info">
+                                <strong>Otros estatus</strong>
+                                <span>Tu solicitud se encuentra en una etapa interna. El equipo de reclutamiento te contactar&#xE1; pronto.</span>
+                            </div>
+                        </div>
+                        <button class="kuale-shm-close" id="kualeStatusHelpClose">Entendido</button>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════
+                     Modal: abandono de proceso
+                ══════════════════════════════════════════ -->
+                <div id="kualeAbandonOverlay" style="display:none; position:fixed; inset:0; z-index:9999;
+                    background:rgba(0,0,0,.55); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); align-items:center; justify-content:center;">
+                    <div style="background:#fff; border-radius:12px; padding:40px 36px; width:90%; max-width:520px;
+                                box-shadow:0 24px 64px rgba(0,0,0,.22); font-family:'Aloevera',system-ui,sans-serif;">
+                        <h3 style="font-size:18px; font-weight:800; color:#111; margin-bottom:20px; line-height:1.4;">
+                            &#xBF;Por qu&#xE9; deseas abandonar el proceso de reclutamiento?
+                        </h3>
+                        <div id="kualeAbandonError" style="background:#fdecea; color:#c62828; border-radius:6px;
+                            padding:10px 14px; font-size:13px; margin-bottom:16px; display:none;"></div>
+                        <select id="kualeAbandonReason" style="width:100%; border:2px solid #FA0000; border-radius:6px;
+                            padding:12px 14px; font-size:14px; font-family:'Aloevera',system-ui,sans-serif;
+                            color:#333; outline:none; margin-bottom:16px;">
+                            <option value="">Selecciona la opci&#xF3;n que describa el motivo.</option>
+                            <option value="school">Prioridad a la escuela</option>
+                            <option value="moving">Cambio de domicilio</option>
+                            <option value="health">Enfermedad/Salud</option>
+                            <option value="better_job">Mejor oferta de trabajo</option>
+                            <option value="wait_time">Tiempo de espera demasiado largo</option>
+                            <option value="ux">P&#xE1;gina poco amigable al usuario</option>
+                            <option value="bad_service">Mala atenci&#xF3;n de alguien de la empresa</option>
+                            <option value="distance">Complicaci&#xF3;n con distancia o transportes al trabajo</option>
+                            <option value="city_change">Cambio de ciudad</option>
+                            <option value="salary">Salario</option>
+                            <option value="other">Otros/Motivos personales</option>
+                        </select>
+                        <textarea id="kualeAbandonComment" style="width:100%; border:2px solid #FA0000; border-radius:6px;
+                            padding:12px 14px; font-size:14px; font-family:'Aloevera',system-ui,sans-serif;
+                            color:#333; outline:none; margin-bottom:16px; resize:vertical; min-height:80px;
+                            display:none; box-sizing:border-box;"
+                            placeholder="Especifica de favor..."></textarea>
+                        <div style="display:flex; gap:12px;">
+                            <button type="button" id="kualeAbandonCancel"
+                                style="flex:1; background:#f5f5f5; color:#333; border:none; border-radius:999px;
+                                       padding:14px; font-size:14px; font-weight:700; cursor:pointer;
+                                       font-family:'Aloevera',system-ui,sans-serif;">
+                                Cancelar
+                            </button>
+                            <button type="button" id="kualeAbandonSend"
+                                style="flex:1; background:#FA0000; color:#fff; border:none; border-radius:999px;
+                                       padding:14px; font-size:14px; font-weight:800; cursor:pointer;
+                                       font-family:'Aloevera',system-ui,sans-serif;">
+                                Enviar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Mapa -->
+                <div id="kualeBranchModal" class="kuale-modal">
+                    <div class="kuale-modal__box">
+                        <div class="kuale-modal__header">
+                            <span class="kuale-modal__title" id="kualeBranchTitle">Ubicación</span>
+                            <button class="kuale-modal__close" id="kualeBranchClose">&#10005;</button>
+                        </div>
+                        <div class="kuale-modal__body">
+                            <iframe id="kualeBranchMap" class="kuale-modal__map" frameborder="0" allowfullscreen=""></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    window.addEventListener('DOMContentLoaded', function() {
+                        var modal      = document.getElementById('kualeBranchModal');
+                        var modalTitle = document.getElementById('kualeBranchTitle');
+                        var modalMap   = document.getElementById('kualeBranchMap');
+                        var modalClose = document.getElementById('kualeBranchClose');
+
+                        document.querySelectorAll('.kuale-branch-link').forEach(function(link) {
+                            link.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                var branch  = this.getAttribute('data-branch');
+                                var company = this.getAttribute('data-company');
+
+                                if (!branch || branch === 'N/A') {
+                                    modalTitle.textContent = 'Tamaulipas, México';
+                                    modalMap.src = 'https://maps.google.com/maps?q=Tamaulipas+México&amp;output=embed&amp;hl=es&amp;z=8';
+                                } else {
+                                    modalTitle.textContent = company + ' - ' + branch;
+                                    var encodedQuery = encodeURIComponent(company + ' ' + branch + ' Tamaulipas México');
+                                    modalMap.src = 'https://maps.google.com/maps?q=' + encodedQuery + '&amp;output=embed&amp;hl=es&amp;z=15&amp;iwloc=B';
+                                }
+                                modal.classList.add('is-open');
+                            });
+                        });
+
+                        if (modalClose) {
+                            modalClose.addEventListener('click', function() {
+                                modal.classList.remove('is-open');
+                                modalMap.src = '';
+                            });
+                        }
+
+                        if (modal) {
+                            modal.addEventListener('click', function(e) {
+                                if (e.target === modal) {
+                                    modal.classList.remove('is-open');
+                                    modalMap.src = '';
+                                }
+                            });
+                        }
+                    });
+                </script>
+
+                <script>
+                window.addEventListener('DOMContentLoaded', function() {
+
+                    /* ── Ocultar header Odoo ── */
+                    var header = document.getElementById('top');
+                    if (header) header.style.display = 'none';
+
+                    /* ── Badge de usuario ── */
+                    var badge = document.getElementById('kualeUserBadge');
+                    if (badge) {
+                        badge.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            this.classList.toggle('is-open');
+                        });
+                        document.addEventListener('click', function() {
+                            badge.classList.remove('is-open');
+                        });
+                    }
+
+                    /* ════════════════════════════════════════
+                       MAPA DE ESTATUS
+                    ════════════════════════════════════════ */
+                    var STAGE_MAP = {
+                        'Nuevo': {
+                            color: '#3498db',
+                            tooltip: 'Tu solicitud fue recibida y está siendo revisada por el equipo de reclutamiento.'
+                        },
+                        'Calificación inicial': {
+                            color: '#f39c12',
+                            label: 'Hemos visto tu perfil',
+                            tooltip: 'Estamos evaluando si tu perfil cumple con los requisitos básicos del puesto.'
+                        },
+                        'Prefiltrados': {
+                            color: '#f39c12',
+                            tooltip: 'Tu perfil pasó una revisión inicial y está siendo considerado para continuar en el proceso.'
+                        },
+                        'Primera entrevista': {
+                            color: '#9b59b6',
+                            tooltip: 'Estás en etapa de primera entrevista. Pronto nos pondremos en contacto para coordinar los detalles.'
+                        },
+                        'Segunda entrevista': {
+                            color: '#9b59b6',
+                            tooltip: 'Avanzaste a una segunda entrevista. El equipo quiere conocerte mejor antes de tomar una decisión.'
+                        },
+                        'Proceso de segunda entrevista': {
+                            color: '#8e44ad',
+                            tooltip: 'Tu candidatura está en evaluación profunda durante la segunda ronda de entrevistas.'
+                        },
+                        'Propuesta de contrato': {
+                            color: '#1abc9c',
+                            tooltip: '¡Muy buenas noticias! Estamos preparando una propuesta formal de trabajo para ti.'
+                        },
+                        'Proceso de contratación': {
+                            color: '#1abc9c',
+                            tooltip: 'Estás en la etapa final de incorporación. El equipo está gestionando los documentos necesarios.'
+                        },
+                        'Contrato firmado': {
+                            color: '#27ae60',
+                            tooltip: '¡Bienvenido/a! Tu contrato ha sido firmado. Recibirás instrucciones sobre tu fecha de inicio.'
+                        },
+                        'Rechazado': {
+                            color: '#e74c3c',
+                            label: 'Bolsa de trabajo',
+                            tooltip: 'Por el momento nuestros puestos se encuentran ocupados, pero en cuanto se abra alguna vacante nos contactamos contigo.'
+                        },
+                        'abandoned': {
+                            color: '#aaaaaa',
+                            tooltip: 'Has decidido no continuar con este proceso. Puedes volver a aplicar cuando lo desees.'
+                        },
+                        'default': {
+                            color: '#ff8800',
+                            tooltip: 'Tu solicitud está en proceso interno. El equipo de reclutamiento te contactará pronto.'
+                        }
+                    };
+
+                    /* ════════════════════════════════════════
+                       TOOLTIP FLOTANTE ÚNICO
+                    ════════════════════════════════════════ */
+                    var tooltipEl = document.getElementById('kualeStatusTooltip');
+
+                    function positionTooltip(e) {
+                        var TW = 230, TH = 70, M = 14;
+                        var x = e.clientX - TW / 2;
+                        var y = e.clientY - TH - M;
+                        x = Math.max(8, Math.min(x, window.innerWidth - TW - 8));
+                        if (y &lt; 8) { y = e.clientY + M + 6; }
+                        tooltipEl.style.left = x + 'px';
+                        tooltipEl.style.top  = y + 'px';
+                    }
+
+                    /* Aplicar color, tooltip y label a cada punto de estatus */
+                    document.querySelectorAll('.kuale-status-dot').forEach(function(dot) {
+                        var stage = dot.getAttribute('data-stage') || 'default';
+                        var info  = STAGE_MAP[stage] || STAGE_MAP['default'];
+
+                        /* Color del círculo */
+                        dot.style.color = info.color;
+
+                        /* Sustituir label en tabla si el mapa define uno (ej: Rechazado → Bolsa de trabajo) */
+                        if (info.label) {
+                            var badge = dot.closest('.kuale-status-badge');
+                            if (badge) {
+                                var labelEl = badge.querySelector('.kuale-status-label');
+                                if (labelEl) { labelEl.textContent = info.label; }
+                            }
+                        }
+                        /* Las etapas sin label en STAGE_MAP conservan el nombre real de la BD */
+
+                        /* Eventos del tooltip flotante */
+                        dot.addEventListener('mouseenter', function(e) {
+                            tooltipEl.textContent = info.tooltip;
+                            tooltipEl.classList.add('visible');
+                            positionTooltip(e);
+                        });
+                        dot.addEventListener('mousemove', positionTooltip);
+                        dot.addEventListener('mouseleave', function() {
+                            tooltipEl.classList.remove('visible');
+                        });
+                    });
+
+                    /* ════════════════════════════════════════
+                       MODAL SEMÁFORO (botón ?)
+                    ════════════════════════════════════════ */
+                    var helpOverlay = document.getElementById('kualeStatusHelpOverlay');
+                    var helpBtn     = document.getElementById('kualeStatusHelpBtn');
+                    var helpClose   = document.getElementById('kualeStatusHelpClose');
+                    var helpCloseX = document.getElementById('kualeStatusHelpCloseX');
+
+                    if (helpCloseX) {
+                        helpCloseX.addEventListener('click', function() {
+                            helpOverlay.style.display = 'none';
+                        });
+                    }
+
+                    if (helpBtn &amp;&amp; helpOverlay) {
+                        helpBtn.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            helpOverlay.style.display = 'flex';
+                        });
+                    }
+                    if (helpClose) {
+                        helpClose.addEventListener('click', function() {
+                            helpOverlay.style.display = 'none';
+                        });
+                    }
+                    if (helpOverlay) {
+                        helpOverlay.addEventListener('click', function(e) {
+                            if (e.target === helpOverlay) helpOverlay.style.display = 'none';
+                        });
+                    }
+
+                    /* ════════════════════════════════════════
+                       BOTÓN "QUITAR DE MI LISTA"
+                       Guarda en BD y elimina la fila del DOM.
+                    ════════════════════════════════════════ */
+                    document.querySelectorAll('.kuale-btn-quitar-fila').forEach(function(btn) {
+                        btn.addEventListener('click', function() {
+                            tooltipEl.classList.remove('visible');
+                            var row = this.closest('tr');
+                            var appId = this.getAttribute('data-id');
+
+                            fetch('/mis-aplicaciones/ocultar', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0', method: 'call',
+                                    params: { applicant_id: appId }
+                                })
+                            })
+                            .then(function(r) { return r.json(); })
+                            .then(function(data) {
+                                var result = data.result || {};
+                                if (result.success) {
+                                    if (row) {
+                                        row.style.transition = 'opacity .25s';
+                                        row.style.opacity = '0';
+                                        setTimeout(function() { row.remove(); }, 260);
+                                    }
+                                } else {
+                                    console.error('Error al ocultar:', result.error);
+                                }
+                            })
+                            .catch(function() {
+                                console.error('Error de conexión al ocultar aplicación.');
+                            });
+                        });
+                    });
+
+                    /* ════════════════════════════════════════
+                       MODAL ABANDONO DE PROCESO
+                    ════════════════════════════════════════ */
+                    var overlay      = document.getElementById('kualeAbandonOverlay');
+                    var reason       = document.getElementById('kualeAbandonReason');
+                    var comment      = document.getElementById('kualeAbandonComment');
+                    var errorEl      = document.getElementById('kualeAbandonError');
+                    var btnSend      = document.getElementById('kualeAbandonSend');
+                    var btnCancel    = document.getElementById('kualeAbandonCancel');
+                    var currentAppId = null;
+
+                    reason.addEventListener('change', function() {
+                        if (reason.value === 'bad_service' || reason.value === 'other') {
+                            comment.style.display = 'block';
+                        } else {
+                            comment.style.display = 'none';
+                            comment.value = '';
+                        }
+                        errorEl.style.display = 'none';
+                    });
+
+                    document.querySelectorAll('.kuale-btn-abandon').forEach(function(btn) {
+                        btn.addEventListener('click', function() {
+                            currentAppId = this.getAttribute('data-id');
+                            reason.value = '';
+                            comment.value = '';
+                            comment.style.display = 'none';
+                            errorEl.style.display = 'none';
+                            overlay.style.display = 'flex';
+                        });
+                    });
+
+                    btnCancel.addEventListener('click', function() {
+                        overlay.style.display = 'none';
+                    });
+
+                    overlay.addEventListener('click', function(e) {
+                        if (e.target === overlay) overlay.style.display = 'none';
+                    });
+
+                    btnSend.addEventListener('click', function() {
+                        if (!reason.value) {
+                            errorEl.textContent = 'Por favor selecciona un motivo.';
+                            errorEl.style.display = 'block';
+                            return;
+                        }
+                        if ((reason.value === 'bad_service' || reason.value === 'other') &amp;&amp; !comment.value.trim()) {
+                            errorEl.textContent = 'Por favor especifica el motivo.';
+                            errorEl.style.display = 'block';
+                            return;
+                        }
+                        btnSend.disabled = true;
+                        btnSend.textContent = 'Enviando...';
+                        fetch('/mis-aplicaciones/abandonar', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                jsonrpc: '2.0', method: 'call',
+                                params: {
+                                    applicant_id: currentAppId,
+                                    reason:       reason.value,
+                                    comment:      comment.value.trim()
+                                }
+                            })
+                        })
+                        .then(function(r) { return r.json(); })
+                        .then(function(data) {
+                            var result = data.result || {};
+                            if (result.success) {
+                                overlay.style.display = 'none';
+                                window.location.reload();
+                            } else {
+                                errorEl.textContent = result.error || 'Error al procesar.';
+                                errorEl.style.display = 'block';
+                                btnSend.disabled = false;
+                                btnSend.textContent = 'Enviar';
+                            }
+                        })
+                        .catch(function() {
+                            errorEl.textContent = 'Error de conexi&#xF3;n. Intenta de nuevo.';
+                            errorEl.style.display = 'block';
+                            btnSend.disabled = false;
+                            btnSend.textContent = 'Enviar';
+                        });
+                    });
+
+                }); /* fin DOMContentLoaded */
+                </script>
+
+            </div>
+        </t>
+    </template>
+</odoo>

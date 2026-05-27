@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="hoja_membretada_blanca" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Hoja Blanca</field>
+            <field name="filename"></field>
+            <field name="active">True</field>
+        </record>
+
+        <record id="hoja_CJr" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">CJr - Carta</field>
+            <field name="filename">CJr_HojaMembretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_Comercial_Carta" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Comercial - Carta</field>
+            <field name="filename">Comerciall_HojaMembretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_Comercial_ServEdu" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Comercial - Servicios Educativos</field>
+            <field name="filename">Comerciall_HojaMembretada_Servicios_Educativos.jpg</field>
+        </record>
+
+        <record id="hoja_DQ" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">DQ - Carta</field>
+            <field name="filename">DQ_HojaMembretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_GA" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">GA - Carta</field>
+            <field name="filename">GA_HojaMembretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_GK" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">GK - Carta</field>
+            <field name="filename">GK_HojaMembretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_GK_GenteKuale" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">GK - Gente Kuale</field>
+            <field name="filename">GK_HojaMembretada-GenteKuale_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_GK_ServiciosKuale" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">GK - Servicios Kuale</field>
+            <field name="filename">GK_HojaMembretada-ServiciosKuale_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_Hidrologica" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Hidrológica</field>
+            <field name="filename">Hidrológica_HojaMembretada.jpg</field>
+        </record>
+
+        <record id="hoja_MFDA" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">MFDA</field>
+            <field name="filename">HojaMembretada_MFDA.jpg</field>
+        </record>
+
+        <record id="hoja_Plazas_FajaOro" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Plazas - Faja de Oro</field>
+            <field name="filename">Plazas_HojaMembretada_Carta_Faja de Oro.jpg</field>
+        </record>
+
+        <record id="hoja_Plazas_Monterrey" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Plazas - Monterrey</field>
+            <field name="filename">Plazas_HojaMembretada_Carta_Monterrey.jpg</field>
+        </record>
+
+        <record id="hoja_Plazas_Universidad" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Plazas - Universidad</field>
+            <field name="filename">Plazas_HojaMembretada_Carta_Universidad.jpg</field>
+        </record>
+
+        <record id="hoja_PPT" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">PPT</field>
+            <field name="filename">PPT_HojaMembretada.jpg</field>
+        </record>
+
+        <record id="hoja_ProductoraG" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Productora G - Carta</field>
+            <field name="filename">Productora-G_Hoja-membretada_Carta.jpg</field>
+        </record>
+
+        <record id="hoja_PS_SIFAM" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">PS - SIFAM</field>
+            <field name="filename">PS_HojaMembretada_Carta_SIFAM.jpg</field>
+        </record>
+
+        <record id="hoja_Sprocket" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Sprocket Garage</field>
+            <field name="filename">Sprocket_Garage_HojaMembretada.jpg</field>
+        </record>
+
+        <record id="hoja_Tintocinco" model="reclutamiento__kuale.hoja_membretada">
+            <field name="name">Tintocinco - Carta</field>
+            <field name="filename">Tintocinco_HojaMembretada_Carta.jpg</field>
+        </record>
+
+    </data>
+</odoo>

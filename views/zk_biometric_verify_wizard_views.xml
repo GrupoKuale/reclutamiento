@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_zk_biometric_verify_wizard_form" model="ir.ui.view">
+        <field name="name">zk.biometric.verify.wizard.form</field>
+        <field name="model">zk.biometric.verify.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Verificar Huella">
+                <sheet>
+                    <div class="zk-enroll-wrapper">
+
+                        <div class="zk-scanner-area state-waiting" id="zk_scanner_area">
+                            <div class="zk-pulse-ring ring-1"/>
+                            <div class="zk-pulse-ring ring-2"/>
+                            <div class="zk-pulse-ring ring-3"/>
+                            <div class="zk-scan-line"/>
+
+                            <div class="zk-finger-container">
+                                <svg class="zk-finger-svg" viewBox="0 0 100 120" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="50" cy="58" rx="30" ry="38"
+                                            fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+                                    <path id="zk_finger_fill"
+                                        d="M50 96 C28 96 20 78 20 58 C20 36 32 20 50 20
+                                        C68 20 80 36 80 58 C80 78 72 96 50 96 Z"
+                                        fill="#6366f1" opacity="0.45"/>
+                                    <path d="M50 34 C40 34 33 43 33 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C38 40 30 50 30 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C36 46 27 57 27 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 34 C60 34 67 43 67 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C62 40 70 50 70 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C64 46 73 57 73 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <circle cx="50" cy="54" r="4" fill="#6366f1" opacity="0.6"/>
+                                    <path d="M32 90 L32 100 Q32 110 50 110 Q68 110 68 100 L68 90
+                                            Q60 96 50 96 Q40 96 32 90 Z"
+                                        fill="#6366f1" opacity="0.1"/>
+                                </svg>
+                            </div>
+
+                            <div class="zk-status-badge waiting" id="zk_status_badge">
+                                <div class="zk-status-dot"/>
+                                <span id="zk_status_text">Esperando huella…</span>
+                            </div>
+
+                            <div class="zk-timer-container">
+                                <div class="zk-timer-wrapper">
+                                    <svg class="zk-timer-svg" viewBox="0 0 40 40">
+                                        <circle class="zk-timer-track" cx="20" cy="20" r="16"/>
+                                        <circle class="zk-timer-arc" id="zk_timer_arc"
+                                                cx="20" cy="20" r="16"/>
+                                    </svg>
+                                    <div class="zk-timer-label" id="zk_timer_label">2:15</div>
+                                </div>
+                            </div>
+
+                            <div class="zk-instruction" id="zk_instruction">
+                                Coloca el dedo en el sensor del reloj para verificar
+                            </div>
+                        </div>
+
+                        <field name="user_id"      invisible="1"/>
+                        <field name="ip"           invisible="1"/>
+                        <field name="port"         invisible="1"/>
+                        <field name="opened_at"    invisible="1"/>
+                        <field name="applicant_id" invisible="1"/>
+
+                    </div>
+                </sheet>
+                <footer>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

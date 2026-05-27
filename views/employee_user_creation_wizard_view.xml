@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_mobile_credentials_wizard" model="ir.ui.view">
+            <field name="name">employee.mobile.credentials.wizard.form</field>
+            <field name="model">employee.mobile.credentials.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Asignar Credenciales Móviles">
+                    <group>
+                        <field name="employee_id" invisible="1"/>
+                        <field name="username"/>
+                        <field name="password" password="True"/>
+                    </group>
+                    <footer>
+                        <button string="Asignar" type="object" name="assign_mobile_credentials" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

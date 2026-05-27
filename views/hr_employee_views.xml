@@ -1,0 +1,298 @@
+<odoo>
+    <record id="hr_employee_form_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.employee.form_reclutamiento_kuale</field>
+        <field name="model">hr.employee</field>
+        <field name="priority">20</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <data>
+
+                <!-- ── Banner complemento pendiente ── -->
+                <xpath expr="//sheet" position="after">
+                    <field name="complement_pending" nolabel="1" 
+                        style="position:absolute; opacity:0; pointer-events:none; width:0; height:0;"/>
+                    <div id="complement_notify_banner"
+                        style="position:fixed; top:60px; right:16px; z-index:9999; max-width:380px;
+                                background:#fff3cd; border:1px solid #ffc107; border-radius:8px;
+                                padding:16px 20px; box-shadow:0 4px 16px rgba(0,0,0,.15);
+                                align-items:flex-start; gap:12px; display:none;">
+                        <span style="font-size:24px; line-height:1;">&#x26A0;&#xFE0F;</span>
+                        <div style="flex:1;">
+                            <strong style="color:#856404;">Información pendiente</strong>
+                            <p style="margin:4px 0 0; font-size:13px; color:#533f03;">
+                                Este empleado no tiene datos bancarios ni beneficiarios registrados.
+                                Completa esta información en la pestaña <strong>Datos fiscales</strong>.
+                            </p>
+                        </div>
+                        <span id="complement_notify_close"
+                            style="cursor:pointer; font-size:18px; color:#856404; 
+                                    padding:0; line-height:1; align-self:flex-start;">&#x2715;</span>
+                    </div>
+                    <script>
+                        (function() {
+                            function initNotify() {
+                                var banner = document.getElementById('complement_notify_banner');
+                                if (!banner) { setTimeout(initNotify, 500); return; }
+                                var inp = document.querySelector('[name="complement_pending"] input[type="checkbox"]');
+                                if (!inp) { setTimeout(initNotify, 500); return; }
+                                if (inp.checked) {
+                                    banner.style.display = 'flex';
+                                    var closeBtn = document.getElementById('complement_notify_close');
+                                    if (closeBtn) {
+                                        closeBtn.addEventListener('click', function() {
+                                            banner.style.display = 'none';
+                                        });
+                                    }
+                                    setTimeout(function() { banner.style.display = 'none'; }, 30000);
+                                }
+                            }
+                            setTimeout(initNotify, 1000);
+                        })();
+                    </script>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="last_name"/>
+                    <field name="last_name2"/>
+                </xpath>
+                <xpath expr="//field[@name='coach_id']" position="after">
+                    <field name="rol_employee_selection" invisible="1"/>
+                    <field name="rol_tab_id" />
+                </xpath>
+                <xpath expr="//field[@name='mobile_phone']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='work_phone']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='work_email']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//page[@name='personal_information']" position="replace">
+                    <page name="personal_information" string="Información personal" groups="hr.group_hr_user">
+                        <group>
+                            <group string="Generales">
+                                <field name="curp"/>
+                                <field name="rfc_number"/>
+                                <field name="ssnid"/>
+                                <field name="medical_unity"/>
+                                <field name="gender"/>
+                                <field name="birthday"/>
+                                <field name="age"/>
+                                <field name="nationality"/>
+
+                                <field name="state_birth_Select" context="{'name_format': 'state'}"/>
+                                <field name="birthplace_select" context="{'name_format': 'city'}"/>
+                                <separator name="marital_status" string="Estado familiar"/>
+
+                                <field name="marital"/>
+                                <field name="spouse_complete_name"
+                                       invisible="marital not in ['married', 'cohabitant']"/>
+                                <field name="spouse_birthdate" invisible="marital not in ['married', 'cohabitant']"/>
+                            </group>
+
+                            <group string="Datos de contacto">
+                                <field name="desk_phone" widget="phone"/>
+                                <field name="mobile_phone" widget="phone"/>
+                                <field name="work_phone" widget="phone"/>
+                                <field name="private_phone" string="Phone"/>
+                                <field name="private_email" widget="email" string="Correo electrónico personal"/>
+                                <field name="work_email" widget="email"/>
+                            </group>
+
+                            <group string="Salud" name="emergency">
+                                <field name="blood_type"/>
+                                <field name="has_allergy"/>
+                                <field name="allergy" invisible="has_allergy != 'yes'"/>
+                                <field name="has_medical_tx"/>
+                                <field name="medical_tx" invisible="has_medical_tx != 'yes'"/>
+                                <field name="has_chronic_disease"/>
+                                <field name="chronic_disease" invisible="has_chronic_disease != 'yes'"/>
+                                <field name="emergency_contact"/>
+                                <field name="emergency_phone" class="o_force_ltr"/>
+                                <label for="emergency_contacts"/>
+                                <field name="emergency_contacts">
+                                    <tree editable="top" string="Contactos de emergencia">
+                                        <field name="name"/>
+                                        <field name="relationship"/>
+                                        <field name="phone_number"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Datos familiares">
+                                <field name="mother_name"/>
+                                <field name="father_name"/>
+                            </group>
+                            <group string="Uniformes">
+                                <field name="clothing_size" nolabel="1">
+                                    <tree editable="top" string="Clothing Size">
+                                        <field name="allowed_product_templates" column_invisible="1"/>
+                                        <field name="product_template_id" string="Prenda"/>
+                                        <field name="product_id" string="Variante"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Permiso de trabajo">
+                                <field name="visa_no"/>
+                                <field name="permit_no"/>
+                                <field name="visa_expire"/>
+                                <field name="work_permit_expiration_date"/>
+                                <field name="work_permit_name" invisible="1"/>
+                                <field name="has_work_permit" widget="work_permit_upload" filename="work_permit_name"/>
+                            </group>
+                            <group string="Ciudadanía">
+                                <field name="country_id" options='{"no_open": True, "no_create": True}'/>
+                                <field name="identification_id"/>
+                                <field name="passport_id"/>
+                                <field name="country_of_birth"/>
+                            </group>
+
+                        </group>
+                    </page>
+                    <page name="fiscal_information" string="Datos fiscales">
+                        <group>
+                            <group string="Domicilio fiscal">
+                                <field name="postal_code_fiscal"/>
+                            </group>
+                            <group string="Bancario">
+                            </group>
+                            <field name="bank_account_ids">
+                                <tree editable="top">
+                                    <field name="account_type"/>
+                                    <field name="account_number"/>
+                                    <field name="interbank_clabe"/>
+                                    <field name="payroll_card_number"/>
+                                    <field name="bank"/>
+                                    <field name="branch_bank"/>
+                                </tree>
+                            </field>
+                            <group string="Beneficiarios">
+                            </group>
+                            <field name="beneficiaries_ids">
+                                <tree editable="top">
+                                    <field name="beneficiary_name"/>
+                                    <field name="beneficiary_relationship"/>
+                                    <field name="other_relationship"
+                                           readonly="beneficiary_relationship != 'other'"/>
+                                    <field name="beneficiary_percentage"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page name="aditional_information" string="Adicional">
+                        <group>
+                            <group string="Reclutamiento">
+                                <field name="km_home_work"/>
+                                <field name="about_vacancy"/>
+                                <field name="previous_experience"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page name="experience_information" string="Experiencia">
+                        <group>
+                            <group>
+                                <field name="has_experience"/>
+                            </group>
+                            <field name="experiencies_ids" invisible="has_experience != 'yes'">
+                                <tree editable="bottom">
+                                    <field name="companyE"/>
+                                    <field name="cityE"/>
+                                    <field name="periodEIn"/>
+                                    <field name="periodEOut"/>
+                                    <field name="positionE"/>
+                                    <field name="salaryE"/>
+                                    <field name="supervisorE"/>
+                                    <field name="referenceE"/>
+                                    <field name="reasonE"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                    <page name="license_information" string="Licencias">
+                        <group>
+                            <group string="Trámites">
+                                <field name="has_driver_license"/>
+                                <field name="driver_license_number"
+                                       invisible="has_driver_license != 'yes'"/>
+                                <field name="driver_license_validity"
+                                       invisible="has_driver_license != 'yes'"/>
+                                <field name="private_car_plate"/>
+                                <field name="has_ine"/>
+                                <field name="ine_validity" invisible="has_ine != 'yes'"/>
+                                <field name="has_passport"/>
+                                <field name="passport_validity" invisible="has_passport != 'yes'"/>
+                                <field name="has_visa"/>
+                            </group>
+                            <group string="Documentos">
+                                <field name="ine_document"/>
+                                <field name="curp_file"/>
+                                <field name="nss_files">
+                                    <tree>
+                                        <field name="file"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                                <field name="rfc_files">
+                                    <tree>
+                                        <field name="file"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                                <field name="bank_account_agreement_file"/>
+                                <field name="birth_act"/>
+                                <field name="address_file"/>
+                                <field name="driver_files">
+                                    <tree>
+                                        <field name="file"/>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
+                                <field name="passport_file"/>
+                                <field name="identity_document">
+                                    <tree>
+                                        <field name="doc_data"/>
+                                        <field name="doc_name"/>
+                                    </tree>
+                                </field>
+                            </group>
+                            <group string="Documentos empresa">
+                                <field name="promissory_file"/>
+                            </group>
+                        </group>
+                    </page>
+                </xpath>
+
+                <!--      biometric device    -->
+                <xpath expr="//page[@name='hr_settings']//field[@name='user_id']"
+                       position="after">
+                    <field name="device_id_num"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <!-- <data>
+     Slide Channel Inherit Form view-->
+    <!--<record id="inherit_view_employee_form" model="ir.ui.view">
+        <field name="name">inherit.view.employee.form"</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//page[@name='hr_settings']" position="after" >
+                    <page string="Credenciales" name="hr_credentials">
+                            <field name="credentials" nolabel="1" required="1">
+                                <tree editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="description" required="1"/>
+                                    <field name="format_id" required="1"/>
+                                </tree>
+                            </field>
+                    </page>
+                </xpath>
+
+            </data>
+        </field>
+    </record>
+
+</data>-->
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+     <t t-name="go_back_button.FormView.Buttons" t-inherit="web.FormView">
+      <xpath expr="//t[@t-set-slot='layout-buttons']" position="inside">
+           <button type="button" class="btn btn-outline-primary"
+               t-on-click="GoBack">
+               <span>Go back</span>
+           </button>
+       </xpath>
+   </t>
+</templates>

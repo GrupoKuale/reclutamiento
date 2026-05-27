@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_biometric_user_form" model="ir.ui.view">
+        <field name="name">biometric.user.form</field>
+        <field name="model">reclutamiento__kuale.biometric_user</field>
+        <field name="arch" type="xml">
+            <form string="Usuarios Biométricos">
+                <sheet>
+                    <group>
+                        <field name="device_employee_id"/>
+                        <field name="employee_id"/>
+                        <field name="biometric_type"/>
+                    </group>
+                    <group>
+                        <field name="biometric_data" filename="biometric_data_filename"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_biometric_user_tree" model="ir.ui.view">
+        <field name="name">biometric.user.tree</field>
+        <field name="model">reclutamiento__kuale.biometric_user</field>
+        <field name="arch" type="xml">
+            <tree string="Usuarios Biométricos">
+                <field name="employee_id"/>
+                <field name="biometric_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_biometric_user" model="ir.actions.act_window">
+        <field name="name">Usuarios Biométricos</field>
+        <field name="res_model">reclutamiento__kuale.biometric_user</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>
+                Gestiona los usuarios biométricos y sus datos asociados.
+            </p>
+        </field>
+    </record>
+</odoo>

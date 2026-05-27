@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="kuale_footer" model="ir.ui.view">
+            <field name="name">Footer Kuale</field>
+            <field name="type">qweb</field>
+            <field name="key">reclutamiento__kuale.kuale_footer</field>
+            <field name="inherit_id" ref="website.footer_custom"/>
+            <field name="website_id" ref="reclutamiento__kuale.website_reclutamiento"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='footer']" position="replace">
+                    <t t-set="kuale_path" t-value="request.httprequest.path or ''"/>
+                    <t t-set="kuale_show_footer"
+                       t-value="kuale_path in ('/reclutamiento', '/vacancy', '/vacantes', '/quienes-somos', '/job-thank-you-r', '/mis-aplicaciones') or kuale_path.startswith('/jobs')"/>
+                    <div id="footer" class="oe_structure oe_structure_solo kuale-footer"
+                         t-ignore="true"
+                         t-if="not no_footer and kuale_show_footer">
+                        <footer class="kuale-footer__wrap">
+                            <div class="kuale-footer__container">
+                                <div class="kuale-footer__top">
+                                    <div class="kuale-footer__col-left">
+                                        <h3>¿Tienes alguna duda sobre el proceso de reclutamiento?</h3>
+                                        <p>
+                                            Consulta las <a href="#faq" class="kuale-footer__link">preguntas frecuentes</a>
+                                            o escríbenos al correo
+                                            <a href="mailto:reclutamiento@grupokuale.com.mx" class="kuale-footer__link">reclutamiento@grupokuale.com.mx</a>
+                                        </p>
+                                    </div>
+                                    <div class="kuale-footer__col-right">
+                                        <h3>¿Quiénes somos?</h3>
+                                        <p>
+                                                Grupo Kuale es una empresa dedicada a la satisfacción total de nuestros clientes y 
+                                                el desarrollo humano de su personal por más de 30 años.
+                                        </p>
+                                        <a href="/quienes-somos" class="kuale-footer__link2">Conoce más →</a>
+                                    </div>
+                                </div>
+                                <div class="kuale-footer__bottom-section">
+                                    <div class="kuale-footer__col-left">
+                                       <a href="#" class="kuale-footer__link2" id="kuale-privacy-btn">Aviso de privacidad</a>
+                                    </div>
+                                    <div class="kuale-footer__col-right">
+                                        <div class="kuale-footer__tagline-row">
+                                            <div class="kuale-footer__tagline">
+                                                Somos Buenos,<br/>
+                                                somos Gente Kuale
+                                            </div>
+                                            <div class="kuale-footer__logo">
+                                                <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo-blanco.png" alt="Grupo Kuale" class="kuale-footer__logo-img"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="kuale-footer__bottom">
+                                &#169; 2026 Grupo Kuale. Todos los derechos reservados.
+                            </div>
+                        </footer>
+
+                        <!-- Modal -->
+                        <div class="kuale-privacy-overlay" id="kuale-privacy-overlay">
+                            <div class="kuale-privacy-modal">
+                                <button class="kuale-privacy-close" id="kuale-privacy-close">✕</button>
+                                <div class="kuale-privacy-header">
+                                    <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo-blanco.png" alt="Grupo Kuale" class="kuale-privacy-logo"/>
+                                    <h3>Aviso de Privacidad</h3>
+                                </div>
+                                <div class="kuale-privacy-content">
+                                    <p>
+                                        <strong>Servicios Kuale, S.A. de C.V. (RECLUTAMIENTO KUALE)</strong>, con domicilio en
+                                        calle Estadio No. 203, Col. Petrolera, C.P. 89110, Tampico, Tamaulipas, México,
+                                        es responsable del uso y protección de sus datos personales, en cumplimiento con
+                                        la Ley Federal de Protección de Datos Personales en Posesión de los Particulares (LFPD).
+                                    </p>
+
+                                    <p><strong>¿Para qué usamos sus datos?</strong></p>
+                                    <ul>
+                                        <li>Creación y gestión de su cuenta en la Bolsa de Trabajo.</li>
+                                        <li>Elaboración de su perfil de candidato para procesos de reclutamiento y selección.</li>
+                                        <li>Evaluación de identidad, experiencia, escolaridad, habilidades y expectativa económica.</li>
+                                        <li>Comunicación de vacantes afines a su perfil profesional.</li>
+                                        <li>Transferencia de su perfil a filiales o subsidiarias del Grupo Kuale que requieran cubrir vacantes.</li>
+                                    </ul>
+
+                                    <p><strong>¿Qué datos recabamos?</strong></p>
+                                    <ul>
+                                        <li>Identificación y contacto, características personales, datos académicos y profesionales,
+                                        ocupación laboral, datos patrimoniales y, en su caso, datos de salud (sensibles).</li>
+                                    </ul>
+
+                                    <p><strong>Sus derechos ARCO</strong></p>
+                                    <p>
+                                        Usted puede ejercer sus derechos de <strong>Acceso, Rectificación, Cancelación u Oposición</strong>
+                                        sobre sus datos personales escribiendo a:
+                                        <a href="mailto:privacidad@grupokuale.com.mx" class="kuale-privacy-email">
+                                            privacidad@grupokuale.com.mx
+                                        </a>
+                                    </p>
+
+                                    <p>
+                                        RECLUTAMIENTO KUALE responderá su solicitud dentro de los <strong>20 días hábiles</strong>
+                                        siguientes a su recepción.
+                                    </p>
+
+                                    <p class="kuale-privacy-full-link">
+                                        ¿Desea conocer todos los detalles de nuestro Aviso de Privacidad?
+                                        <a href="/reclutamiento__kuale/static/src/docs/Aviso de privacidad - Reclutamiento Kuale.pdf"
+                                        target="_blank" rel="noopener noreferrer">
+                                            Haz clic aquí para leer el aviso completo →
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- JS del modal -->
+                        <script>
+                            (function () {
+                                document.addEventListener('DOMContentLoaded', function () {
+                                    const btn     = document.getElementById('kuale-privacy-btn');
+                                    const overlay = document.getElementById('kuale-privacy-overlay');
+                                    const close   = document.getElementById('kuale-privacy-close');
+
+                                    function getBlurTargets() {
+                                        return Array.from(document.querySelectorAll('#wrapwrap > *'))
+                                            .filter(el => !el.contains(overlay) &amp;&amp; el.id !== 'footer');
+                                    }
+
+                                    function openModal() {
+                                        overlay.classList.add('is-open');
+                                        document.body.classList.add('modal-open');
+                                        getBlurTargets().forEach(el => el.classList.add('kuale-blur-bg'));
+                                        document.querySelectorAll('.kuale-footer__wrap, .kuale-footer__bottom')
+                                            .forEach(el => el.classList.add('kuale-blur-bg'));
+                                    }
+                                    window.kualeOpenPrivacyModal = openModal;
+
+                                    function closeModal() {
+                                        overlay.classList.remove('is-open');
+                                        document.body.classList.remove('modal-open');
+                                        document.querySelectorAll('.kuale-blur-bg')
+                                            .forEach(el => el.classList.remove('kuale-blur-bg'));
+                                    }
+                                    window.kualeClosePrivacyModal = closeModal;
+
+                                    if (btn) btn.addEventListener('click', function (e) { e.preventDefault(); openModal(); });
+                                    if (close) close.addEventListener('click', closeModal);
+                                    if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+                                    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+                                });
+                            })();
+                        </script>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

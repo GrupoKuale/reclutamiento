@@ -1,0 +1,14 @@
+
+.custom_badge span.o_selection_badge.btn.btn-secondary.mb-1 {
+
+}
+
+.custom_badge span.o_selection_badge.btn.btn-secondary.mb-1.active {
+  background-color: var(--biz-theme-primary-color) !important;
+  border: 1px solid var(--biz-theme-primary-color) !important;
+  color: #FFFFFF !important;
+}
+
+.custom_badge span.o_selection_badge.btn.btn-secondary.mb-1:hover {
+  border: 1px solid var(--biz-theme-primary-color) !important;
+}

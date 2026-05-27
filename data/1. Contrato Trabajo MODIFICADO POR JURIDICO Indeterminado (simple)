@@ -1,0 +1,168 @@
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;  font-family: Arial, sans-serif; font-weight: bold;">
+CONTRATO INDIVIDUAL POR TIEMPO INDETERMINADO <br>
+(Personal Empleado)
+</p>
+<br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify; text-transform: uppercase;">
+CONTRATO INDIVIDUAL POR TIEMPO INDETERMINADO DE TRABAJO QUE CELEBRAN POR UNA PARTE <strong> <t t-out="object.employee_id.company_id.legal_representative.name"></t> </strong>
+EN NOMBRE Y REPRESENTACION DE LA EMPRESA <strong> <t t-out="object.employee_id.company_id.name"></t> </strong> A QUIEN EN EL CURSO DE ESTE CONTRATO SE LE DENOMINARA <strong> “LA EMPRESA”</strong>
+Y POR OTRA PARTE <t t-out="object.employee_id.name"></t> <t t-out="object.employee_id.last_name"></t> <t t-out="object.employee_id.last_name2"></t>
+A QUIEN SE LE DENOMINARA “EL EMPLEADO” SUJETANDO AMBAS PARTES EL PRESENTE AL TENOR DE LO SIGUIENTE:
+</p>
+<br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;  font-family: Arial, sans-serif; font-weight: bold;">
+                                    MANIFESTACIONES
+</p>
+<br><br>
+
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    1)  Manifiesta “LA EMPRESA” <br>
+    Que actualmente y de manera extraordinaria requiere servicios de personal para desempeñar las siguientes labores en las instalaciones que se indiquen, consistentes en:
+             <t t-out="object.employee_id.job_id.activities_summary"></t>
+    2)  Por su parte manifiesta “EL EMPLEADO”
+          a) Estar completamente enterado de las condiciones laborales ofrecidas por “LA EMPRESA” en este Contrato y que es su voluntad y deseo celebrarlo bajo dichas bases.
+          b) Tener las condiciones de salud, capacidad, preparación y experiencia suficientes y necesarias para el desempeño del objeto de este contrato.
+    </ol>
+</p>
+<br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;  font-family: Arial, sans-serif; font-weight: bold;">
+                                    BASES DEL CONTRATO
+</p>
+<br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    1)   OBJETO: “LA EMPRESA” por este conducto contrata a “EL EMPLEADO” quien se compromete a desempeñar la labor descrita en el inciso “a” del apartado de manifestaciones de “LA EMPRESA” con eficiencia, calidad y esmero.
+    <br>
+    2)   LUGAR: “EL EMPLEADO” acepta que desempeñará su trabajo en el o lugares que se le asignen, consciente de que “LA EMPRESA” podrá cambiarlo de ubicación en cualquier momento a cualquiera de los diferentes centros de ejecución de labores, ya sean presentes o futuros tanto en esta ciudad como en los diferentes Estados de la República Mexicana.
+    <br>
+    3)   DURACIÓN DEL CONTRATO: Ambas partes acuerdan que la duración de este Contrato es por tiempo indeterminado.
+    <br>
+    4)   JORNADA DE TRABAJO: La jornada de trabajo será acorde a lo establecido por la Ley Federal del Trabajo, estando facultada “LA EMPRESA” a establecerla conforme a sus necesidades en el entendido que “EL EMPLEADO” cumpla un mínimo de 48 horas a la semana. De la misma manera “EL EMPLEADO” se obliga a laborar en el turno que le asigne “LA EMPRESA” y a prestar sus servicios bajo la dirección y dependencia de la administración de la misma.
+    <br>
+    Solamente se tomará y pagará como tiempo extra, el que exceda de la jornada semanal y que haya sido asignado por orden expresa y por escrito de “LA EMPRESA”.
+    <br>
+    5)   NORMAS DE TRABAJO: “EL EMPLEADO” acepta y se compromete a acatar, cumplir y respetar totalmente las disposiciones establecidas en la Ley Federal de Trabajo, por el Contrato Colectivo de Trabajo, por el Reglamento Interior de Trabajo y con la normatividad y los lineamientos dictados y establecidos por “LA EMPRESA” en cuanto a seguridad, orden y limpieza, disciplina y calidad en su trabajo.
+    <br>
+    6)   REMUNERACION:  “LA EMPRESA” se obliga a pagar a “EL EMPLEADO” la cantidad de <t t-out="object.monthly_salary"></t> mensuales por concepto de sueldo, el cual se hará por quincena, en Moneda Nacional, el día quince y último de cada mes, de acuerdo con el lugar y sistema establecido por la empresa, debiendo “EL EMPLEADO” al recibir el pago del mismo, firmar el recibo correspondiente. En caso de cualquier reclamación sobre su salario deberá hacerla de inmediato, ya que en caso contrario se extenderá que esta conforme con lo recibido.
+    <br>
+    7)   DESCANSOS: Por cada seis días de labores  “EL EMPLEADO” disfrutará de un día de descanso pagado. Mismo que será fijado por “LA EMPRESA” de acuerdo con sus necesidades.
+    <br>
+    Los días de descanso obligatorio los establece la Ley Federal del Trabajo.
+    <br>
+    “EL EMPLEADO” tendrá derecho al periodo vacacional establecido por la Ley y gozará además de la prima vacacional correspondiente a dicho periodo.
+    <br>
+    8)   AGUINALDO: “EL EMPLEADO” tendrá derecho a recibir el pago por concepto de Aguinaldo conforme a lo establecido por el artículo 87 de la Ley Federal de Trabajo.
+    <br>
+    9)   CAPACITACION Y ADIESTRAMIENTO: “LA EMPRESA” dará capacitación y adiestramiento a “EL EMPLEADO” conforme a los planes y programas registrados en la dirección general de capacitación y adiestramiento dependiente de la Secretaría del Trabajo y Previsión Social. Es obligación de “EL EMPLEADO” asistir puntualmente a las juntas de capacitación y adiestramiento que “LA EMPRESA” efectué.
+    <br>
+    10)  CONFIDENCIALIDAD: “EL EMPLEADO” se compromete a guardar escrupulosamente los secretos técnicos, comerciales y de la fabricación de los productos a cuya elaboración concurra directa e indirectamente.
+    <br>
+    11)  INSTRUMENTOS DE TRABAJO: “LA EMPRESA” proporcionará al trabajador todos los instrumentos necesarios para el desempeño y la seguridad en la labor desempeñada por los mismos.
+    <br>
+    12)  SALUD: “EL EMPLEADO” se obliga a someterse a exámenes médicos periódicos a efecto de comprobar que no tiene incapacidad o padece alguna enfermedad contagiosa o incurable.
+    <br>
+    13)  OBLIGACIONES Y PROHIBICIONES: Ambas partes se comprometen a conocer, cumplir y respetar las obligaciones y prohibiciones establecidas por los artículos 132, 133, 134 y 135 de la Ley Federal del Trabajo y Reglamento Interior del Trabajo.
+    <br>
+    14)  “EL EMPLEADO” designa para el pago de salarios y prestaciones devengadas, dando cumplimiento con lo establecido en el artículo 25 fracción X, articulo 501 de esta ley, a los siguientes beneficiarios y sus porcentajes.
+    <br><br>
+   </p>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><p>Nombre:</p></td>
+                <td><p>Parentesco:</p></td>
+                <td><p>Porcentaje:</p></td>
+            </tr>
+                <tr>
+                    <td><br></td>
+                    <td><br></td>
+                    <td><br></td>
+                </tr>
+                <tr>
+                    <td><br></td>
+                    <td><br></td>
+                    <td><br></td>
+                </tr>
+                <tr>
+                    <td><br></td>
+                    <td><br></td>
+                    <td><br></td>
+                </tr>
+        </tbody>
+    </table>
+ </p> <br> <br>
+ <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    15)  FALTAS INJUSTIFICADAS.- Las partes acuerdan que en caso de los días no laborados o días en que existan faltas injustificadas serán descontados al trabajador, solo se admitirán como faltas justificadas las amparadas mediante los comprobantes que expida el I.M.S.S. como incapacidades, pues de otra manera, se considerarán como falta injustificada. desde luego de la incapacidad expedida por el I.M.S.S. el trabajador deberá entregar la copia respectiva al patrón inmediatamente, de manera personal o por conducto de un tercero.
+    <br>
+    16)  JURISDICCION.- Las partes acuerdan que para la interpretación y cumplimiento del presente contrato, así como para todo lo no expresamente previsto en el mismo, las partes se someten a la jurisdicción y competencia del Tribunal Laboral de la Sexta Región del estado de Tamaulipas con residencia en la ciudad de Altamira, Tamaulipas, México, por lo que las partes renuncian a cualquier otra jurisdicción que le pudiere corresponder por razón de su domicilio, presente o futuro.
+    <br>
+    17)  PRESTACIONES SOCIALES.- El patrón se obliga al pago de las aportaciones correspondientes al IMSS, INFONAVIT, seguro social, etc., para lo cual el patrón le incrementa las prestaciones legales para determinar el salario diario base de cotización para el IMSS E INFONAVIT y en su caso se le restará el ISR ó se le aumentará el subsidio al empleo de conformidad con la ley del ISR y se le descontarán las cuotas del IMSS y en su caso el importe que señale el INFONAVIT para amortización de crédito.
+</p><br> <br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:left;  font-family: Arial, sans-serif; font-weight: bold;">
+                                    GENERALES DE LOS SUJETOS
+</p><br> <br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    Los generales de “EL EMPLEADO” son los siguientes:<br>
+    NACIONALIDAD: <t t-out="object.employee_id.nationality"></t>
+    <br>
+    ESTADO CIVIL: <t t-out="object.employee_id.marital"></t>
+    <br>
+    C.U.R.P.: <t t-out="object.employee_id.curp"></t>
+    <br>
+    NUMERO DE AFILIACION AL IMSS: <t t-out="object.employee_id.social_security_number"></t>
+    <br>
+    EDAD: <t t-out="object.employee_id.age"></t>
+    <br>
+    DIRECCION:<t t-out="object.employee_id.applicant_id.full_address"></t>
+    <br>
+    TELEFONO: <t t-out="object.employee_id.mobile_phone"></t><br> <t t-out="object.employee_id.desk_phone"></t>
+
+</p><br> <br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+    Los generales de “LA EMPRESA” son los siguientes:<br>
+Mexicana, Servicio de Restaurante de Alimentos, con R.F.C. <t t-out="object.job_id.company_id.rfc"></t>, y con domicilio en <t t-out="object.job_id.company_id.fiscal_address"></t>
+
+Leído que fue por ambas partes este documento ante los testigos que firman e impuestos todos de su contenido y sabedores de las obligaciones que contraen, lo firman en la ciudad de Tampico, Tamaulipas a los <t t-out="object.actual_date"></t>
+<br>
+
+</p>
+
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center; ">
+
+ <table class="table table-borderless">
+                    <tbody>
+                    <tr col="2">
+                            <td> “LA EMPRESA”</td>
+                            <td>“EL EMPLEADO”</td>
+                        </tr>
+                        <tr col="2">
+                            <td>
+                                <br/>
+                                <br/>
+                                <br/>
+                                 <br/>
+                                 <br/> <br/><br/>
+                            </td>
+                            <td>
+                                <br/>
+                                <br/>
+                                <br/> <br/> <br/> <br/>
+                            </td>
+                        </tr>
+                        <tr col="2">
+                            <td>
+                                <t t-out="object.employee_id.company_id.legal_representative.name"></t>
+                                <br/>
+                                 Representante legal
+                                <br/>
+                                 <t t-out="object.employee_id.company_id.name"></t>
+                                 <br/>
+                                  <t t-out="object.job_id.company_id.rfc"></t>
+                            </td>
+                            <td>
+                                <t t-out="object.employee_id.name"></t> <t t-out="object.employee_id.last_name"></t> <t t-out="object.employee_id.last_name2"></t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+</p>

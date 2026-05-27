@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="type_format_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.type_format.view.tree</field>
+            <field name="model">reclutamiento__kuale.type_format</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de formato">
+                    <field name="active" column_invisible="True" />
+                    <field name="name" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+        <record id="type_format_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.type_format.view.form</field>
+            <field name="model">reclutamiento__kuale.type_format</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de formato">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="active" />
+                                <field name="name" />
+                                <field name="description" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_type_format_action" model="ir.actions.act_window">
+            <field name="name">Tipo de formato</field>
+            <field name="res_model">reclutamiento__kuale.type_format</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear un nuevo tipo de formato
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

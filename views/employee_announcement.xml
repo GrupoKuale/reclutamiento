@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_kuale_employee_announcement_tree" model="ir.ui.view">
+            <field name="name">kuale.employee.announcement.tree</field>
+            <field name="model">reclutamiento__kuale.employee.announcement</field>
+            <field name="arch" type="xml">
+                <tree string="Anuncios">
+                    <field name="header" string="Anuncio"/>
+                    <field name="postedBy" />
+                    <field name="create_date" string="Fecha de creación"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_kuale_employee_announcement_form" model="ir.ui.view">
+            <field name="name">kuale.employee.announcement.form</field>
+            <field name="model">reclutamiento__kuale.employee.announcement</field>
+            <field name="arch" type="xml">
+                <form string="Anuncios">
+                    <sheet>
+                        <group>
+                            <field name="header" string="Anuncio"/>
+                        </group>
+                        <group>
+                            <field name="image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="postedBy" readonly="1"/>
+                        </group>
+                        <!--            reactions div            -->
+                        <div class="row row-cols-auto">
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="Me gusta" class="oe_highlight"
+                                        context="{'reaction_type': 'like'}"/>
+                            </div>
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="No me gusta" class="oe_highlight"
+                                        context="{'reaction_type': 'dislike'}"/>
+                            </div>
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="Amo" class="oe_highlight"
+                                        context="{'reaction_type': 'love'}"/>
+                            </div>
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="Wow" class="oe_highlight"
+                                        context="{'reaction_type': 'wow'}"/>
+                            </div>
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="Triste" class="oe_highlight"
+                                        context="{'reaction_type': 'sad'}"/>
+                            </div>
+                            <div class="col">
+                                <button name="add_reaction" type="object" string="Enojado" class="oe_highlight"
+                                        context="{'reaction_type': 'angry'}"/>
+                            </div>
+                        </div>
+                    </sheet>
+                    <group>
+                        <field name="reaction_ids" editable="false" create="false">
+                            <tree string="Reactions">
+                                <field name="user_id"/>
+                                <field name="reaction_type"/>
+                            </tree>
+                        </field>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_kuale_employee_announcement" model="ir.actions.act_window">
+            <field name="name">Anuncios</field>
+            <field name="res_model">reclutamiento__kuale.employee.announcement</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Sin anuncios aún.
+                </p>
+                <p>
+                    Crea tu primer anuncio.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

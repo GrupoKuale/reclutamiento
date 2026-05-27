@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="kuale_recruitment_login_page" name="Kuale Recruitment Login">
+            <t t-call="website.layout">
+                <t t-set="no_header" t-value="1"/>
+                <t t-set="no_footer" t-value="1"/>
+
+                <div id="wrap" class="kuale-login">
+                    <div class="kuale-login__layout">
+                        <section class="kuale-login__panel">
+                            <img class="kuale-login__logo"
+                                 src="/reclutamiento__kuale/static/src/images/punto_kuale/pk_logo_rojo.png"
+                                 alt="Punto Kuale"/>
+                            <h1 class="kuale-login__title">Ser familia es<br/>estar conectados.</h1>
+                            <p class="kuale-login__subtitle">
+                                Inicia tu sesion e ingresa al punto de encuentro digital de tu familia Kuale.
+                            </p>
+
+                            <t t-if="error">
+                                <div class="alert alert-danger kuale-login__alert" role="alert">
+                                    <t t-esc="error"/>
+                                </div>
+                            </t>
+
+                            <form method="post" action="/kuale/login" class="kuale-login__form">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+
+                                <label class="kuale-login__label" for="kuale_login_user">Usuario</label>
+                                <input id="kuale_login_user" type="text" name="login" class="kuale-login__input"
+                                       t-att-value="login" autocomplete="username" required="required"/>
+
+                                <label class="kuale-login__label" for="kuale_login_password">Contrasena</label>
+                                <input id="kuale_login_password" type="password" name="password"
+                                       class="kuale-login__input" autocomplete="current-password" required="required"/>
+
+                                <a class="kuale-login__forgot" href="/web/login?redirect=/kuale/login">
+                                    Olvidaste tu contrasena?
+                                </a>
+
+                                <button type="submit" class="kuale-login__submit">
+                                    Entrar <span aria-hidden="true">&#8250;</span>
+                                </button>
+                            </form>
+                        </section>
+
+                        <aside class="kuale-login__visual" aria-hidden="true">
+                            <div class="kuale-login__slide kuale-login__slide--one"></div>
+                            <div class="kuale-login__slide kuale-login__slide--two"></div>
+                            <div class="kuale-login__dots">
+                                <span></span><span></span><span></span><span></span>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>
+

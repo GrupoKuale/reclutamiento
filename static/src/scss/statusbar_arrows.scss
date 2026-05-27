@@ -1,0 +1,71 @@
+.ks-hidden { display: none !important; }
+
+.ks_statusbar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0px !important;
+    padding: 6px 2px !important;
+}
+
+.ks-step-wrap {
+    position: relative !important;
+    display: inline-flex !important;
+    margin-right: -6px !important;
+}
+
+.ks-step-wrap:last-child {
+    margin-right: 0 !important;
+}
+
+.ks-step {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    height: 34px !important;
+    padding: 0 22px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    white-space: nowrap !important;
+    box-shadow: none !important;
+    font-size: 13px !important;
+    overflow: hidden !important;
+    clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%, 12px 50%) !important;
+    color: var(--biz-theme-secondary-text-color, #555) !important;
+    z-index: 1 !important;
+}
+
+.ks-step-label {
+    position: relative !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+}
+
+body.o_web_client .o_form_view .o_form_sheet_bg .o_form_statusbar .o_statusbar_status > .ks-step-wrap > button.btn.btn-secondary.ks-step {
+    background-color: transparent !important;
+    background: transparent !important;
+    filter: none !important;
+}
+
+body.o_web_client .o_form_view .o_form_sheet_bg .o_form_statusbar .o_statusbar_status > .ks-step-wrap > button.btn.btn-secondary.ks-step.ks-step-current {
+    background-color: transparent !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+}
+
+body.o_web_client .o_form_view .o_form_sheet_bg .o_form_statusbar .o_statusbar_status > .ks-step-wrap > button.btn.btn-secondary.ks-step::before,
+body.o_web_client .o_form_view .o_form_sheet_bg .o_form_statusbar .o_statusbar_status > .ks-step-wrap > button.btn.btn-secondary.ks-step::after {
+    display: none !important;
+    content: none !important;
+}
+
+// SVG está en el wrapper, z-index menor que el botón para que el texto quede encima
+.ks-step-wrap .ks-border-svg {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    pointer-events: none !important;
+    z-index: 0 !important;
+    overflow: visible !important;
+}

@@ -1,0 +1,313 @@
+<odoo>
+    <data noupdate="0">
+
+        <!-- ======= APP RECLUTAMIENTO KUALE - OCULTO DEL HOME ======= -->
+        <record id="reclutamiento__kuale_menu_root" model="ir.ui.menu">
+		 <field name="name">Reclutamiento Kuale</field>
+		 <field name="active" eval="False"/>
+        </record>
+
+        <!-- logo Kuale -->
+        <record id="hr_recruitment.menu_hr_recruitment_root" model="ir.ui.menu">
+                <field name="web_icon">reclutamiento__kuale,static/src/images/logoKuale.png</field>
+        </record>
+
+        <!-- ══════════════════════════════════════════
+        Restauración menús hr_recruitment
+        ══════════════════════════════════════════ -->
+
+        <!-- Menús principales -->
+        <record id="hr_recruitment.menu_hr_recruitment_configuration" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="groups_id" eval="[(6, 0, [ref('hr_recruitment.group_hr_recruitment_user')])]"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_config_jobs" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_config_applications" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_config_employees" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_config_activities" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_crm_case_categ0_act_job" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_crm_case_categ_all_app" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_applicant_refuse_reason" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_stage" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>
+        </record>
+
+        <record id="hr_recruitment.hr_applicant_category_menu" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_degree" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="groups_id" eval="[(6, 0, [ref('base.group_no_one')])]"/>
+        </record>
+
+        <record id="hr_recruitment.menu_hr_recruitment_contract_type" model="ir.ui.menu">
+        <field name="active" eval="True"/>
+        <field name="groups_id" eval="[(6, 0, [ref('hr.group_hr_user')])]"/>
+        </record>
+
+        <!-- ======= CLÍNICAS ======= -->
+        <menuitem
+                name="Clínicas"
+                id="reclutamiento__kuale_menu_root2"
+                web_icon="reclutamiento__kuale,static/src/images/clinica.png"
+                sequence="30"/>
+        <menuitem
+                name="Clínicas"
+                id="reclutamiento__kuale_clinic_kanban"
+                action="reclutamiento__kuale_clinic_action"
+                parent="reclutamiento__kuale_menu_root2"
+                groups="reclutamiento__kuale.group_dh_access"/>
+
+        <!-- ======= DENTRO DE RECLUTAMIENTO (hr_recruitment) ======= -->
+
+        <!-- 1. REQUISICIONES -->
+        <menuitem
+                name="Requisiciones de contratación"
+                id="reclutamiento__kuale_requisiciones_kanban"
+                action="reclutamiento_kuale_requisitions_kanban_action"
+                parent="hr_recruitment.menu_hr_recruitment_root"
+                sequence="5"/>
+
+        <!-- 2. CATÁLOGO -->
+        <menuitem
+                name="Catálogo"
+                id="reclutamiento__kuale_catalogo"
+                parent="hr_recruitment.menu_hr_recruitment_root"
+                sequence="20"/>
+
+        <menuitem name="Tipo de sucursales"
+                id="reclutamiento__kuale_subsidiaries"
+                action="reclutamiento__kuale_branch_type_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Tipo de giros"
+                id="reclutamiento__kuale_typeturns"
+                action="reclutamiento__kuale_businessType_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Representantes Legales"
+                id="reclutamiento__kuale_legalrep"
+                action="reclutamiento__kuale_legalRep_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Registros patronales"
+                id="reclutamiento__kuale_employeerrecord"
+                action="reclutamiento__kuale_imssRegistration_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Certificado sello digital"
+                id="reclutamiento__kuale_certificatedigital"
+                action="reclutamiento__kuale_stampCertificate_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Segmentos"
+                id="reclutamiento__kuale_segments"
+                action="reclutamiento__kuale_segments_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Tipo de formato"
+                id="reclutamiento__kuale_typeformat"
+                action="reclutamiento__kuale_type_format_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Tipo de contratos"
+                id="reclutamiento__kuale_typecontract"
+                action="reclutamiento__kuale_contract_type_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Formato de contratos"
+                id="reclutamiento__kuale_contractformat"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Actividades"
+                id="reclutamiento__kuale_activity"
+                action="reclutamiento__kuale_activities_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Herramientas y conocimientos"
+                id="reclutamiento__kuale_tools"
+                action="reclutamiento__kuale_tools_knowledge_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Escolaridad"
+                id="reclutamiento__kuale_education"
+                action="reclutamiento_kuale_schooling_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Idiomas"
+                id="reclutamiento__kuale_language"
+                action="reclutamiento__kuale_language_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Rango de edad"
+                id="reclutamiento__kuale_age"
+                action="reclutamiento_kuale_age_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Relaciones internas"
+                id="reclutamiento__kuale_internalrelations"
+                action="reclutamiento_kuale_int_rel_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Relaciones externas"
+                id="reclutamiento__kuale_externalrelations"
+                action="reclutamiento_kuale_ext_rel_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Estándares de rendimiento"
+                id="reclutamiento__kuale_performancestandards"
+                action="reclutamiento_kuale_perf_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Beneficios y prestaciones"
+                id="reclutamiento__kuale_benefits"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Bonos"
+                id="reclutamiento__kuale_bonus"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Usuarios"
+                id="reclutamiento__kuale_users"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Recordatorios"
+                id="reclutamiento__kuale_reminders"
+                action="reclutamiento_kuale_requisitions_tree_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Días"
+                id="reclutamiento__kuale_weekday"
+                action="reclutamiento_kuale_weekdays_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Género"
+                id="reclutamiento__kuale_gender"
+                action="reclutamiento_kuale_gender_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Documentos de identificación"
+                id="reclutamiento__kuale_identify_docs"
+                action="reclutamiento_kuale_identification_option_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Ciudades"
+                id="reclutamiento__kuale_cities"
+                action="reclutamiento__kuale_city_action"
+                parent="reclutamiento__kuale_catalogo"/>
+        <menuitem name="Configuración general"
+                id="reclutamiento__kuale_settings"
+                action="reclutamiento__kuale_settings_action"
+                parent="reclutamiento__kuale_catalogo"/>
+
+        <menuitem name="Formatos de contratación"
+                id="reclutamiento__kuale_doc_formats"
+                action="hr_applicant_doc_format_action"
+                parent="reclutamiento__kuale_catalogo"/>
+
+        <!-- 3. TABULADOR -->
+        <menuitem
+                name="Tabulador"
+                id="reclutamiento__kuale_job_tab"
+                parent="hr_recruitment.menu_hr_recruitment_root"
+                sequence="30"/>
+
+        <menuitem name="Tabuladores de puesto"
+                id="reclutamiento__kuale_job_tabs"
+                action="reclutamiento__kuale_job_tab_action"
+                parent="reclutamiento__kuale_job_tab"
+                sequence="10"/>
+        <menuitem name="Áreas"
+                id="reclutamiento__kuale_company_area"
+                action="reclutamiento__kuale_company_area_action"
+                parent="reclutamiento__kuale_job_tab"/>
+        <menuitem name="Centro de costos"
+                id="reclutamiento__kuale_cost_center"
+                action="reclutamiento__kuale_cost_center_action"
+                parent="reclutamiento__kuale_job_tab"/>
+        <menuitem name="Rol"
+                id="reclutamiento__kuale_rol_tab"
+                action="reclutamiento__kuale_rol_tab_action"
+                parent="reclutamiento__kuale_job_tab"/>
+        <menuitem name="Nivel jerárquico"
+                id="reclutamiento__kuale_hierarchical_level"
+                action="reclutamiento__kuale_hierarchical_level_action"
+                parent="reclutamiento__kuale_job_tab"/>
+        <menuitem name="Tipo de empleado"
+                id="reclutamiento__kuale_type_employee"
+                action="reclutamiento__kuale_type_employee_action"
+                parent="reclutamiento__kuale_job_tab"/>
+        <menuitem name="UMA"
+                id="reclutamiento__kuale_unit_mesure_update"
+                action="reclutamiento__kuale_type_unit_mesure_update_action"
+                parent="reclutamiento__kuale_job_tab"/>
+
+
+        <!-- ======= COMPETENCIAS en Configuración de Reclutamiento ======= -->
+        <menuitem
+                name="Competencias"
+                id="reclutamiento__kuale_competence"
+                parent="hr_recruitment.menu_hr_recruitment_config_employees"
+                action="reclutamiento__kuale_competencies_type_action"
+                sequence="40"/>
+
+        <!-- ======= ACCESO AL MÓDULO HR ======= -->
+        <record id="hr.menu_hr_root" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4, ref('reclutamiento__kuale.group_dh_access'))]"/>
+        </record>
+
+        <!-- ======= SERVICIOS AL EMPLEADO ======= -->
+        <menuitem name="Servicios al empleado"
+                id="servicios_al_empleado_menu_root"
+                action="action_employee_request"
+                web_icon="reclutamiento__kuale,static/src/images/serviciosKuale.png"/>
+        <menuitem id="menu_employee_feedback" name="Comentarios"
+                parent="servicios_al_empleado_menu_root"
+                action="action_employee_feedback"/>
+        <menuitem id="menu_employee_announcement" name="Anuncios"
+                parent="servicios_al_empleado_menu_root"
+                action="action_kuale_employee_announcement"/>
+        <menuitem id="menu_employee_todo" name="Tareas"
+                parent="servicios_al_empleado_menu_root"
+                action="action_employee_todo"/>
+        <menuitem id="menu_employee_request_root" name="Solicitudes"
+                parent="servicios_al_empleado_menu_root" sequence="1"/>
+        <menuitem id="menu_employee_request_submenu" name="Solicitudes"
+                parent="menu_employee_request_root"
+                action="action_employee_request" sequence="1"/>
+        <menuitem id="menu_employee_request_work" name="Trabajo"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_work" sequence="10"/>
+        <menuitem id="menu_employee_request_vacation" name="Vacaciones"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_vacation" sequence="20"/>
+        <menuitem id="menu_employee_request_expenses" name="Viáticos"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_expenses" sequence="30"/>
+        <menuitem id="menu_employee_request_uniform" name="Uniformes"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_uniform" sequence="40"/>
+        <menuitem id="menu_employee_request_loan" name="Préstamo"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_loan" sequence="50"/>
+        <menuitem id="menu_employee_request_labor_letter" name="Carta laboral"
+                parent="menu_employee_request_submenu"
+                action="action_employee_request_labor_letter" sequence="60"/>
+
+        <!-- ======= BIOMÉTRICO ======= -->
+        <menuitem id="biometric_device_details_menu"
+                name="Dispositivo biométrico"
+                parent="hr_attendance.menu_hr_attendance_root"
+                sequence="21"/>
+        <menuitem id="zkteco_biometric_logs_menu"
+                name="Registro de Asistencia"
+                parent="biometric_device_details_menu"
+                action="action_zkteco_log" sequence="10"/>
+        <menuitem id="zkteco_biometric_users_menu"
+                name="Datos Biométricos"
+                parent="biometric_device_details_menu"
+                action="action_biometric_user" sequence="20"/>
+
+    </data>
+</odoo>

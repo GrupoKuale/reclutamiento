@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="contract_format_form">
+            <field name="name">reclutamiento__kuale.contract_format.form</field>
+            <field name="model">reclutamiento__kuale.contract_format</field>
+            <field name="arch" type="xml">
+                <form string="Plantillas">
+                    <header>
+                        <button name="print_quotation_preview" string="Vista previa" type="object"  class="oe_highlight" data-hotkey="k"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h1><field name="name" class="w-100"
+                                required="1" placeholder='e.g. "Formato 1"'/></h1>
+                        </div>
+                        <group>
+                            <field name="type_format_id"/>
+                            <field name="description"/>
+                        </group>
+                        <notebook>
+                            <page string="Contenido" name="content">
+                                <field name="body" widget="html" class="oe-bordered-editor"
+                                    options="{'style-inline': true, 'codeview': true, 'dynamic_placeholder': true}"
+                                />
+                                <!--<field name="body" />-->
+                            </page>
+                        </notebook>
+                       </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="contract_format_tree">
+            <field name="name">reclutamiento__kuale.contract_format.tree</field>
+            <field name="model">reclutamiento__kuale.contract_format</field>
+            <field name="arch" type="xml">
+                <tree string="Plantillas">
+                    <field name="name"/>
+                    <field name="type_format_id"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="reclutamiento__kuale_contract_format_action">
+            <field name="name">Formato del contrato</field>
+            <field name="res_model">reclutamiento__kuale.contract_format</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="contract_format_tree" />
+        </record>
+
+    </data>
+
+    <menuitem
+        id="reclutamiento__kuale_contract_format"
+        name="Formatos"
+        action="reclutamiento__kuale_contract_format_action"
+        parent="hr_contract.menu_human_resources_configuration_contract"
+        sequence="10"
+        groups="base.group_no_one"/>
+
+</odoo>

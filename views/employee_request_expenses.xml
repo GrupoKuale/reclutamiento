@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_employee_request_expenses_form" model="ir.ui.view">
+            <field name="name">employee.request.expenses.form</field>
+            <field name="model">reclutamiento__kuale.employee.request.expenses</field>
+            <field name="arch" type="xml">
+                <form string="Solicitud de viáticos">
+                    <sheet>
+                        <group>
+                            <field name="startDate"/>
+                            <field name="endDate"/>
+                            <field name="destiny"/>
+<!--                            <field name="requestId" context="{'default_expensesRequestId': active_id}">-->
+<!--                                <tree>-->
+<!--                                    <field name="requestedBy"/>-->
+<!--                                    <field name="status"/>-->
+<!--                                </tree>-->
+<!--                            </field>-->
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_employee_request_expenses_tree" model="ir.ui.view">
+            <field name="name">employee.request.expenses.tree</field>
+            <field name="model">reclutamiento__kuale.employee.request.expenses</field>
+            <field name="arch" type="xml">
+                <tree string="Solicitudes de viáticos">
+                    <field name="startDate"/>
+                    <field name="endDate"/>
+                    <field name="destiny"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_employee_request_expenses_search" model="ir.ui.view">
+            <field name="name">employee.request.expenses.search</field>
+            <field name="model">reclutamiento__kuale.employee.request.expenses</field>
+            <field name="arch" type="xml">
+                <search string="Buscar solicitudes de viáticos">
+                    <filter name="filter_date" string="Fecha" domain="[('startDate', '!=', False)]"/>
+                    <filter name="filter_destiny" string="Destino" domain="[('destiny', '!=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_employee_request_expenses" model="ir.actions.act_window">
+            <field name="name">Solicitudes de viáticos</field>
+            <field name="res_model">reclutamiento__kuale.employee.request.expenses</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_employee_request_expenses_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Crea la primera solicitud de viáticos.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

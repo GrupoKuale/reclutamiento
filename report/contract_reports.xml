@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="report_contract_employee" model="ir.actions.report">
+            <field name="name">Contract</field>
+            <field name="model">hr.contract</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.report_contractemployee</field>
+            <field name="report_file">reclutamiento__kuale.report_contractemployee</field>
+            <field name="print_report_name">'Contract - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_hr_contract"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="report_contract_employee_dynamic" model="ir.actions.report">
+            <field name="name">Contract</field>
+            <field name="model">hr.contract</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.report_contractEmployee</field>
+            <field name="report_file">reclutamiento__kuale.report_contractEmployee</field>
+            <field name="print_report_name">'Contrato - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_hr_contract"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="report_contract_employee_preview" model="ir.actions.report">
+            <field name="name">Formato</field>
+            <field name="model">reclutamiento__kuale.contract_format</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.report_contractpreview</field>
+            <field name="report_file">reclutamiento__kuale.report_contractpreview</field>
+            <field name="print_report_name">'Vista previa - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_reclutamiento__kuale_contract_format"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

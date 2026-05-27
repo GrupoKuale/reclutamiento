@@ -1,0 +1,1483 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="kuale_login_modal_component"
+                  name="Kuale Login Modal Component"
+                  inherit_id="website.layout">
+            <xpath expr="//body" position="inside">
+
+                <style>
+                    /* ── Overlay compartido ── */
+                    .kuale-login-overlay {
+                        display: none; position: fixed; inset: 0;
+                        background: rgba(0,0,0,.55); z-index: 9999;
+                        align-items: center; justify-content: center;
+                    }
+                    .kuale-login-overlay.is-open { display: flex; }
+
+                    /* ── Caja compartida ── */
+                    .kuale-login-box {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 48px 52px 40px;
+                        width: 100%;
+                        max-width: 540px;
+                        position: relative;
+                        box-shadow: 0 24px 64px rgba(0,0,0,.22);
+                        animation: kualeLoginBoxIn .22s ease;
+                    }
+                    @keyframes kualeLoginBoxIn {
+                        from { transform: translateY(-20px); opacity: 0; }
+                        to   { transform: translateY(0);     opacity: 1; }
+                    }
+
+                    .kuale-login-box__close {
+                        position: absolute; top: 16px; right: 20px;
+                        background: none; border: none; font-size: 20px;
+                        cursor: pointer; color: #bbb; line-height: 1;
+                    }
+                    .kuale-login-box__close:hover { color: #555; }
+
+                    .kuale-login-box__title {
+                        text-align: center; font-size: 28px; font-weight: 800;
+                        color: #111; margin: 0 0 32px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__subtitle {
+                        text-align: center; font-size: 14px; color: #666;
+                        margin: -20px 0 28px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        line-height: 1.5;
+                    }
+
+                    .kuale-login-box__label {
+                        display: block; font-size: 13px; font-weight: 600;
+                        color: #333; margin-bottom: 6px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__input {
+                        width: 100%; border: 2px solid #FA0000; border-radius: 6px;
+                        padding: 12px 14px; font-size: 15px; outline: none;
+                        transition: border-color .2s, box-shadow .2s;
+                        margin-bottom: 20px; box-sizing: border-box; color: #111;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__input:focus {
+                        border-color: #FA0000;
+                        box-shadow: 0 0 0 3px rgba(250,0,0,.12);
+                    }
+
+                    .kuale-login-box__forgot {
+                        display: block; text-align: right; font-size: 12px;
+                        color: #FA0000; margin-top: -14px; margin-bottom: 28px;
+                        text-decoration: none; cursor: pointer;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__forgot:hover { text-decoration: underline; }
+
+                    .kuale-login-box__back {
+                        display: block; text-align: center; font-size: 13px;
+                        color: #FA0000; margin-top: 16px;
+                        text-decoration: none; cursor: pointer;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__back:hover { text-decoration: underline; }
+
+                    .kuale-login-box__submit {
+                        width: 100%; background: #FA0000; color: #fff; border: none;
+                        border-radius: 999px; padding: 16px; font-size: 16px;
+                        font-weight: 800; cursor: pointer;
+                        transition: background .2s, transform .15s;
+                        font-family: "Somerun", "Aloevera", system-ui, sans-serif;
+                        letter-spacing: 0.4px;
+                    }
+                    .kuale-login-box__submit:hover { background: #E10000; transform: translateY(-1px); }
+                    .kuale-login-box__submit:active { transform: translateY(0); }
+                    .kuale-login-box__submit:disabled { background: #e57373; cursor: not-allowed; transform: none; }
+
+                    .kuale-login-box__logo {
+                        display: block; margin: 28px auto 0; height: 56px; width: auto;
+                    }
+
+                    .kuale-login-box__error {
+                        background: #fdecea; color: #c62828; border-radius: 6px;
+                        padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__error.is-visible { display: block; }
+
+                    .kuale-login-box__success {
+                        background: #e8f5e9; color: #2e7d32; border-radius: 6px;
+                        padding: 10px 14px; font-size: 13px; margin-bottom: 16px; display: none;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__success.is-visible { display: block; }
+
+                    .kuale-login-box__switch {
+                        text-align: center; margin-top: 20px;
+                        font-size: 13px; color: #666;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-login-box__switch a {
+                        color: #FA0000; font-weight: 700; cursor: pointer;
+                        text-decoration: none;
+                    }
+                    .kuale-login-box__switch a:hover { text-decoration: underline; }
+
+                    .kuale-login-box__hint {
+                        font-size: 11px; color: #999; margin-top: -14px;
+                        margin-bottom: 20px; display: block;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+
+                    /* ── Verificación: input código ── */
+                    .kuale-verify-code-wrap {
+                        display: flex; gap: 10px; justify-content: center;
+                        margin-bottom: 24px;
+                    }
+                    .kuale-verify-digit {
+                        width: 52px; height: 62px;
+                        border: 2px solid #FA0000; border-radius: 8px;
+                        font-size: 26px; font-weight: 800; text-align: center;
+                        outline: none; color: #111;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        transition: border-color .2s, box-shadow .2s;
+                        caret-color: transparent;
+                        box-sizing: border-box;
+                    }
+                    .kuale-verify-digit:focus {
+                        border-color: #FA0000;
+                        box-shadow: 0 0 0 3px rgba(250,0,0,.15);
+                    }
+                    .kuale-verify-digit.filled { background: #fff5f5; }
+
+                    /* ── Timer ── */
+                    .kuale-verify-timer-wrap {
+                        text-align: center; margin-bottom: 20px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                    }
+                    .kuale-verify-timer {
+                        display: inline-flex; align-items: center; gap: 8px;
+                        font-size: 13px; color: #555;
+                    }
+                    .kuale-verify-timer__clock {
+                        font-size: 15px; font-weight: 800;
+                        color: #FA0000; letter-spacing: 1px;
+                        font-variant-numeric: tabular-nums;
+                    }
+                    .kuale-verify-timer__clock.warning { color: #e65100; animation: kualePulse 1s infinite; }
+                    @keyframes kualePulse {
+                        0%, 100% { opacity: 1; }
+                        50%       { opacity: .5; }
+                    }
+
+                    .kuale-verify-resend-wrap {
+                        text-align: center; margin-bottom: 20px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        font-size: 13px; color: #666;
+                    }
+                    .kuale-verify-resend-btn {
+                        background: none; border: 2px solid #FA0000; border-radius: 999px;
+                        color: #FA0000; font-size: 13px; font-weight: 700;
+                        padding: 8px 20px; cursor: pointer;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        transition: background .2s, color .2s;
+                    }
+                    .kuale-verify-resend-btn:hover { background: #FA0000; color: #fff; }
+                    .kuale-verify-resend-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+                    .kuale-verify-email-hint {
+                        text-align: center; font-size: 13px; color: #888;
+                        margin: -20px 0 26px;
+                        font-family: "Aloevera", system-ui, sans-serif;
+                        line-height: 1.5;
+                    }
+                    .kuale-verify-email-hint strong { color: #333; }
+
+                    /* ══════════════════════════════════════
+                    RESPONSIVE — Tablet (≤ 768px)
+                    ══════════════════════════════════════ */
+                    @media (max-width: 768px) {
+                        /* ── Overlay: alinear al fondo como sheet ── */
+                        .kuale-login-overlay {
+                            align-items: flex-end;
+                            padding: 0;
+                        }
+
+                        /* ── Caja: ocupa todo el ancho, esquinas arriba redondeadas ── */
+                        .kuale-login-box {
+                            padding: 28px 20px 32px;
+                            max-width: 100%;
+                            width: 100%;
+                            margin: 0;
+                            border-radius: 20px 20px 0 0;
+                            max-height: 92dvh;
+                            overflow-y: auto;
+                            box-shadow: 0 -8px 32px rgba(0,0,0,.18);
+                            animation: kualeSheetIn .25s ease;
+                        }
+                        @keyframes kualeSheetIn {
+                            from { transform: translateY(100%); opacity: 0; }
+                            to   { transform: translateY(0);    opacity: 1; }
+                        }
+
+                        /* ── Handle visual ── */
+                        .kuale-login-box::before {
+                            content: '';
+                            display: block;
+                            width: 40px;
+                            height: 4px;
+                            background: #ddd;
+                            border-radius: 999px;
+                            margin: 0 auto 20px;
+                        }
+
+                        .kuale-login-box__close {
+                            top: 20px;
+                            right: 16px;
+                            font-size: 18px;
+                        }
+
+                        .kuale-login-box__title {
+                            font-size: 24px;
+                            margin: 0 0 24px;
+                        }
+
+                        .kuale-login-box__subtitle {
+                            font-size: 13px;
+                            margin: -16px 0 22px;
+                        }
+
+                        .kuale-login-box__label {
+                            font-size: 12px;
+                        }
+
+                        .kuale-login-box__input {
+                            padding: 11px 13px;
+                            font-size: 14px;
+                            margin-bottom: 16px;
+                            border-width: 1.5px;
+                        }
+
+                        .kuale-login-box__hint {
+                            font-size: 10px;
+                            margin-top: -10px;
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-login-box__forgot {
+                            font-size: 11px;
+                            margin-top: -10px;
+                            margin-bottom: 20px;
+                        }
+
+                        .kuale-login-box__submit {
+                            padding: 14px;
+                            font-size: 15px;
+                        }
+
+                        .kuale-login-box__switch {
+                            font-size: 12px;
+                            margin-top: 16px;
+                        }
+
+                        .kuale-login-box__back {
+                            font-size: 12px;
+                            margin-top: 12px;
+                        }
+
+                        .kuale-login-box__logo {
+                            height: 40px;
+                            margin: 16px auto 0;
+                        }
+
+                        .kuale-login-box__error,
+                        .kuale-login-box__success {
+                            font-size: 12px;
+                            padding: 9px 12px;
+                        }
+
+                        /* ── Dígitos verificación ── */
+                        .kuale-verify-code-wrap {
+                            gap: 6px;
+                            margin-bottom: 18px;
+                        }
+
+                        .kuale-verify-digit {
+                            width: 40px;
+                            height: 48px;
+                            font-size: 20px;
+                            border-radius: 6px;
+                            border-width: 1.5px;
+                        }
+
+                        /* ── Timer ── */
+                        .kuale-verify-timer-wrap {
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-verify-timer {
+                            font-size: 12px;
+                        }
+
+                        .kuale-verify-timer__clock {
+                            font-size: 13px;
+                        }
+
+                        /* ── Reenviar ── */
+                        .kuale-verify-resend-wrap {
+                            font-size: 12px;
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-verify-resend-btn {
+                            font-size: 12px;
+                            padding: 7px 16px;
+                        }
+
+                        .kuale-verify-email-hint {
+                            font-size: 12px;
+                            margin: -14px 0 20px;
+                        }
+                    }
+
+                    /* ══════════════════════════════════════
+                    RESPONSIVE — Móvil (≤ 576px)
+                    ══════════════════════════════════════ */
+                    @media (max-width: 576px) {
+                        /* ── Overlay: alinear al fondo en móvil ── */
+                        .kuale-login-overlay {
+                            align-items: flex-end;   /* ← sube desde abajo como sheet */
+                            padding: 0;
+                        }
+
+                        /* ── Caja: ocupa todo el ancho, esquinas arriba redondeadas ── */
+                        .kuale-login-box {
+                            padding: 28px 20px 32px;
+                            max-width: 100%;
+                            width: 100%;
+                            margin: 0;
+                            border-radius: 20px 20px 0 0;  /* ← sheet inferior */
+                            max-height: 92dvh;             /* ← no tapa toda la pantalla */
+                            overflow-y: auto;
+                            box-shadow: 0 -8px 32px rgba(0,0,0,.18);
+                            /* quitar animación vertical y usar una lateral */
+                            animation: kualeSheetIn .25s ease;
+                        }
+                        @keyframes kualeSheetIn {
+                            from { transform: translateY(100%); opacity: 0; }
+                            to   { transform: translateY(0);    opacity: 1; }
+                        }
+
+                        /* ── Handle visual (línea gris arriba) ── */
+                        .kuale-login-box::before {
+                            content: '';
+                            display: block;
+                            width: 40px;
+                            height: 4px;
+                            background: #ddd;
+                            border-radius: 999px;
+                            margin: 0 auto 20px;
+                        }
+
+                        .kuale-login-box__close {
+                            top: 20px;
+                            right: 16px;
+                            font-size: 18px;
+                        }
+
+                        .kuale-login-box__title {
+                            font-size: 22px;
+                            margin: 0 0 20px;
+                        }
+
+                        .kuale-login-box__subtitle {
+                            font-size: 12px;
+                            margin: -14px 0 18px;
+                        }
+
+                        .kuale-login-box__label {
+                            font-size: 12px;
+                        }
+
+                        .kuale-login-box__input {
+                            padding: 11px 12px;
+                            font-size: 14px;
+                            margin-bottom: 14px;
+                            border-width: 1.5px;
+                        }
+
+                        .kuale-login-box__hint {
+                            font-size: 10px;
+                            margin-top: -10px;
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-login-box__forgot {
+                            font-size: 11px;
+                            margin-top: -10px;
+                            margin-bottom: 20px;
+                        }
+
+                        .kuale-login-box__submit {
+                            padding: 14px;
+                            font-size: 14px;
+                        }
+
+                        .kuale-login-box__switch {
+                            font-size: 12px;
+                            margin-top: 16px;
+                        }
+
+                        .kuale-login-box__back {
+                            font-size: 12px;
+                            margin-top: 12px;
+                        }
+
+                        .kuale-login-box__logo {
+                            height: 40px;
+                            margin: 16px auto 0;
+                        }
+
+                        .kuale-login-box__error,
+                        .kuale-login-box__success {
+                            font-size: 12px;
+                            padding: 9px 12px;
+                        }
+
+                        /* ── Dígitos verificación: más compactos ── */
+                        .kuale-verify-code-wrap {
+                            gap: 6px;
+                            margin-bottom: 18px;
+                        }
+
+                        .kuale-verify-digit {
+                            width: 40px;
+                            height: 48px;
+                            font-size: 20px;
+                            border-radius: 6px;
+                            border-width: 1.5px;
+                        }
+
+                        /* ── Timer ── */
+                        .kuale-verify-timer-wrap {
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-verify-timer {
+                            font-size: 12px;
+                        }
+
+                        .kuale-verify-timer__clock {
+                            font-size: 13px;
+                        }
+
+                        /* ── Reenviar ── */
+                        .kuale-verify-resend-wrap {
+                            font-size: 12px;
+                            margin-bottom: 14px;
+                        }
+
+                        .kuale-verify-resend-btn {
+                            font-size: 12px;
+                            padding: 7px 16px;
+                        }
+
+                        .kuale-verify-email-hint {
+                            font-size: 12px;
+                            margin: -14px 0 20px;
+                        }
+                    }
+                    
+                    /* ══════════════════════════════════════
+                    RESPONSIVE — Desktop grande (≤ 1400px)
+                    ══════════════════════════════════════ */
+                    @media (max-width: 1400px) {
+                        .kuale-login-box {
+                            max-width: 520px;
+                            padding: 44px 48px 38px;
+                        }
+                        .kuale-login-box__title {
+                            font-size: 26px;
+                        }
+                    }
+
+                    /* ══════════════════════════════════════
+                    RESPONSIVE — Laptop mediana (≤ 1280px)
+                    ══════════════════════════════════════ */
+                    @media (max-width: 1280px) {
+                        .kuale-login-box {
+                            max-width: 500px;
+                            padding: 40px 44px 36px;
+                        }
+                        .kuale-login-box__title {
+                            font-size: 25px;
+                            margin: 0 0 28px;
+                        }
+                        .kuale-login-box__input {
+                            padding: 11px 13px;
+                            font-size: 14px;
+                            margin-bottom: 18px;
+                        }
+                        .kuale-login-box__submit {
+                            padding: 15px;
+                            font-size: 15px;
+                        }
+                    }
+
+                    /* ══════════════════════════════════════
+                    RESPONSIVE — Laptop pequeña (≤ 1100px)
+                    ══════════════════════════════════════ */
+                    @media (max-width: 1100px) {
+                        .kuale-login-box {
+                            max-width: 460px;
+                            padding: 36px 38px 32px;
+                        }
+                        .kuale-login-box__title {
+                            font-size: 23px;
+                            margin: 0 0 24px;
+                        }
+                        .kuale-login-box__subtitle {
+                            font-size: 13px;
+                            margin: -16px 0 22px;
+                        }
+                        .kuale-login-box__label {
+                            font-size: 12px;
+                        }
+                        .kuale-login-box__input {
+                            padding: 10px 12px;
+                            font-size: 14px;
+                            margin-bottom: 16px;
+                            border-width: 1.5px;
+                        }
+                        .kuale-login-box__hint {
+                            font-size: 10px;
+                            margin-top: -10px;
+                            margin-bottom: 14px;
+                        }
+                        .kuale-login-box__forgot {
+                            font-size: 11px;
+                            margin-top: -10px;
+                            margin-bottom: 22px;
+                        }
+                        .kuale-login-box__submit {
+                            padding: 14px;
+                            font-size: 14px;
+                        }
+                        .kuale-login-box__switch {
+                            font-size: 12px;
+                            margin-top: 16px;
+                        }
+                        .kuale-login-box__logo {
+                            height: 48px;
+                            margin: 20px auto 0;
+                        }
+                        .kuale-verify-digit {
+                            width: 48px;
+                            height: 58px;
+                            font-size: 24px;
+                        }
+                    }
+                </style>
+
+                <!-- ═══════════════════════════
+                     MODAL: INICIAR SESIÓN
+                ════════════════════════════ -->
+                <div id="kualeLoginOverlay" class="kuale-login-overlay"
+                     role="dialog" aria-modal="true" aria-labelledby="kualeLoginTitle">
+                    <div class="kuale-login-box">
+                        <button class="kuale-login-box__close" id="kualeLoginClose"
+                                aria-label="Cerrar" type="button">&#x2715;</button>
+                        <h2 class="kuale-login-box__title" id="kualeLoginTitle">Iniciar sesi&#xF3;n</h2>
+                        <div class="kuale-login-box__error" id="kualeLoginError" role="alert"></div>
+                        <form id="kualeLoginForm" novalidate="novalidate">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <label class="kuale-login-box__label" for="kualeLoginUser">Correo electr&#xF3;nico</label>
+                            <input id="kualeLoginUser" class="kuale-login-box__input"
+                                   type="text" name="login" autocomplete="username" required="required"/>
+                            <label class="kuale-login-box__label" for="kualeLoginPass">Contrase&#xF1;a</label>
+                            <input id="kualeLoginPass" class="kuale-login-box__input"
+                                   type="password" name="password" autocomplete="current-password" required="required"/>
+                            <a class="kuale-login-box__forgot" id="kualeForgotBtn">
+                                &#xBF;Olvidaste tu contrase&#xF1;a?
+                            </a>
+                            <button type="submit" class="kuale-login-box__submit" id="kualeLoginSubmit">
+                                Entrar
+                            </button>
+                        </form>
+                        <div class="kuale-login-box__switch">
+                            &#xBF;No tienes cuenta? <a id="kualeGoToSignup">Crear cuenta</a>
+                        </div>
+                        <img class="kuale-login-box__logo"
+                             src="/reclutamiento__kuale/static/src/images/landing/Logotipo-GrupoKuale-S&#xED;mbolo.png"
+                             alt="Grupo Kuale"/>
+                    </div>
+                </div>
+
+               <!-- ═══════════════════════════
+                    MODAL: CREAR CUENTA
+                ════════════════════════════ -->
+                <div id="kualeSignupOverlay" class="kuale-login-overlay"
+                    role="dialog" aria-modal="true" aria-labelledby="kualeSignupTitle">
+                    <div class="kuale-login-box">
+                        <button class="kuale-login-box__close" id="kualeSignupClose"
+                                aria-label="Cerrar" type="button">&#x2715;</button>
+                        <h2 class="kuale-login-box__title" id="kualeSignupTitle">Crear cuenta</h2>
+                        <div class="kuale-login-box__error" id="kualeSignupError" role="alert"></div>
+                        <form id="kualeSignupForm" novalidate="novalidate">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <label class="kuale-login-box__label" for="kualeSignupEmail">Correo electr&#xF3;nico</label>
+                            <input id="kualeSignupEmail" class="kuale-login-box__input"
+                                type="email" name="login" autocomplete="email" required="required"/>
+
+                            <label class="kuale-login-box__label" for="kualeSignupPass">Contrase&#xF1;a</label>
+                            <input id="kualeSignupPass" class="kuale-login-box__input"
+                                type="password" name="password" autocomplete="new-password" required="required"/>
+                            <span class="kuale-login-box__hint">M&#xED;nimo 8 caracteres</span>
+
+                            <label class="kuale-login-box__label" for="kualeSignupPass2">Confirmar contrase&#xF1;a</label>
+                            <input id="kualeSignupPass2" class="kuale-login-box__input"
+                                type="password" name="confirm_password" autocomplete="new-password" required="required"/>
+
+                            <button type="submit" class="kuale-login-box__submit" id="kualeSignupSubmit">
+                                Continuar
+                            </button>
+                        </form>
+                        <div class="kuale-login-box__switch">
+                            &#xBF;Ya tienes cuenta? <a id="kualeGoToLogin">Iniciar sesi&#xF3;n</a>
+                        </div>
+                        <img class="kuale-login-box__logo"
+                            src="/reclutamiento__kuale/static/src/images/landing/Logotipo-GrupoKuale-S&#xED;mbolo.png"
+                            alt="Grupo Kuale"/>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════
+                    MODAL: VERIFICAR CORREO
+                ════════════════════════════ -->
+                <div id="kualeVerifyOverlay" class="kuale-login-overlay"
+                    role="dialog" aria-modal="true" aria-labelledby="kualeVerifyTitle">
+                    <div class="kuale-login-box">
+                        <button class="kuale-login-box__close" id="kualeVerifyClose"
+                                aria-label="Cerrar" type="button">&#x2715;</button>
+                        <h2 class="kuale-login-box__title" id="kualeVerifyTitle">&#x2709;&#xFE0F; Verifica tu correo</h2>
+                        <p class="kuale-verify-email-hint" id="kualeVerifyHint">
+                            Enviamos un c&#xF3;digo de 6 d&#xED;gitos a<br/>
+                            <strong id="kualeVerifyEmailDisplay"></strong>
+                        </p>
+                        <div class="kuale-login-box__error" id="kualeVerifyError" role="alert"></div>
+                        <div class="kuale-login-box__success" id="kualeVerifySuccess" role="status"></div>
+
+                        <!-- 6 cajas para el código -->
+                        <div class="kuale-verify-code-wrap" id="kualeVerifyCodeWrap">
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]" autocomplete="one-time-code"
+                                   data-index="0" aria-label="D&#xED;gito 1"/>
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]"
+                                   data-index="1" aria-label="D&#xED;gito 2"/>
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]"
+                                   data-index="2" aria-label="D&#xED;gito 3"/>
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]"
+                                   data-index="3" aria-label="D&#xED;gito 4"/>
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]"
+                                   data-index="4" aria-label="D&#xED;gito 5"/>
+                            <input class="kuale-verify-digit" type="text" maxlength="1"
+                                   inputmode="numeric" pattern="[0-9]"
+                                   data-index="5" aria-label="D&#xED;gito 6"/>
+                        </div>
+
+                        <!-- Timer -->
+                        <div class="kuale-verify-timer-wrap" id="kualeTimerWrap">
+                            <span class="kuale-verify-timer">
+                                C&#xF3;digo v&#xE1;lido por:&#160;
+                                <span class="kuale-verify-timer__clock" id="kualeTimerDisplay">5:00</span>
+                            </span>
+                        </div>
+
+                        <!-- Reenviar -->
+                        <div class="kuale-verify-resend-wrap" id="kualeResendWrap" style="display:none;">
+                            <p style="margin:0 0 12px;">El c&#xF3;digo expir&#xF3;. &#xBF;No lo recibiste?</p>
+                            <button class="kuale-verify-resend-btn" id="kualeResendBtn" type="button">
+                                Reenviar c&#xF3;digo
+                            </button>
+                        </div>
+
+                        <button type="button" class="kuale-login-box__submit" id="kualeVerifySubmit"
+                                style="margin-top:4px;">
+                            Verificar
+                        </button>
+
+                        <a class="kuale-login-box__back" id="kualeVerifyBack">
+                            &#x2190; Volver y corregir correo
+                        </a>
+
+                        <img class="kuale-login-box__logo"
+                            src="/reclutamiento__kuale/static/src/images/landing/Logotipo-GrupoKuale-S&#xED;mbolo.png"
+                            alt="Grupo Kuale"/>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════
+                    MODAL: COMPLETAR PERFIL
+                ════════════════════════════ -->
+                <div id="kualePerfilOverlay" class="kuale-login-overlay"
+                    role="dialog" aria-modal="true" aria-labelledby="kualePerfilTitle">
+                    <div class="kuale-login-box">
+                        <h2 class="kuale-login-box__title" id="kualePerfilTitle">&#x1F44B; &#xA1;Casi listo!</h2>
+                        <p class="kuale-login-box__subtitle" id="kualePerfilSubtitle">
+                            Completa tu perfil para poder postularte a vacantes.
+                        </p>
+                        <div class="kuale-login-box__error" id="kualePerfilError" role="alert"></div>
+                        <form id="kualePerfilForm" novalidate="novalidate">
+
+                            <label class="kuale-login-box__label" for="kpFirstName">Nombre(s)</label>
+                            <input id="kpFirstName" class="kuale-login-box__input"
+                                type="text" name="kuale_first_name" autocomplete="given-name" required="required"/>
+
+                            <label class="kuale-login-box__label" for="kpLastName">Apellido paterno</label>
+                            <input id="kpLastName" class="kuale-login-box__input"
+                                type="text" name="kuale_last_name" autocomplete="family-name" required="required"/>
+
+                            <label class="kuale-login-box__label" for="kpSecondLast">Apellido materno</label>
+                            <input id="kpSecondLast" class="kuale-login-box__input"
+                                type="text" name="kuale_second_last" autocomplete="additional-name" required="required"/>
+
+                            <label class="kuale-login-box__label" for="kpPhone">Tel&#xE9;fono</label>
+                            <input id="kpPhone" class="kuale-login-box__input"
+                                type="tel" name="phone" autocomplete="tel" required="required"/>
+
+                            <label class="kuale-login-box__label" for="kpZip">C&#xF3;digo postal</label>
+                            <input id="kpZip" class="kuale-login-box__input"
+                                type="text" name="zip" maxlength="10" required="required"/>
+
+                            <button type="submit" class="kuale-login-box__submit" id="kualePerfilSubmit">
+                                Guardar y ver vacantes
+                            </button>
+                        </form>
+                        <img class="kuale-login-box__logo"
+                            src="/reclutamiento__kuale/static/src/images/landing/Logotipo-GrupoKuale-S&#xED;mbolo.png"
+                            alt="Grupo Kuale"/>
+                    </div>
+                </div>
+
+                <!-- ═══════════════════════════
+                     MODAL: RECUPERAR CONTRASEÑA
+                ════════════════════════════ -->
+                <div id="kualeForgotOverlay" class="kuale-login-overlay"
+                     role="dialog" aria-modal="true" aria-labelledby="kualeForgotTitle">
+                    <div class="kuale-login-box">
+                        <button class="kuale-login-box__close" id="kualeForgotClose"
+                                aria-label="Cerrar" type="button">&#x2715;</button>
+                        <h2 class="kuale-login-box__title" id="kualeForgotTitle">Recuperar contrase&#xF1;a</h2>
+                        <p class="kuale-login-box__subtitle">
+                            Ingresa tu correo y te enviaremos un enlace para restablecer tu contrase&#xF1;a.
+                        </p>
+                        <div class="kuale-login-box__error" id="kualeForgotError" role="alert"></div>
+                        <div class="kuale-login-box__success" id="kualeForgotSuccess" role="status"></div>
+                        <form id="kualeForgotForm" novalidate="novalidate">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <label class="kuale-login-box__label" for="kualeForgotEmail">Correo electr&#xF3;nico</label>
+                            <input id="kualeForgotEmail" class="kuale-login-box__input"
+                                   type="email" name="login" autocomplete="email" required="required"
+                                   placeholder="correo@empresa.com"/>
+                            <button type="submit" class="kuale-login-box__submit" id="kualeForgotSubmit">
+                                Enviar enlace
+                            </button>
+                        </form>
+                        <a class="kuale-login-box__back" id="kualeBackToLogin">
+                            &#x2190; Volver a iniciar sesi&#xF3;n
+                        </a>
+                        <img class="kuale-login-box__logo"
+                             src="/reclutamiento__kuale/static/src/images/landing/Logotipo-GrupoKuale-S&#xED;mbolo.png"
+                             alt="Grupo Kuale"/>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    (function () {
+                        'use strict';
+
+                        /* ════════════════════════════════════════
+                           ESTADO TEMPORAL — NO se crea la cuenta
+                           hasta que el usuario complete todo.
+                        ════════════════════════════════════════ */
+                        var pendingSignup = {
+                            firstName: '',
+                            email:     '',
+                            password:  ''
+                        };
+
+                        /* ── Elementos: login ── */
+                        var loginOverlay  = document.getElementById('kualeLoginOverlay');
+                        var loginClose    = document.getElementById('kualeLoginClose');
+                        var loginForm     = document.getElementById('kualeLoginForm');
+                        var loginError    = document.getElementById('kualeLoginError');
+                        var loginSubmit   = document.getElementById('kualeLoginSubmit');
+                        var forgotBtn     = document.getElementById('kualeForgotBtn');
+                        var goToSignup    = document.getElementById('kualeGoToSignup');
+
+                        /* ── Elementos: signup ── */
+                        var signupOverlay = document.getElementById('kualeSignupOverlay');
+                        var signupClose   = document.getElementById('kualeSignupClose');
+                        var signupForm    = document.getElementById('kualeSignupForm');
+                        var signupError   = document.getElementById('kualeSignupError');
+                        var signupSubmit  = document.getElementById('kualeSignupSubmit');
+                        var goToLogin     = document.getElementById('kualeGoToLogin');
+
+                        /* ── Elementos: verificación ── */
+                        var verifyOverlay   = document.getElementById('kualeVerifyOverlay');
+                        var verifyClose     = document.getElementById('kualeVerifyClose');
+                        var verifyError     = document.getElementById('kualeVerifyError');
+                        var verifySuccess   = document.getElementById('kualeVerifySuccess');
+                        var verifySubmit    = document.getElementById('kualeVerifySubmit');
+                        var verifyBack      = document.getElementById('kualeVerifyBack');
+                        var timerDisplay    = document.getElementById('kualeTimerDisplay');
+                        var timerWrap       = document.getElementById('kualeTimerWrap');
+                        var resendWrap      = document.getElementById('kualeResendWrap');
+                        var resendBtn       = document.getElementById('kualeResendBtn');
+                        var verifyEmailDisp = document.getElementById('kualeVerifyEmailDisplay');
+                        var verifyDigits    = document.querySelectorAll('.kuale-verify-digit');
+
+                        /* ── Elementos: perfil ── */
+                        var perfilOverlay   = document.getElementById('kualePerfilOverlay');
+                        var perfilForm      = document.getElementById('kualePerfilForm');
+                        var perfilError     = document.getElementById('kualePerfilError');
+                        var perfilSubmit    = document.getElementById('kualePerfilSubmit');
+                        var perfilTitle     = document.getElementById('kualePerfilTitle');
+                        var perfilSubtitle  = document.getElementById('kualePerfilSubtitle');
+
+                        /* ── Elementos: forgot ── */
+                        var forgotOverlay = document.getElementById('kualeForgotOverlay');
+                        var forgotClose   = document.getElementById('kualeForgotClose');
+                        var forgotForm    = document.getElementById('kualeForgotForm');
+                        var forgotError   = document.getElementById('kualeForgotError');
+                        var forgotSuccess = document.getElementById('kualeForgotSuccess');
+                        var forgotSubmit  = document.getElementById('kualeForgotSubmit');
+                        var backToLogin   = document.getElementById('kualeBackToLogin');
+
+                        /* ════════════════════════════════
+                           TIMER — 5 minutos (300 segundos)
+                        ════════════════════════════════ */
+                        var timerInterval = null;
+                        var timerSeconds  = 0;
+
+                        function formatTime(secs) {
+                            var m = Math.floor(secs / 60);
+                            var s = secs % 60;
+                            return m + ':' + (s &lt; 10 ? '0' : '') + s;
+                        }
+
+                        function startTimer() {
+                            stopTimer();
+                            timerSeconds = 300; // 5 minutos
+                            timerDisplay.textContent = formatTime(timerSeconds);
+                            timerDisplay.classList.remove('warning');
+                            timerWrap.style.display  = '';
+                            resendWrap.style.display  = 'none';
+                            resendBtn.disabled        = false;
+
+                            timerInterval = setInterval(function () {
+                                timerSeconds--;
+                                timerDisplay.textContent = formatTime(timerSeconds);
+
+                                if (timerSeconds &lt;= 60) {
+                                    timerDisplay.classList.add('warning');
+                                }
+
+                                if (timerSeconds &lt;= 0) {
+                                    stopTimer();
+                                    timerWrap.style.display  = 'none';
+                                    resendWrap.style.display  = '';
+                                    verifySubmit.disabled     = true;
+                                    showMsg(verifyError, 'El c\xF3digo expir\xF3. Por favor solicita uno nuevo.');
+                                }
+                            }, 1000);
+                        }
+
+                        function stopTimer() {
+                            if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+                        }
+
+                        /* ════════════════
+                           HELPERS
+                        ════════════════ */
+                        function closeAll() {
+                            loginOverlay.classList.remove('is-open');
+                            signupOverlay.classList.remove('is-open');
+                            verifyOverlay.classList.remove('is-open');
+                            forgotOverlay.classList.remove('is-open');
+                            perfilOverlay.classList.remove('is-open');
+                            stopTimer();
+                        }
+                        function showMsg(el, msg) { el.textContent = msg; el.classList.add('is-visible'); }
+                        function hideMsg(el) { el.classList.remove('is-visible'); el.textContent = ''; }
+
+                        function getVerifyCode() {
+                            return Array.from(verifyDigits).map(function (d) { return d.value; }).join('');
+                        }
+                        function clearVerifyCode() {
+                            verifyDigits.forEach(function (d) {
+                                d.value = '';
+                                d.classList.remove('filled');
+                            });
+                        }
+
+                        /* ════════════════
+                        HELPERS
+                        ════════════════ */
+                        function isMobile() {
+                            return window.innerWidth &lt;= 768;
+                        }
+
+                        /* ════════════════
+                        ABRIR MODALES
+                        ════════════════ */
+                        function openLogin() {
+                            closeAll();
+                            loginOverlay.classList.add('is-open');
+                            hideMsg(loginError);
+                            setTimeout(function () {
+                                if (isMobile()) return;
+                                var el = document.getElementById('kualeLoginUser');
+                                if (el) el.focus();
+                            }, 50);
+                        }
+
+                        function openSignup() {
+                            closeAll();
+                            signupOverlay.classList.add('is-open');
+                            hideMsg(signupError);
+                            setTimeout(function () {
+                                if (isMobile()) return;
+                                var el = document.getElementById('kualeSignupName');
+                                if (el) el.focus();
+                            }, 50);
+                        }
+
+                        function openVerify(email) {
+                            closeAll();
+                            verifyOverlay.classList.add('is-open');
+                            hideMsg(verifyError);
+                            hideMsg(verifySuccess);
+                            clearVerifyCode();
+                            verifySubmit.disabled       = false;
+                            verifyEmailDisp.textContent = email || pendingSignup.email;
+                            startTimer();
+                            setTimeout(function () {
+                                if (isMobile()) return;
+                                if (verifyDigits[0]) verifyDigits[0].focus();
+                            }, 50);
+                        }
+
+                        function openPerfil(modo) {
+                            closeAll();
+                            modo = modo || 'registro';
+                            perfilOverlay.classList.add('is-open');
+                            perfilOverlay.setAttribute('data-modo', modo);
+                            hideMsg(perfilError);
+
+                            if (modo === 'cuenta') {
+                                if (perfilTitle)    perfilTitle.textContent    = 'Mi cuenta';
+                                if (perfilSubtitle) perfilSubtitle.textContent = 'Actualiza tus datos de contacto.';
+                                if (perfilSubmit)   perfilSubmit.textContent   = 'Guardar';
+
+                                fetch('/kuale/perfil/datos', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ jsonrpc: '2.0', method: 'call', params: {} })
+                                })
+                                .then(function (r) { return r.json(); })
+                                .then(function (data) {
+                                    var d = data.result || {};
+                                    var fn = document.getElementById('kpFirstName');  
+                                    var ln = document.getElementById('kpLastName');
+                                    var sl = document.getElementById('kpSecondLast');
+                                    var ph = document.getElementById('kpPhone');
+                                    var zp = document.getElementById('kpZip');
+                                    if (fn) fn.value = d.kuale_first_name  || '';     
+                                    if (ln) ln.value = d.kuale_last_name   || '';
+                                    if (sl) sl.value = d.kuale_second_last || '';
+                                    if (ph) ph.value = d.phone             || '';
+                                    if (zp) zp.value = d.zip               || '';
+                                })
+                                .catch(function () {});
+
+                            } else {
+                                if (perfilTitle)    perfilTitle.innerHTML      = '&#x1F44B; &#xA1;Casi listo!';
+                                if (perfilSubtitle) perfilSubtitle.textContent = 'Completa tu perfil para poder postularte a vacantes.';
+                                if (perfilSubmit)   perfilSubmit.textContent   = 'Crear cuenta';
+
+                                ['kpLastName','kpSecondLast','kpPhone','kpZip'].forEach(function (id) {
+                                    var el = document.getElementById(id);
+                                    if (el) el.value = '';
+                                });
+                            }
+
+                            setTimeout(function () {
+                                if (isMobile()) return;
+                                var el = document.getElementById('kpLastName');
+                                if (el) el.focus();
+                            }, 50);
+                        }
+
+                        function openForgot() {
+                            closeAll();
+                            forgotOverlay.classList.add('is-open');
+                            hideMsg(forgotError);
+                            hideMsg(forgotSuccess);
+                            forgotForm.style.display = '';
+                            var fe = document.getElementById('kualeForgotEmail');
+                            if (fe) {
+                                fe.value = '';
+                                if (!isMobile()) fe.focus();
+                            }
+                        }
+
+                        function showLoginError(msg) {
+                            showMsg(loginError, msg);
+                            var u = document.getElementById('kualeLoginUser');
+                            var p = document.getElementById('kualeLoginPass');
+                            if (u) { u.value = ''; if (!isMobile()) u.focus(); }
+                            if (p) { p.value = ''; }
+                        }
+
+                        /* ════════════════════════════════════════
+                           INPUT de 6 dígitos — navegación entre cajas
+                        ════════════════════════════════════════ */
+                        verifyDigits.forEach(function (input, idx) {
+                            input.addEventListener('keydown', function (e) {
+                                if (e.key === 'Backspace') {
+                                    if (input.value === '' &amp;&amp; idx > 0) {
+                                        verifyDigits[idx - 1].value = '';
+                                        verifyDigits[idx - 1].classList.remove('filled');
+                                        verifyDigits[idx - 1].focus();
+                                    } else {
+                                        input.value = '';
+                                        input.classList.remove('filled');
+                                    }
+                                    e.preventDefault();
+                                    return;
+                                }
+                                if (e.key === 'ArrowLeft' &amp;&amp; idx > 0) { verifyDigits[idx - 1].focus(); return; }
+                                if (e.key === 'ArrowRight' &amp;&amp; idx &lt; 5) { verifyDigits[idx + 1].focus(); return; }
+                            });
+
+                            input.addEventListener('input', function (e) {
+                                /* Solo dígitos */
+                                var val = input.value.replace(/\D/g, '');
+                                /* Pegar: distribuir dígitos */
+                                if (val.length > 1) {
+                                    var digits = val.split('');
+                                    digits.forEach(function (d, i) {
+                                        if (idx + i &lt; 6) {
+                                            verifyDigits[idx + i].value = d;
+                                            verifyDigits[idx + i].classList.add('filled');
+                                        }
+                                    });
+                                    var next = Math.min(idx + digits.length, 5);
+                                    verifyDigits[next].focus();
+                                } else {
+                                    input.value = val;
+                                    if (val) {
+                                        input.classList.add('filled');
+                                        if (idx &lt; 5) verifyDigits[idx + 1].focus();
+                                    } else {
+                                        input.classList.remove('filled');
+                                    }
+                                }
+                            });
+
+                            /* Seleccionar todo al enfocar */
+                            input.addEventListener('focus', function () { input.select(); });
+                        });
+
+                        /* ════════════════════════════
+                           TRIGGERS GLOBALES
+                        ════════════════════════════ */
+                        document.addEventListener('click', function (e) {
+                            var loginTrigger  = e.target.closest('[data-kuale-login="open"]');
+                            var signupTrigger = e.target.closest('[data-kuale-signup="open"]');
+                            var perfilTrigger = e.target.closest('[data-kuale-perfil="open"]');
+                            if (loginTrigger)  { e.preventDefault(); e.stopPropagation(); openLogin(); }
+                            if (signupTrigger) { e.preventDefault(); e.stopPropagation(); openSignup(); }
+                            if (perfilTrigger) { e.preventDefault(); e.stopPropagation(); openPerfil('cuenta'); }
+                        }, true);
+
+                        /* ── Cerrar con X ── */
+                        loginClose.addEventListener('click',  closeAll);
+                        signupClose.addEventListener('click', closeAll);
+                        forgotClose.addEventListener('click', closeAll);
+                        verifyClose.addEventListener('click', function () { stopTimer(); closeAll(); });
+
+                        /* ── Cerrar al click fuera ── */
+                        loginOverlay.addEventListener('click',  function (e) { if (e.target === loginOverlay)  closeAll(); });
+                        signupOverlay.addEventListener('click', function (e) { if (e.target === signupOverlay) closeAll(); });
+                        forgotOverlay.addEventListener('click', function (e) { if (e.target === forgotOverlay) closeAll(); });
+                        verifyOverlay.addEventListener('click', function (e) { if (e.target === verifyOverlay) { stopTimer(); closeAll(); } });
+                        perfilOverlay.addEventListener('click', function (e) {
+                            if (e.target === perfilOverlay &amp;&amp; perfilOverlay.getAttribute('data-modo') === 'cuenta') {
+                                closeAll();
+                            }
+                        });
+
+                        /* ── Escape ── */
+                        document.addEventListener('keydown', function (e) {
+                            if (e.key === 'Escape') {
+                                var modo = perfilOverlay.getAttribute('data-modo');
+                                if (perfilOverlay.classList.contains('is-open') &amp;&amp; modo === 'registro') return;
+                                stopTimer();
+                                closeAll();
+                            }
+                        });
+
+                        /* ── Navegación entre modales ── */
+                        forgotBtn.addEventListener('click',   function (e) { e.preventDefault(); openForgot(); });
+                        goToSignup.addEventListener('click',  function (e) { e.preventDefault(); openSignup(); });
+                        goToLogin.addEventListener('click',   function (e) { e.preventDefault(); openLogin(); });
+                        backToLogin.addEventListener('click', function (e) { e.preventDefault(); openLogin(); });
+                        verifyBack.addEventListener('click',  function (e) { e.preventDefault(); stopTimer(); openSignup(); });
+
+                        /* ════════════════════════════════
+                           SUBMIT: LOGIN
+                        ════════════════════════════════ */
+                        loginForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            hideMsg(loginError);
+                            var login    = document.getElementById('kualeLoginUser').value.trim();
+                            var password = document.getElementById('kualeLoginPass').value;
+                            if (!login || !password) { showLoginError('Por favor completa todos los campos.'); return; }
+                            loginSubmit.disabled = true;
+                            loginSubmit.textContent = 'Entrando...';
+                            fetch('/kuale/login/ajax', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ jsonrpc: '2.0', method: 'call', params: { login: login, password: password } })
+                            })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                var result = data.result || {};
+                                if (result.success) {
+                                    window.location.href = result.redirect || '/jobs';
+                                } else {
+                                    showLoginError(result.error || 'Usuario o contrase\xF1a incorrectos.');
+                                    loginSubmit.disabled = false;
+                                    loginSubmit.textContent = 'Entrar';
+                                }
+                            })
+                            .catch(function () {
+                                showLoginError('Error de conexi\xF3n. Intenta de nuevo.');
+                                loginSubmit.disabled = false;
+                                loginSubmit.textContent = 'Entrar';
+                            });
+                        });
+
+                        /* ════════════════════════════════════════════════════════════
+                           SUBMIT: SIGNUP
+                           ─ Solo valida y ENVÍA el código al correo.
+                           ─ NO crea la cuenta todavía.
+                        ════════════════════════════════════════════════════════════ */
+                        signupForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            hideMsg(signupError);
+                            var email     = document.getElementById('kualeSignupEmail').value.trim();
+                            var pass      = document.getElementById('kualeSignupPass').value;
+                            var pass2     = document.getElementById('kualeSignupPass2').value;
+
+                            if (!email || !pass || !pass2) {
+                                showMsg(signupError, 'Por favor completa todos los campos.');
+                                return;
+                            }
+                            if (pass !== pass2) {
+                                showMsg(signupError, 'Las contrase\xF1as no coinciden.');
+                                var sp  = document.getElementById('kualeSignupPass');
+                                var sp2 = document.getElementById('kualeSignupPass2');
+                                if (sp)  { sp.value = '';  sp.focus(); }
+                                if (sp2) { sp2.value = ''; }
+                                return;
+                            }
+                            if (pass.length &lt; 8) {
+                                showMsg(signupError, 'La contrase\xF1a debe tener al menos 8 caracteres.');
+                                var sp  = document.getElementById('kualeSignupPass');
+                                var sp2 = document.getElementById('kualeSignupPass2');
+                                if (sp)  { sp.value = '';  sp.focus(); }
+                                if (sp2) { sp2.value = ''; }
+                                return;
+                            }
+
+                            signupSubmit.disabled = true;
+                            signupSubmit.textContent = 'Enviando c\xF3digo...';
+
+                            /* Guardar datos en memoria — la cuenta se crea al final */
+                            pendingSignup.email     = email;
+                            pendingSignup.password  = pass;
+
+                            /* Llamar al endpoint que solo envía el código */
+                            fetch('/kuale/send_verification', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0', method: 'call',
+                                    params: { email: email }
+                                })
+                            })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                var result = data.result || {};
+                                signupSubmit.disabled = false;
+                                signupSubmit.textContent = 'Continuar';
+                                if (result.success) {
+                                    openVerify(email);
+                                } else {
+                                    showMsg(signupError, result.error || 'Error al enviar el c\xF3digo. Intenta de nuevo.');
+                                }
+                            })
+                            .catch(function () {
+                                showMsg(signupError, 'Error de conexi\xF3n. Intenta de nuevo.');
+                                signupSubmit.disabled = false;
+                                signupSubmit.textContent = 'Continuar';
+                            });
+                        });
+
+                        /* ════════════════════════════════════════════════════
+                           REENVIAR CÓDIGO
+                        ════════════════════════════════════════════════════ */
+                        function enviarCodigo(email, onSuccess, onError) {
+                            fetch('/kuale/send_verification', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0', method: 'call',
+                                    params: { email: email }
+                                })
+                            })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                var result = data.result || {};
+                                if (result.success) { onSuccess(); }
+                                else { onError(result.error || 'Error al enviar el c\xF3digo.'); }
+                            })
+                            .catch(function () { onError('Error de conexi\xF3n. Intenta de nuevo.'); });
+                        }
+
+                        resendBtn.addEventListener('click', function () {
+                            resendBtn.disabled = true;
+                            resendBtn.textContent = 'Enviando...';
+                            hideMsg(verifyError);
+                            hideMsg(verifySuccess);
+                            clearVerifyCode();
+
+                            enviarCodigo(
+                                pendingSignup.email,
+                                function () {
+                                    /* Éxito: reiniciar timer */
+                                    resendBtn.textContent = 'Reenviar c\xF3digo';
+                                    verifySubmit.disabled = false;
+                                    showMsg(verifySuccess, 'C\xF3digo enviado. Revisa tu correo.');
+                                    startTimer();
+                                    if (verifyDigits[0]) verifyDigits[0].focus();
+                                },
+                                function (err) {
+                                    resendBtn.textContent = 'Reenviar c\xF3digo';
+                                    resendBtn.disabled    = false;
+                                    showMsg(verifyError, err);
+                                }
+                            );
+                        });
+
+                        /* ════════════════════════════════════════════════════════════
+                           SUBMIT: VERIFICAR CÓDIGO
+                           ─ Valida el código con el servidor.
+                           ─ Si es correcto, abre el modal de perfil.
+                           ─ La cuenta sigue SIN crearse.
+                        ════════════════════════════════════════════════════════════ */
+                        verifySubmit.addEventListener('click', function () {
+                            hideMsg(verifyError);
+                            var code = getVerifyCode();
+                            if (code.length &lt; 6) {
+                                showMsg(verifyError, 'Ingresa los 6 d\xEDgitos del c\xF3digo.');
+                                if (verifyDigits[0]) verifyDigits[0].focus();
+                                return;
+                            }
+                            verifySubmit.disabled = true;
+                            verifySubmit.textContent = 'Verificando...';
+
+                            fetch('/kuale/verify_code', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    jsonrpc: '2.0', method: 'call',
+                                    params: { email: pendingSignup.email, code: code }
+                                })
+                            })
+                            .then(function (r) { return r.json(); })
+                            .then(function (data) {
+                                var result = data.result || {};
+                                verifySubmit.disabled = false;
+                                verifySubmit.textContent = 'Verificar';
+                                if (result.success) {
+                                    stopTimer();
+                                    openPerfil('registro'); // ← ahora sí, pedir datos
+                                } else {
+                                    clearVerifyCode();
+                                    showMsg(verifyError, result.error || 'C\xF3digo incorrecto. Intenta de nuevo.');
+                                    if (verifyDigits[0]) verifyDigits[0].focus();
+                                }
+                            })
+                            .catch(function () {
+                                showMsg(verifyError, 'Error de conexi\xF3n. Intenta de nuevo.');
+                                verifySubmit.disabled = false;
+                                verifySubmit.textContent = 'Verificar';
+                            });
+                        });
+
+                        /* ════════════════════════════════════════════════════════════
+                        SUBMIT: PERFIL
+                        MODO REGISTRO: Aquí se crea la cuenta con TODOS los datos.
+                        MODO CUENTA:   Actualiza los datos (el usuario ya existe).
+                        ════════════════════════════════════════════════════════════ */
+                        perfilForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            hideMsg(perfilError);
+
+                            var firstName  = document.getElementById('kpFirstName').value.trim();  // ← NUEVO
+                            var lastName   = document.getElementById('kpLastName').value.trim();
+                            var secondLast = document.getElementById('kpSecondLast').value.trim();
+                            var phone      = document.getElementById('kpPhone').value.trim();
+                            var zip        = document.getElementById('kpZip').value.trim();
+
+                            if (!firstName || !lastName || !secondLast || !phone || !zip) {  // ← firstName incluido
+                                showMsg(perfilError, 'Por favor completa todos los campos.');
+                                return;
+                            }
+
+                            var modo = perfilOverlay.getAttribute('data-modo') || 'registro';
+                            perfilSubmit.disabled = true;
+                            perfilSubmit.textContent = 'Guardando...';
+
+                            if (modo === 'registro') {
+                                /* ── CREAR CUENTA: se envían TODOS los datos juntos ── */
+                                fetch('/kuale/signup/ajax', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        jsonrpc: '2.0', method: 'call',
+                                        params: {
+                                            name:              firstName + ' ' + lastName,  // ← nombre completo
+                                            login:             pendingSignup.email,
+                                            password:          pendingSignup.password,
+                                            confirm_password:  pendingSignup.password,
+                                            kuale_first_name:  firstName,                   // ← del perfil
+                                            kuale_last_name:   lastName,
+                                            kuale_second_last: secondLast,
+                                            phone:             phone,
+                                            zip:               zip
+                                        }
+                                    })
+                                })
+                                .then(function (r) { return r.json(); })
+                                .then(function (data) {
+                                    var result = data.result || {};
+                                    if (result.success) {
+                                        /* Limpiar datos temporales */
+                                        pendingSignup = { firstName: '', email: '', password: '' };
+                                        window.location.href = result.redirect || '/vacantes';
+                                    } else {
+                                        showMsg(perfilError, result.error || 'Error al crear la cuenta.');
+                                        perfilSubmit.disabled = false;
+                                        perfilSubmit.textContent = 'Crear cuenta';
+                                    }
+                                })
+                                .catch(function () {
+                                    showMsg(perfilError, 'Error de conexi\xF3n. Intenta de nuevo.');
+                                    perfilSubmit.disabled = false;
+                                    perfilSubmit.textContent = 'Crear cuenta';
+                                });
+
+                            } else {
+                                /* ── ACTUALIZAR datos de cuenta existente ── */
+                                fetch('/kuale/perfil/ajax', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        jsonrpc: '2.0', method: 'call',
+                                        params: {
+                                            kuale_first_name:  firstName,   // ← también se actualiza
+                                            kuale_last_name:   lastName,
+                                            kuale_second_last: secondLast,
+                                            phone:             phone,
+                                            zip:               zip
+                                        }
+                                    })
+                                })
+                                .then(function (r) { return r.json(); })
+                                .then(function (data) {
+                                    var result = data.result || {};
+                                    if (result.success) {
+                                        closeAll();
+                                        perfilSubmit.disabled = false;
+                                        perfilSubmit.textContent = 'Guardar';
+                                    } else {
+                                        showMsg(perfilError, result.error || 'Error al guardar.');
+                                        perfilSubmit.disabled = false;
+                                        perfilSubmit.textContent = 'Guardar';
+                                    }
+                                })
+                                .catch(function () {
+                                    showMsg(perfilError, 'Error de conexi\xF3n. Intenta de nuevo.');
+                                    perfilSubmit.disabled = false;
+                                    perfilSubmit.textContent = 'Guardar';
+                                });
+                            }
+                        });
+
+                        /* ════════════════════════════════
+                           SUBMIT: FORGOT PASSWORD
+                        ════════════════════════════════ */
+                        forgotForm.addEventListener('submit', function (e) {
+                            e.preventDefault();
+                            hideMsg(forgotError);
+                            hideMsg(forgotSuccess);
+                            var email = document.getElementById('kualeForgotEmail').value.trim();
+                            if (!email) { showMsg(forgotError, 'Por favor ingresa tu correo electr\xF3nico.'); return; }
+                            forgotSubmit.disabled = true;
+                            forgotSubmit.textContent = 'Enviando...';
+                            fetch('/web/reset_password', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                body: new URLSearchParams({
+                                    login: email,
+                                    csrf_token: forgotForm.querySelector('[name="csrf_token"]').value
+                                })
+                            })
+                            .then(function () {
+                                showMsg(forgotSuccess, 'Si tu correo est\xE1 registrado, recibir\xE1s un enlace en breve.');
+                                forgotForm.style.display = 'none';
+                                forgotSubmit.disabled = false;
+                                forgotSubmit.textContent = 'Enviar enlace';
+                            })
+                            .catch(function () {
+                                showMsg(forgotError, 'Error al enviar. Intenta de nuevo.');
+                                forgotSubmit.disabled = false;
+                                forgotSubmit.textContent = 'Enviar enlace';
+                            });
+                        });
+
+                        /* ── Auto-abrir si hay error de login ── */
+                        if (window.location.search.indexOf('login_error=1') !== -1) {
+                            openLogin();
+                            showLoginError('Usuario o contrase\xF1a incorrectos.');
+                        }
+
+                    })();
+                </script>
+
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

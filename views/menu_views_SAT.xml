@@ -1,0 +1,103 @@
+<odoo>
+    <data noupdate="0">
+        <menuitem
+                name="Catálogos SAT"
+                id="catalogs_sat"
+                parent="hr_recruitment.menu_hr_recruitment_root"
+                sequence="40"/>
+        <menuitem
+                name="Tipos de contrato"
+                id="catalog_sat_type_contract"
+                action="catalog_sat_type_contract_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Periodicidad de pago"
+                id="catalog_sat_payment_periodicity"
+                action="catalog_sat_payment_periodicity_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Tipo de jornada"
+                id="catalog_sat_type_workday"
+                action="catalog_sat_type_workday_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Régimen Fiscal"
+                id="catalog_sat_fiscal_regime"
+                action="catalog_sat_fiscal_regime_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Tipo de régimen"
+                id="catalog_sat_type_regime"
+                action="catalog_sat_type_regime_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Uso CFDI"
+                id="catalog_sat_use_cfdi"
+                action="catalog_sat_use_cfdi_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Riesgo Puesto"
+                id="catalog_sat_risk_placed"
+                action="catalog_sat_risk_placed_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Método de Pago"
+                id="catalog_sat_payment_method"
+                action="catalog_sat_payment_method_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Estados"
+                id="catalog_sat_federal_entity_code"
+                action="catalog_sat_federal_entity_code_action"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Nómina"
+                id="catalog_payroll"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Base de Pago"
+                id="catalog_payroll_payment_basis"
+                action="catalog_payroll_payment_basis_action"
+                parent="catalog_payroll"/>
+        <menuitem
+                name="Tipo de prestación"
+                id="catalog_payroll_type_benefit"
+                action="catalog_payroll_type_benefit_action"
+                parent="catalog_payroll"/>
+        <menuitem
+                name="IMSS"
+                id="catalog_imss"
+                parent="catalogs_sat"/>
+        <menuitem
+                name="Zona de salario"
+                id="catalog_imss_salary_zone"
+                action="catalog_imss_salary_zone_action"
+                parent="catalog_imss"/>
+        <menuitem
+                name="Tipo de Movimiento"
+                id="catalog_imss_type_movement"
+                action="catalog_imss_type_movement_action"
+                parent="catalog_imss"/>
+        <menuitem
+                name="Tipo de Trabajador"
+                id="catalog_imss_type_worker"
+                action="catalog_imss_type_worker_action"
+                parent="catalog_imss"/>
+        <menuitem
+                name="Tipo de Jornada"
+                id="catalog_imss_type_workday"
+                action="catalog_imss_type_workday_action"
+                parent="catalog_imss"/>
+        <menuitem
+                name="Tipo de Salarios"
+                id="catalog_imss_type_salary"
+                action="catalog_imss_type_salary_action"
+                parent="catalog_imss"/>
+        <menuitem
+                name="Tipo de Jornada/Semana reducida"
+                id="catalog_imss_type_working_day_reduced"
+                action="catalog_imss_type_working_day_reduced_action"
+                parent="catalog_imss"/>
+
+    </data>
+</odoo>

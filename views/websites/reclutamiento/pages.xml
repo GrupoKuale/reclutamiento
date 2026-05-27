@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="page_reclutamiento_ejemplo" model="website.page">
+            <field name="name">Punto Kuale</field>
+            <field name="url">/reclutamiento</field>
+            <field name="website_id" ref="website_reclutamiento"/>
+            <field name="view_id" ref="reclutamiento_template_ejemplo"/>
+            <field name="is_published">True</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--  inherit start end dates   -->
+        <record id="view_slide_channel_invite_custom" model="ir.ui.view">
+            <field name="name">website.slides.channel.invite.custom</field>
+            <field name="model">slide.channel.invite</field>
+            <field name="inherit_id" ref="website_slides.slide_channel_invite_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='subject']" position="after">
+                    <field name="startDate" placeholder="Start Date" string="Course Start Date"/>
+                    <field name="endDate" placeholder="End Date" string="Course End Date"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--   custom email template   -->
+        <record id="mail_template_slide_channel_enroll_custom" model="mail.template">
+            <field name="name">Elearning: Add Attendees to Course (schedule)</field>
+            <field name="model_id" ref="model_slide_channel_partner"/>
+            <field name="subject">You have been invited to join {{ object.channel_id.name }}</field>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="use_default_to" eval="True"/>
+            <field name="description">Sent to attendees when they are added to a course with schedule</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello
+                        <br/>
+                        <br/>
+                        You have been enrolled to a new course: <t t-out="object.channel_id.name or ''">Basics of
+                        Gardening</t>.
+                        <br/>
+                        <br/>
+                        <strong>Course Start Date:</strong>
+                        <t t-out="object.startDate or ''">8:00</t>
+                        <br/>
+                        <strong>Course End Date:</strong>
+                        <t t-out="object.endDate or ''">17:00</t>
+                        <br/>
+                        <br/>
+                        <div style="padding: 16px 8px 16px 8px; text-align: center;">
+                            <a href="/slides/"
+                               style="background-color: #875a7b; padding: 8px 16px; text-decoration: none; color: #fff; border-radius: 5px;">
+                                View my courses
+                            </a>
+                        </div>
+                        Enjoy this exclusive content!
+                        <t t-if="object.channel_id.user_id.signature">
+                            <br/>
+                            <t t-out="object.channel_id.user_id.signature or ''">--<br/>Mitchell Admin
+                            </t>
+                        </t>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

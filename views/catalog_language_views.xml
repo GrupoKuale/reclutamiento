@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Contract type -->
+        <record id="reclutamiento_kuale_language_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.language.view.tree</field>
+            <field name="model">reclutamiento__kuale.language</field>
+            <field name="arch" type="xml">
+                <tree string="Idioma">
+                    <field name="active" column_invisible="True" />
+                    <field name="name" />
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_language_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.language.view.form</field>
+            <field name="model">reclutamiento__kuale.language</field>
+            <field name="arch" type="xml">
+                <form string="Idioma">
+                    <field name="id" invisible="1"/>
+                    <field name="active" invisible="1" />
+                    <sheet>
+                         <div class="oe_title">
+                            <label for="name" string="Nombre"/>
+                            <h1>
+                                <field name="name" placeholder="e.g Actividad 1" required="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <field name="description" />
+                        </group>
+                        <group></group>
+                            <group string="Niveles" name="level_language">
+                            </group>
+                            <!--<field name="language_level_ids" nolabel="1" widget="auto_save_language_type" context="{'default_skill_type_id': id}"/>-->
+                            <field name="language_level_ids">
+                                <tree editable="Top">
+                                    <field name="name"/>
+                                    <field name="level_progress"/>
+                                </tree>
+                            </field>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="reclutamiento__kuale_language_action" model="ir.actions.act_window">
+            <field name="name">Idioma</field>
+            <field name="res_model">reclutamiento__kuale.language</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nuevo Idioma
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

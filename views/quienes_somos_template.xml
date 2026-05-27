@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="quienes_somos_page" name="¿Quiénes somos?">
+            <t t-call="website.layout">
+                <t t-set="no_header" t-value="1"/>
+                <section class="kuale-about">
+                    <div class="kuale-about__hero">
+                        <h1><strong>¿Quiénes somos?</strong></h1>
+                        <a href="/reclutamiento" class="kuale-about__close">✕</a>
+                        <img src="/reclutamiento__kuale/static/src/images/landing/GK-logo-blanco.png" alt="Grupo Kuale" class="kuale-about__hero-logo"/>
+                    </div>
+
+                    <div class="kuale-about__container">
+                        <div class="kuale-about__intro">
+                            <p class="kuale-about__intro-lead">
+                                Grupo Kuale es una empresa dedicada a la satisfacción total de nuestros clientes y el desarrollo humano de su personal por más de 30 años.
+                            </p>
+                            <p>
+                                Manejamos marcas de renombre internacional con los mejores procesos, liderando el mercado gracias al desarrollo humano de nuestro equipo, ofreciendo la mejor calidad y servicio con entusiasmo y pasión.
+                            </p>
+                            <p>
+                                Creemos en el aprendizaje continuo y en equipos que crecen juntos. Nuestra cultura promueve la responsabilidad, la mejora constante y el respeto por las personas.
+                            </p>
+                        </div>
+
+                        <div class="kuale-about__cards">
+                            <div class="kuale-about__card">
+                                <div class="kuale-about__card-header">
+                                    <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                                    <h2>Misión</h2>
+                                </div>
+                                <p>Ser una empresa dedicada a la satisfacción total de nuestros clientes a través del desarrollo humano de nuestro equipo.</p>
+                            </div>
+                            <div class="kuale-about__card">
+                                <div class="kuale-about__card-header">
+                                    <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                                    <h2>Visión</h2>
+                                </div>
+                                <p>La empresa líder integrada por gente entusiasta y apasionada que supera las expectativas del cliente, conservándolos de por vida.</p>
+                            </div>
+                        </div>
+
+                        <div class="kuale-about__values">
+                            <div class="kuale-about__values-header">
+                                <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                                <h2>Valores</h2>
+                                <img src="/reclutamiento__kuale/static/src/images/landing/rombo-rojo.svg"/>
+                            </div>
+                            <div class="kuale-about__values-grid">
+                                <div class="kuale-about__value-item">Lealtad a los ideales y principios de la empresa.</div>
+                                <div class="kuale-about__value-item">Honestidad y transparencia en todos mis actos.</div>
+                                <div class="kuale-about__value-item">Compromiso y responsabilidad en mi trabajo y con la comunidad.</div>
+                                <div class="kuale-about__value-item">Justicia y equidad en la toma de decisiones.</div>
+                                <div class="kuale-about__value-item">Trabajo en equipo. Interdependencia.</div>
+                                <div class="kuale-about__value-item">Integridad y congruencia entre lo que decimos y lo que hacemos.</div>
+                                <div class="kuale-about__value-item">Humildad. Reconocer que todos podemos aprender de todos.</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+            </t>
+        </template>
+    </data>
+</odoo>

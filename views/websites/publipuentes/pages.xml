@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="page_publipuentes_ejemplo" model="website.page">
+            <field name="name">Ejemplo Publipuentes</field>
+            <field name="url">/publipuentes</field>
+            <field name="website_id" ref="website_publipuentes"/>
+            <field name="view_id" ref="publipuentes_template_ejemplo"/>
+            <field name="is_published">True</field>
+        </record>
+    </data>
+</odoo>

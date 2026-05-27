@@ -1,0 +1,53 @@
+<odoo>
+    <!--Hr Department Inherit Kanban view-->
+    <record id="hr_department_view_form_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.department.form_reclutamiento_kuale</field>
+        <field name="model">hr.department</field>
+        <field name="priority">20</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='name']" position="after">
+                     <field name="internal_name" style="text-transform: uppercase;"/>
+                    <field name="acronym" style="text-transform: uppercase;"/>
+                </xpath>
+                <xpath expr="//field[@name='color']" position="before">
+                    <field name="segment_ids" widget="many2many_tags" placeholder="Segments"/>
+
+                    <!--<label for="min_employees"/>
+                     <div class="o_row" name="div_km_home_work">
+                          <field name="min_employees" class="o_hr_narrow_field"/>
+                    </div>
+                   <field name="min_employees"/>
+                   <field name="max_employees"/>-->
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <record id="hr_department_view_tree_reclutamiento" model="ir.ui.view">
+        <field name="name">hr.department.tree_reclutamiento</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_tree"/>
+        <field name="arch" type="xml">
+             <xpath expr="//tree" position="replace">
+                <tree string="Companies">
+                    <field name="company_id" column_invisible="True"/>
+                    <field name="name" string="Nombre test"/>
+                    <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                    <field name="manager_id" widget="many2one_avatar_user"/>
+                    <field name="total_employee" string="Employees"/>
+                    <field name="parent_id"/>
+                    <field name="color" widget="color_picker" string="Color"/>
+                </tree>
+            </xpath>
+        </field>
+    </record>
+    <!--<record id="action_hr_department_kuale" model="ir.actions.act_window">
+        <field name="name">Departments 2</field>
+        <field name="res_model">hr.department</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_hr_department_kuale" name="Departments 2"
+            parent="menu_hr_recruitment_config_employees" action="action_hr_department_kuale"/>-->
+</odoo>

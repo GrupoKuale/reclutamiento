@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_interview" model="mail.template">
+            <field name="name">Send Interview</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from"> </field>
+            <field name="email_to"> </field>
+            <field name="subject">Interview 1</field>
+            <field name="body_html" type="html">
+                <div>Url interview</div>
+            </field>
+              <field name="lang"> </field>
+         </record>
+        <record id="mail_template_pre_hired" model="mail.template">
+            <field name="name">Pre-hire Email</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from"> "{{ object.company_id.name }}" &lt;{{ (object.company_id.email or user.email) }}&gt;</field>
+            <field name="email_to"> </field>
+            <field name="subject">Selected for Hiring</field>
+            <field name="body_html" type="html">
+                <div>Congratulations, you have been selected for hiring at the company:</div>
+            </field>
+              <field name="lang"> </field>
+         </record>
+    </data>
+</odoo>

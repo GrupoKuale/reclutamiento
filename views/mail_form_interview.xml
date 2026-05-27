@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_modal_form_mail_interview" model="ir.ui.view">
+        <field name="name">mail.mail.interview</field>
+        <field name="model">reclutamiento__kuale.mail_mail</field>
+        <field name="arch" type="xml">
+            <form string="Enviar entrevista">
+                <label for="scheduled_date"/>
+                <field name="scheduled_date"/>
+                <field name="email_from" disabled="True"/>
+                <br/>
+                <label for="templateMail" />
+                <field name="templateMail" />
+                 <br/>
+                <footer>
+                    <button string="Accept" name="send_interview" type="object" class="btn-primary"/>
+                    <button string="Cancel" name="cancelInterview" type="object" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_modal_form_mail_complement" model="ir.ui.view">
+        <field name="name">mail.mail.formComplement</field>
+        <field name="model">reclutamiento__kuale.mail_mail</field>
+        <field name="arch" type="xml">
+            <form string="Send mail">
+                <label for="sendMail"/>
+                <field name="sendMail"/>
+                <field name="email_from" disabled="True"/>
+                <br/>
+                <label for="templateMail" />
+                <field name="templateMail" />
+                 <br/>
+                <label for="applicant_url" />
+                <field name="applicant_url" disabled="True" />
+                <footer>
+                    <button string="Accept" name="sendEmail" type="object" class="btn-primary"/>
+                    <button string="Cancel" name="cancelEmail" type="object" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+     <record id="view_modal_form_mail_selected" model="ir.ui.view">
+        <field name="name">mail.mail.formSelected</field>
+        <field name="model">reclutamiento__kuale.mail_mail</field>
+        <field name="arch" type="xml">
+            <form string="Send mail user selected">
+                <label for="sendMail"/>
+                <field name="sendMail"/>
+                <field name="email_from" disabled="True"/>
+                <br/>
+                <label for="templateMail" />
+                <field name="templateMail" />
+                <footer>
+                    <button string="Send" name="sendEmailSelected" type="object" class="btn-primary"/>
+                    <button string="Cancel" name="cancelEmail" type="object" class="btn-secondary" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

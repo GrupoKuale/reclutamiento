@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_job_tab_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.job_tab.view.tree</field>
+            <field name="model">reclutamiento__kuale.job_tab</field>
+            <field name="arch" type="xml">
+                <tree string="Tabuladores de puesto">
+                    <field name="active" column_invisible="True"/>
+                    <field name="name"/>
+                    <!--<field name="company_id" groups="base.group_multi_company" />-->
+                    <field name="company_id"/>
+                    <field name="department_id"/>
+                    <field name="salary"/>
+                    <field name="report_to_id"/>
+                    <field name="subordinates_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_job_tab_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.job_tab.view.form</field>
+            <field name="model">reclutamiento__kuale.job_tab</field>
+            <field name="arch" type="xml">
+                <form string="Tabulador">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="active" invisible="1"/>
+                                <field name="name"/>
+                                <!--<field name="company_id" groups="base.group_multi_company" />-->
+                                <field name="company_id" options="{'no_create': True}"
+                                       domain="[('is_parent_id_set', '=', False)]"/>
+                                <field name="branch_id" options="{'no_create': True}"
+                                       domain="[('parent_id', '=', company_id)]"
+                                       invisible="not company_id"/>
+                                <field name="job_id"/>
+                                <field name="department_id"/>
+                                <field name="area_id"/>
+                            </group>
+                            <group>
+                                <field name="cost_center_id"/>
+                                <field name="segment_id"/>
+                                <field name="rol_id"/>
+                                <field name="hierarchical_level_id"/>
+                                <field name="report_to_id" widget="many2one_avatar_user"/>
+                                <field name="subordinates_ids" widget="many2many_tags_avatar" string="Staff"/>
+
+                                <field name="salary" invisible="1"/>
+                                <field name="address" invisible="1"/>
+                                <field name="business_name" invisible="1"/>
+                            </group>
+
+                        </group>
+                        <notebook>
+                            <!--<page name="offered" string="Offered" groups="hr.group_hr_user">-->
+                            <page name="staffing" string="Plantilla">
+                                <group>
+                                    <group>
+                                        <field name="ideal_staffing"/>
+                                        <field name="minimum_staffing"/>
+                                        <field name="maximum_staffing"/>
+                                        <field name="current_staffing"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="offered" string="Oferta">
+                                <group>
+                                    <group>
+                                        <field name="currency_id"/>
+                                        <field name="date_historical"/>
+                                        <field name="daily_contract_salary"/>
+                                        <field name="fixed_base_salary"/>
+                                        <field name="variable_base_salary"/>
+                                        <field name="capped_base_salary"/>
+                                        <field name="daily_salary_integrated"/>
+                                        <field name="gross_monthly_salary"/>
+                                        <field name="net_monthly_salary"/>
+                                        <field name="capped_net_monthly_salary"/>
+                                    </group>
+                                    <group string="Impuestos sobre sueldo">
+                                        <field name="isrtps"/>
+                                        <field name="monthly_imss_emp_cont"/>
+                                        <field name="monthly_imss_worker_cont"/>
+                                        <field name="monthly_sar_emp_cont"/>
+                                        <field name="monthly_sar_worker_cont"/>
+                                        <field name="emp_infonavit_cont"/>
+                                        <field name="employer_total"/>
+                                        <field name="worker_total"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="history" string="Historial de salarios">
+                                <group>
+                                    <field name="historical_salary" string="">
+                                        <tree editable="false">
+                                            <field name="end_date" string="Fecha"/>
+                                            <field name="daily_contract_salary"/>
+                                            <field name="fixed_base_salary"/>
+                                            <field name="variable_base_salary"/>
+                                            <field name="capped_base_salary"/>
+                                            <field name="daily_salary_integrated"/>
+                                            <field name="gross_monthly_salary"/>
+                                            <field name="capped_net_monthly_salary"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page name="benefits_allowances" string="Beneficios y Subsidios">
+                                <group>
+                                    <group>
+                                        <field name="type_benefits"/>
+                                        <field name="benefits"/>
+                                        <field name="description_policies"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="bonus" string="Bonificaciones/Comisiones/Incentivos">
+                                <group>
+                                    <group>
+                                        <field name="type_bonus"/>
+                                        <field name="name_bonus"/>
+                                        <field name="amount_bonus"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="staffing" string="Configuraciones">
+                                <group>
+                                    <group>
+                                        <field name="type_employee"/>
+                                        <field name="interviewer_id" widget="many2one_avatar_user"/>
+                                        <field name="recruiter_id" widget="many2one_avatar_user"/>
+                                        <field name="manager_id" widget="many2one_avatar_user"/>
+                                        <field name="instructor_id" widget="many2one_avatar_user"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="contract" string="Contratos">
+                                <group>
+                                    <group string="SAT">
+                                        <field name="contract_format"/>
+                                        <field name="contract_type_sat"/>
+                                        <field name="payment_periodicity"/>
+                                        <field name="unionized"/>
+                                        <field name="type_workday"/>
+                                        <field name="fiscal_regime"/>
+                                        <field name="type_regime"/>
+                                        <field name="use_cfdi"/>
+                                        <field name="imss_registration"/>
+                                        <field name="risk_placed"/>
+                                        <field name="payment_method"/>
+                                        <field name="federal_entity_code"/>
+                                    </group>
+                                    <group string="Nómina">
+                                        <field name="payment_basis"/>
+                                        <field name="type_benefit"/>
+                                    </group>
+                                    <group string="IMSS">
+                                        <field name="salary_zone"/>
+                                        <field name="type_movement"/>
+                                        <field name="type_worker"/>
+                                        <field name="type_workday_imss"/>
+                                        <field name="type_salary"/>
+                                        <field name="type_working_day_reduced"/>
+                                    </group>
+                                    <group string="">
+                                        <field name="working_schedule_id"/>
+                                        <field name="contract_duration"/>
+                                        <field name="expiration_notif_period"/>
+                                        <field name="legal_representative"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="reclutamiento__kuale_job_tab_action" model="ir.actions.act_window">
+            <field name="name">Job tab</field>
+            <field name="res_model">reclutamiento__kuale.job_tab</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new job tab
+                </p>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_company_area_action" model="ir.actions.act_window">
+            <field name="name">Areas</field>
+            <field name="res_model">reclutamiento__kuale.company_area</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nueva área
+                </p>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_cost_center_action" model="ir.actions.act_window">
+            <field name="name">Centros de costos</field>
+            <field name="res_model">reclutamiento__kuale.cost_center</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nuevo centro de costos
+                </p>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_rol_tab_action" model="ir.actions.act_window">
+            <field name="name">Rol</field>
+            <field name="res_model">reclutamiento__kuale.rol_tab</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nuevo Rol
+                </p>
+            </field>
+        </record>
+         <record id="reclutamiento__kuale_rol_tab_view_tree" model="ir.ui.view">
+            <field name="name">Roles</field>
+            <field name="model">reclutamiento__kuale.rol_tab</field>
+            <field name="arch" type="xml">
+                <tree string="Registro de Roles">
+                    <field name="name"/>
+                    <field name="rol_employee_selection"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_rol_tab_view_form" model="ir.ui.view">
+            <field name="model">reclutamiento__kuale.rol_tab</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                            <field name="rol_employee_selection"/>
+                            <field name="groups_ids"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_hierarchical_level_action" model="ir.actions.act_window">
+            <field name="name">Nivel jerárquico</field>
+            <field name="res_model">reclutamiento__kuale.hierarchical_level</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nuevo Nivel jerárquico
+                </p>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_type_employee_action" model="ir.actions.act_window">
+            <field name="name">Tipo de empleado</field>
+            <field name="res_model">reclutamiento__kuale.type_employee</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nuevo Tipo de empleado
+                </p>
+            </field>
+        </record>
+        <!--UMAa-->
+        <record id="reclutamiento_kuale_unit_measure_update_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.unit_measure_update.view.tree</field>
+            <field name="model">reclutamiento__kuale.unit_mesure_update</field>
+            <field name="arch" type="xml">
+                <tree string="Registro de UMAs" editable="bottom">
+                    <field name="name"/>
+                    <field name="daily_value"/>
+                    <field name="monthly_value"/>
+                    <field name="annual_value"/>
+                    <field name="publication_date"/>
+                    <field name="source"/>
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_type_unit_mesure_update_action" model="ir.actions.act_window">
+            <field name="name">UMA</field>
+            <field name="res_model">reclutamiento__kuale.unit_mesure_update</field>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agregar nuevo registro de UMA
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

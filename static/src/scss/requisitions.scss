@@ -1,0 +1,114 @@
+.text-bg-blue{
+    color: #FFFFFF !important;
+    background-color: #617df9 !important;
+}
+.text-bg-gray{
+    color: #FFFFFF !important;
+    background-color: gray !important;
+}
+
+.div_left{
+    margin-left: auto;
+}
+
+.o_kanban_dashboard.o_hr_department_kanban {
+    .o_kanban_renderer {
+        &.o_kanban_ungrouped .o_kanban_record {
+            width: 400px;
+            &:not(.o_kanban_ghost) {
+                min-height: 220px;
+            }
+        }
+
+        .text_top_padding{
+            padding-top: 0.375rem;
+        }
+
+        .o_primary {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+            padding-right: 24px !important;
+
+            .fa {
+                margin-left: 0;
+            }
+        }
+
+        .o_job_activities {
+            list-style-type: none;
+        }
+
+        .o_kanban_card_header_title {
+            min-height: 3rem;
+
+            .o_field_boolean_favorite {
+                display: inline;
+            }
+        }
+
+        .fw-normal{
+            font-weight: normal !important;
+        }
+    }
+}
+
+.o_kanban_view {
+    .o_view_sample_data .ribbon {
+        display: none;
+    }
+}
+
+.o_search_panel {
+    .o_search_panel_category_value {
+        header.active {
+            color: #e00000 !important;
+            font-weight: 700;
+
+            .o_search_panel_label_title {
+                color: #e00000 !important;
+            }
+        }
+    }
+}
+
+.o_kanban_card_disabled {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+}
+
+.o_kanban_record:has(.o_kanban_card_disabled) {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    position: relative;
+
+    * {
+        pointer-events: none !important;
+    }
+
+    .o_kanban_disabled_overlay {
+        pointer-events: all !important;
+    }
+}
+
+// Vista lista - filas no autorizadas
+.o_list_view .o_data_row.o_is_not_authorized {
+    opacity: 0.6;
+    filter: grayscale(100%);
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+}
+
+.o_list_view .o_data_row.o_is_muted {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    filter: grayscale(100%);
+}
+
+.o_list_view .o_data_row.text-muted {
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    filter: grayscale(100%);
+}

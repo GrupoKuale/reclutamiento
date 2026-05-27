@@ -1,0 +1,18 @@
+
+.o_input {
+    border-radius: 5px !important;
+    border: 1px solid #ccc !important;
+    padding: 8px;
+    box-shadow: none !important; 
+    
+}
+
+.o_field_widget.o_field_many2manytags input {
+    display: none;
+}
+
+
+.o_field_widget.o_field_many2manytags .o_tag {
+    border: none;
+    box-shadow: none; 
+}

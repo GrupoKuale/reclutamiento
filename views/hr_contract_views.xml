@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="inherit_hr_contract_view_form" model="ir.ui.view">
+        <field name="name">hr.contract.from.inherit_reclutamiento__kuale</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <data>
+                 <xpath expr="//header//field[@name='state']" position="before" >
+                    <button name="print_quotation" string="Imprimir contrato" type="object"  class="oe_highlight" data-hotkey="k" invisible="1"/>
+                    <button name="generate_quotation" string="Generar contrato" type="object"  class="oe_highlight" data-hotkey="k"/>
+                 </xpath>
+                 <xpath expr="//field[@name='contract_type_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='job_id']" position="after" >
+                    <field name="contract_format_id"/>
+                    <field name="hide_limit_det_contract" invisible="1"/>
+                    <field name="send_notif_expiration" invisible="1"/>
+                    <!--<field name="body_html"/>-->
+                </xpath>
+                <xpath expr="//field[@name='date_end']" position="replace">
+                    <field name="date_end" invisible="hide_limit_det_contract"/>
+                    <field name="renew_contract" invisible="send_notif_expiration != True"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+</odoo>

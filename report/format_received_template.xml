@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="formatReceived">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_Received"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_Received">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 3cm;">
+                <t t-if="o.body_temp">
+                    <div t-out="o.body_temp"/>
+                </t>
+                <t t-else="">
+                    <p>El formato de reglamento no se pudo generar.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="formatConfidentiality">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_Confidentiality"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_Confidentiality">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 3cm;">
+                <t t-if="o.body_temp">
+                    <div t-out="o.body_temp"/>
+                </t>
+                <t t-else="">
+                    <p>El formato de confidencialidad no se pudo generar.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="formatUniformVoucher">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_UniformVoucher"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_UniformVoucher">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 3cm;">
+                <t t-if="o.body_temp">
+                    <div t-out="o.body_temp"/>
+                </t>
+                <t t-else="">
+                    <p>El formato de vale de uniforme no se pudo generar.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="formatPromissory">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_Promissory"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_Promissory">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 3cm;">
+                <t t-if="o.body_temp">
+                    <div t-out="o.body_temp"/>
+                </t>
+                <t t-else="">
+                    <p>El formato de pagaré no se pudo generar.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="contractSummary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_Contract"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_Contract">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 2cm;">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-left" style="background-color: black;color: white;">
+                                1 | GENTE KUALE S.A. DE C.V.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Fecha de ingreso:</td>
+                            <td colspan="3">
+                                <label t-out="o.actual_date"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nombre Completo:</td>
+                            <td colspan="3">
+                                <label t-out="o.partner_name"></label>
+                                <label t-out="o.last_name"></label>
+                                <label t-out="o.last_name2"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Edad:</td>
+                            <td colspan="3">
+                                <label t-out="o.age"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de nacimiento:</td>
+                            <td colspan="3">
+                                <label t-out="o.birthdate"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lugar de nacimiento:</td>
+                            <td colspan="3">
+                                <label t-out="o.birthplace_select.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>No. de Seguridad Social:</td>
+                            <td colspan="3">
+                                <label t-out="o.social_security_number"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Puesto:</td>
+                            <td colspan="3">
+                                <label t-out="o.job_id.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Calle:</td>
+                            <td>
+                                <label t-out="o.current_address"></label>
+                            </td>
+                            <td>Tipo de vialidad:</td>
+                            <td>
+                                <label t-out="o.type_road"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Numero exterior:</td>
+                            <td>
+                                <label t-out="o.exterior_number"></label>
+                            </td>
+                            <td>Número interior:</td>
+                            <td>
+                                <label t-out="o.interior_number"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Colonia:</td>
+                            <td colspan="3">
+                                <label t-out="o.colony"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Municipio y Estado:</td>
+                            <td colspan="3">
+                                <label t-out="o.municipality"></label>,
+                                <label t-out="o.state_id.name"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Código Postal:</td>
+                            <td colspan="3">
+                                <label t-out="o.postal_code"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Entre calles:</td>
+                            <td colspan="3">
+                                <label t-out="o.between_streets"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Referencias adicionales:</td>
+                            <td colspan="3">
+                                <label t-out="o.additional_ref"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Características del domicilio:</td>
+                            <td colspan="3">
+                                <label t-out="o.address_details"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Teléfono fijo y celular:</td>
+                            <td>
+                                Tel.
+                                <label t-out="o.desk_phone"></label>
+                            </td>
+                            <td></td>
+                            <td>
+                                Cel.
+                                <label t-out="o.partner_mobile"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Correo electrónico</td>
+                            <td colspan="3">
+                                <label t-out="o.email_from"></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>¿Padeces de alguna enfermedad crónica?</td>
+                            <td>
+                                <t t-if="o.has_chronic_disease == 'yes'">
+                                    Si
+                                </t>
+                                <t t-else="">
+                                    No
+                                </t>
+                            </td>
+                            <td colspan="2">
+                                <t t-if="o.has_chronic_disease == 'yes'">
+                                    ¿Cuál?
+                                    <label t-out="o.chronic_disease"></label>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>¿Cómo te enteraste de la oferta laboral?</td>
+                            <td colspan="3">
+                                Amistad
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless" style="margin-left: 50px;">
+                    <tbody>
+                        <tr col="2">
+                            <td>
+                                <br/>
+                                <br/>
+                                <br/>
+                                 <br/>
+                                 <br/> <br/><br/>
+                            </td>
+                            <td>
+                                <br/>
+                                <br/>
+                                <br/> <br/> <br/> <br/>
+                            </td>
+                        </tr>
+                        <tr col="2">
+                            <td>Nombre y firma de contratante</td>
+                            <td>Nombre y firma del empleado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br/><br/><br/><br/><br/><br/>
+            <div class="page-break"></div>
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 2cm;">
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-left" style="background-color: black;color: white;">
+                                2 | GENTE KUALE S.A. DE C.V.
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+                    Por medio del presente solicito y autorizo a Gente Kuale S.A. de C.V. realizar los depósitos de mis
+                    nóminas quincenales.
+                    Lo anterior de conformidad con el artículo 101, párrafo de la LFT en vigor otorgando el debido
+                    consentimiento para realizar
+                    el pago de mi salario en la siguiente tarjeta de débito personal.
+                </p>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <td colspan="4" class="text-left" style="background-color: white;">
+                                Datos de cuenta bancaria
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>No.de cuenta:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Nombre completo:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>CURP:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Calle:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Número:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Colonia:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Código Postal:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Teléfono fijo:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Celular:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha de nacimiento:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Sexo:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                        <tr>
+                            <td>Puesto:</td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify;">
+                    *En caso de fallecimiento designo como beneficiario de mis prestaciones laborales a la siguiente
+                    persona (requiere ser mayor de edad).
+                </p>
+                <br/>
+                Nombre del beneficiario:
+                <br/>
+                Parentesco:
+                <br/>
+                <p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: center;">
+                    ☑ Adjunto copia de mi contrato de apertura de cuenta
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <label t-out="o.partner_name"></label>
+                    <label t-out="o.last_name"></label>
+                    <label t-out="o.last_name2"></label>
+                    <br/>
+                    ___________________________
+                    <br/>
+                    Nombre y firma del empleado
+                </p>
+            </div>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,284 @@
+<odoo>
+<!-- Formulario -->
+    <record id="view_zk_biometric_template_form" model="ir.ui.view">
+        <field name="name">zk.biometric.template.form</field>
+        <field name="model">zk.biometric.template</field>
+        <field name="arch" type="xml">
+            <form string="Plantilla biométrica">
+                <header>
+                    <button name="action_open_export_wizard"
+                            type="object"
+                            string="Registrar en reloj"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="uid"/>
+                            <field name="user_id"/>
+                            <field name="name"/>
+                            <field name="privilege"/>
+                            <field name="group_id"/>
+                        </group>
+                        <group>
+                            <field name="finger_index"/>
+                            <field name="template_size"/>
+                            <field name="finger_valid"/>
+                            <field name="source_device_ip"/>
+                            <field name="imported_at"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Datos binarios">
+                        <field name="template_data" filename="display_name"/>
+                        <field name="finger_mark" filename="display_name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+<!-- Formulario Wizard -->
+    <record id="view_zk_biometric_import_wizard_form" model="ir.ui.view">
+        <field name="name">zk.biometric.import.wizard.form</field>
+        <field name="model">zk.biometric.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar biometría desde reloj">
+                <group>
+                    <field name="ip"/>
+                    <field name="port"/>
+                </group>
+                <footer>
+                    <button name="action_import"
+                            type="object"
+                            string="Importar"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_biometric_export_wizard_form" model="ir.ui.view">
+        <field name="name">zk.biometric.export.wizard.form</field>
+        <field name="model">zk.biometric.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Registrar Biometría en reloj">
+                <group>
+                    <field name="biometric_id" readonly="1"/>
+                    <field name="ip"/>
+                    <field name="port"/>
+                </group>
+                <footer>
+                    <button name="action_export"
+                            type="object"
+                            string="Registrar"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_zk_biometric_sync_all_wizard_form" model="ir.ui.view">
+        <field name="name">zk.biometric.sync.all.wizard.form</field>
+        <field name="model">zk.biometric.sync.all.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Sincronizar toda la biometría al reloj">
+                <group>
+                    <field name="ip"/>
+                    <field name="port"/>
+                </group>
+                <footer>
+                    <button name="action_sync_all"
+                            type="object"
+                            string="Sincronizar todo"
+                            class="btn-primary"/>
+                    <button string="Cancelar"
+                            class="btn-secondary"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+<!-- ============================================================
+     REGISTRAR HUELLA — con animación de scanner
+============================================================ -->
+    <record id="view_zk_biometric_enroll_wizard_form" model="ir.ui.view">
+        <field name="name">zk.enroll.wizard.form</field>
+        <field name="model">zk.biometric.create.user.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Registrar Huella">
+                <sheet>
+                    <div class="zk-enroll-wrapper">
+                        <field name="already_enrolled" widget="boolean" 
+                            style="display:none" id="zk_already_enrolled_field"/>
+
+                        <!-- Scanner visual -->
+                        <div class="zk-scanner-area state-idle" id="zk_scanner_area">
+                            <div class="zk-pulse-ring ring-1"/>
+                            <div class="zk-pulse-ring ring-2"/>
+                            <div class="zk-pulse-ring ring-3"/>
+                            <div class="zk-scan-line"/>
+
+                            <div class="zk-finger-container">
+                                <svg class="zk-finger-svg" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <ellipse cx="50" cy="58" rx="30" ry="38" fill="#e0e7ff" stroke="#6366f1" stroke-width="1.5"/>
+                                    <path class="zk-finger-path" id="zk_finger_fill"
+                                        d="M50 96 C28 96 20 78 20 58 C20 36 32 20 50 20 C68 20 80 36 80 58 C80 78 72 96 50 96 Z"
+                                        fill="#6366f1" opacity="0.15"/>
+                                    <path d="M50 34 C40 34 33 43 33 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C38 40 30 50 30 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C36 46 27 57 27 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 34 C60 34 67 43 67 54" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 40 C62 40 70 50 70 62" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <path d="M50 46 C64 46 73 57 73 70" stroke="#6366f1" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+                                    <circle cx="50" cy="54" r="4" fill="#6366f1" opacity="0.6"/>
+                                    <path d="M32 90 L32 100 Q32 110 50 110 Q68 110 68 100 L68 90 Q60 96 50 96 Q40 96 32 90 Z" fill="#6366f1" opacity="0.1"/>
+                                </svg>
+                            </div>
+
+                            <div class="zk-status-badge idle" id="zk_status_badge">
+                                <div class="zk-status-dot"/>
+                                <span id="zk_status_text">Listo para registrar</span>
+                            </div>
+
+                            <div class="zk-timer-container">
+                                <div class="zk-timer-wrapper">
+                                    <svg class="zk-timer-svg" viewBox="0 0 40 40">
+                                        <circle class="zk-timer-track" cx="20" cy="20" r="16"/>
+                                        <circle class="zk-timer-arc" id="zk_timer_arc" cx="20" cy="20" r="16"/>
+                                    </svg>
+                                    <div class="zk-timer-label" id="zk_timer_label">2:15</div>
+                                </div>
+                            </div>
+
+                            <div class="zk-instruction" id="zk_instruction">
+                                Presiona "Registrar" para activar el reloj checador
+                            </div>
+                        </div>
+
+                        <!-- Campos — readonly si ya está enrollado -->
+                        <group>
+                            <group>
+                                <field name="uid"       readonly="already_enrolled"/>
+                                <field name="user_id"   string="ID del Empleado" readonly="already_enrolled"/>
+                                <field name="name"      string="Nombre"          readonly="already_enrolled"/>
+                                <field name="last_name" string="Apellido"        readonly="already_enrolled"/>
+                            </group>
+                            <group>
+                                <field name="privilege"    readonly="already_enrolled"/>
+                                <field name="password"     readonly="already_enrolled"/>
+                                <field name="finger_index" string="Dedo" readonly="already_enrolled"/>
+                            </group>
+                        </group>
+
+                        <group groups="base.group_system" string="Configuración del reloj">
+                            <field name="ip"   string="IP del reloj" readonly="already_enrolled"/>
+                            <field name="port" string="Puerto"       readonly="already_enrolled"/>
+                        </group>
+
+                    </div>
+                </sheet>
+
+                <footer>
+                    <!-- Botones ocultos si ya tiene huella -->
+                    <button string="Registrar"
+                            type="object"
+                            name="action_enroll"
+                            class="btn-primary zk-btn-registrar"
+                            invisible="already_enrolled"/>
+                    <button name="action_verify_enrollment"
+                            string="Verificar captura"
+                            type="object"
+                            class="btn-success zk-btn-verificar"
+                            invisible="already_enrolled"/>
+                    <button string="Cancelar"
+                            special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+<!-- Acción -->
+    <record id="action_zk_biometric_template" model="ir.actions.act_window">
+        <field name="name">Plantillas Biométricas</field>
+        <field name="res_model">zk.biometric.template</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+<!-- Acciones Wizard -->
+    <record id="action_zk_biometric_import_wizard" model="ir.actions.act_window">
+        <field name="name">Importar Biometría</field>
+        <field name="res_model">zk.biometric.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_zk_biometric_export_wizard" model="ir.actions.act_window">
+        <field name="name">Registrar Biometría en reloj</field>
+        <field name="res_model">zk.biometric.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_zk_biometric_sync_all_wizard" model="ir.actions.act_window">
+        <field name="name">Sincronizar toda la biometría</field>
+        <field name="res_model">zk.biometric.sync.all.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+<!-- Lista -->
+    <record id="view_zk_biometric_template_tree" model="ir.ui.view">
+        <field name="name">zk.biometric.template.tree</field>
+        <field name="model">zk.biometric.template</field>
+        <field name="arch" type="xml">
+            <tree string="Plantillas biométricas">
+                <header>
+                    <button name="%(action_zk_biometric_import_wizard)d"
+                            type="action"
+                            string="Importar desde reloj"
+                            class="btn-primary"/>
+                    <button name="%(action_zk_biometric_sync_all_wizard)d"
+                            type="action"
+                            string="Sincronizar todo a reloj"
+                            class="btn-secondary"/>
+                </header>
+                <field name="user_id"/>
+                <field name="name"/>
+                <field name="finger_index"/>
+                <field name="template_size"/>
+                <field name="finger_valid"/>
+                <field name="source_device_ip"/>
+                <field name="imported_at"/>
+            </tree>
+        </field>
+    </record>
+
+<!-- Menús -->
+    <menuitem id="menu_zk_biometric_root"
+              name="Biometría"
+              action="action_zk_biometric_template"
+              sequence="90"/>
+    <menuitem id="menu_zk_biometric_template"
+              name="Plantillas biométricas"
+              parent="menu_zk_biometric_root"
+              action="action_zk_biometric_template"
+              sequence="5"/>
+    <menuitem id="menu_zk_biometric_import"
+              name="Importar desde reloj"
+              parent="menu_zk_biometric_root"
+              action="action_zk_biometric_import_wizard"
+              sequence="10"/>
+    <menuitem id="menu_zk_biometric_sync"
+              name="Sincronizar información"
+              parent="menu_zk_biometric_root"
+              action="action_zk_biometric_sync_all_wizard"
+              sequence="15"/>
+
+</odoo>

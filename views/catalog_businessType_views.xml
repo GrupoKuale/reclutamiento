@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+        <record id="reclutamiento_kuale_businessType_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.business.type.view.tree</field>
+            <field name="model">reclutamiento__kuale.business.type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de giro">
+                    <field name="name" />
+                    <field name="description" />
+                    <field name="status"  />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_businessType_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.business.type.view.form</field>
+            <field name="model">reclutamiento__kuale.business.type</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de giro">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="status" />
+                                <field name="name" />
+                                <field name="description" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="reclutamiento__kuale_businessType_action" model="ir.actions.act_window">
+            <field name="name">Tipo de giro</field>
+            <field name="res_model">reclutamiento__kuale.business.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nuevo Tipo de giro
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

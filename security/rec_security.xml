@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         RECORD RULES — Restricción por sucursal (company_id)
+         Aplica a group_guias_generales y group_guias_foraneos.
+         LGP y DH no tienen record rule: ven todo (solo ACL los limita).
+         ══════════════════════════════════════════════════════════════════ -->
+
+    <!-- Guías Generales: solo postulaciones de su(s) empresa(s) -->
+    <record id="rule_hr_applicant_guias_gen" model="ir.rule">
+        <field name="name">Postulaciones - solo sucursal (Guías Generales)</field>
+        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+        <field name="groups" eval="[(4, ref('reclutamiento__kuale.group_guias_generales'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Guías Foráneos: solo postulaciones de su(s) empresa(s) -->
+    <record id="rule_hr_applicant_guias_for" model="ir.rule">
+        <field name="name">Postulaciones - solo sucursal (Guías Foráneos)</field>
+        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+        <field name="groups" eval="[(4, ref('reclutamiento__kuale.group_guias_foraneos'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Guías Generales: solo requisiciones de su sucursal -->
+    <record id="rule_requisitions_guias_gen" model="ir.rule">
+        <field name="name">Requisiciones - solo sucursal (Guías Generales)</field>
+        <field name="model_id" ref="reclutamiento__kuale.model_reclutamiento__kuale_requisitions"/>
+        <field name="groups" eval="[(4, ref('reclutamiento__kuale.group_guias_generales'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Guías Foráneos: solo requisiciones de su sucursal -->
+    <record id="rule_requisitions_guias_for" model="ir.rule">
+        <field name="name">Requisiciones - solo sucursal (Guías Foráneos)</field>
+        <field name="model_id" ref="reclutamiento__kuale.model_reclutamiento__kuale_requisitions"/>
+        <field name="groups" eval="[(4, ref('reclutamiento__kuale.group_guias_foraneos'))]"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="perm_read"   eval="True"/>
+        <field name="perm_write"  eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+</odoo>

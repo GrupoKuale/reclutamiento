@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de formulario para el modelo 'kuale.employee.todo' -->
+        <record id="view_employee_todo_form" model="ir.ui.view">
+            <field name="name">employee.todo.form</field>
+            <field name="model">reclutamiento__kuale.employee.todo</field>
+            <field name="arch" type="xml">
+                <form string="Employee To-do">
+                    <sheet>
+                        <group>
+                            <field name="title"/>
+                            <field name="description" widget="html"/>
+                            <field name="status"/>
+                            <field name="dueDate"/>
+                            <field name="completedDate" readonly="1"/>
+                            <field name="userId" options="{'no_create': True}"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista de árbol para el modelo 'kuale.employee.todo' -->
+        <record id="view_employee_todo_tree" model="ir.ui.view">
+            <field name="name">employee.todo.tree</field>
+            <field name="model">reclutamiento__kuale.employee.todo</field>
+            <field name="arch" type="xml">
+                <tree string="Employee To-do">
+                    <field name="title"/>
+                    <field name="status"/>
+                    <field name="dueDate"/>
+                    <field name="completedDate"/>
+                    <field name="userId"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Acción para mostrar la lista de tareas -->
+        <record id="action_employee_todo" model="ir.actions.act_window">
+            <field name="name">Employee To-do</field>
+            <field name="res_model">reclutamiento__kuale.employee.todo</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_employee_todo_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No to-do's feedback yet.
+                </p>
+                <p>
+                    Create the first employee to-do's entry.
+                </p>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

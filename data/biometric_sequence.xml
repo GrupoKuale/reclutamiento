@@ -1,0 +1,9 @@
+<odoo>
+    <record id="seq_device_id_num" model="ir.sequence">
+        <field name="name">Device ID Num</field>
+        <field name="code">hr.employee.device_id_num</field>
+        <field name="padding">0</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+</odoo>

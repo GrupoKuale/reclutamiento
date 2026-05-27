@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="job_preview_wizard_form" model="ir.ui.view">
+        <field name="name">job.preview.wizard.form</field>
+        <field name="model">reclutamiento__kuale.job_preview_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Vista previa">
+                <sheet>
+                    <field name="job_id" invisible="1"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="report_layout_id" invisible="1"/>
+                    <field name="preview" widget="html" nolabel="1" readonly="1"
+                           style="height:65vh; overflow:hidden;"/>
+                </sheet>
+                <footer>
+                    <button string="Descargar PDF" class="btn-primary"
+                            type="object" name="document_layout_save" data-hotkey="q"/>
+                    <button special="cancel" data-hotkey="x" string="Cerrar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

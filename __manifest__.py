@@ -1,0 +1,186 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Reclutamiento_Kuale",
+    'summary': "Módulo para administrar el reclutamiento de personal kuale",
+    'description': """
+Long description of module's purpose
+    """,
+    'author': "DWIT",
+    'website': "https://www.yourcompany.com",
+    'category': 'Uncategorized',
+    'version': '0.1',
+    'depends': [
+        'base',
+        'hr',
+        'hr_recruitment',
+        'hr_contract',
+        'website',
+        'website_slides',
+        'calendar',
+        'mail',
+        'hr_recruitment',
+        'website_sale',
+        'web_editor',
+        'hr_attendance',
+        'auth_signup',
+        # 'sale'
+    ],
+    'external_dependencies': {
+        'python': ['pyzk', 'firebase-admin'], },
+    'data': [
+        #security file
+        'security/res_groups.xml',
+        'security/rec_security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
+        'data/catalog_sat_data.xml',
+        'data/ir_cron_contracts.xml',
+        'data/websites_multiples.xml',
+        'data/recruitment_seed_legacy_companies.xml',
+        # 'data/recruitment_seed_data.xml',  # comentado: bug duplicate hr_job 'Cajero(a) Demo'
+        'report/job_specifications_pdf.xml',
+        'report/job_specifications_pdf_template.xml',
+        'report/format_received_report.xml',
+        'report/format_received_template.xml',
+        'views/res_users_views.xml',
+        'views/hr_department_views.xml',
+        'views/requisitions_view.xml',
+        'views/catalog_segments_views.xml',
+        'views/catalog_age_views.xml',
+        'views/catalog_job_tab_views.xml',
+        'views/catalog_contract_type_views.xml',
+        'views/catalog_activities_views.xml',
+        'views/catalog_tools_knowledge_views.xml',
+        'views/catalog_schooling_views.xml',
+        'views/catalog_language_views.xml',
+        'views/catalog_competencies_views.xml',
+        'views/catalog_internal_rel_views.xml',
+        'views/catalog_external_rel_views.xml',
+        'views/catalog_performance_stand_views.xml',
+        'views/catalog_branchType_views.xml',
+        'views/catalog_businessType_views.xml',
+        'views/catalog_imssRegistration_views.xml',
+        'views/catalog_legalRepresentative_views.xml',
+        'views/catalog_stampCertificate_views.xml',
+        'views/catalog_city_views.xml',
+        'views/catalog_SAT_views.xml',
+        'views/catalog_IMSS_views.xml',
+        'views/res_company_views.xml',
+        'views/website_templates.xml',
+        'views/quienes_somos_template.xml',
+        'views/website_hr_recruitment_templates.xml',
+        'views/vacantes_template.xml',
+        'views/vacantes_page.xml',
+        'views/job_preview_wizard.xml',
+        'views/confirm_check_id_wizard.xml',
+        'data/format_employee_global_data.xml', 
+        'views/hr_job_views.xml',
+        'data/hojas_membretadas_data.xml',
+        'views/formatos_preview_views.xml',
+        'views/complement_warning_wizard_views.xml',
+        'views/zk_biometric_verify_wizard_views.xml',
+        'views/view_contrato_wizard.xml',
+        'views/res_config_settings_views.xml',
+
+        'views/hr_applicant_kanban.xml',
+        'views/hr_applicant_list_view.xml',
+        'views/hr_applicant_views.xml',
+        'views/formatos_views.xml',
+        'views/hr_recruitment_stage.xml',
+        'views/clinic_views.xml',
+        'views/mail_form_interview.xml',
+        'views/mail_template.xml',
+        'views/website_form_recruitment.xml',
+        'views/slide_channel_views.xml',
+        'views/hr_employee_views.xml',
+        'views/credentials_views.xml',
+        'report/contract_reports.xml',
+        'views/hr_contract_views.xml',
+        'report/contract_templates.xml',
+        'views/contract_format_views.xml',
+        'views/catalog_type_format_views.xml',
+        'views/hr_applicant_documentation_modal.xml',
+        'views/product_template_views.xml',
+        'views/catalog_identification_views.xml',
+        'views/settings_views.xml',
+        'views/website_settings_views.xml',
+        'views/formato_contratacion_wizard_view.xml',
+
+        # Websites
+        'views/websites/reclutamiento/menus.xml',
+        'views/websites/reclutamiento/templates.xml',
+        'views/websites/reclutamiento/pages.xml',
+        'views/websites/publipuentes/menus.xml',
+        'views/websites/publipuentes/templates.xml',
+        'views/websites/publipuentes/pages.xml',
+        'views/websites/reclutamiento/kuale_login_modal.xml',
+        'views/websites/reclutamiento/mis_aplicaciones.xml',
+
+        #     employee-services
+        'data/employee_request_mailTemplate.xml',
+        'views/calendar.xml',
+        'views/course_enrollment.xml',
+        'views/employee_announcement.xml',
+        'views/employee_credentials.xml',
+        'views/employee_feedback.xml',
+        'views/employee_request.xml',
+        'views/employee_todo.xml',
+        'views/hr_work_location.xml',
+        'views/employee_user_creation_wizard_view.xml',
+
+
+        # Biometric device
+        'views/zk_biometric_user.xml',
+        'views/zk_biometric_log.xml',
+        'views/zk_biometric_template_views.xml',
+        'views/zk_biometric_confirm_wizard_views.xml',
+        #'views/zk_views.xml',
+        #'data/biometric_sequence.xml',
+
+        'views/views.xml',
+        'views/format_employee.xml',
+        'views/website_menu_views.xml',
+        'views/menu_views_SAT.xml',
+
+    ],
+    'installable': True,
+    'application': True,
+    # 'post_init_hook': 'post_init_hook', # comentado: función no existe
+    # 'post_migrate_hook': 'post_init_hook', # comentado: función no existe
+    'assets': {
+        'web.assets_backend': [
+            # 'reclutamiento__kuale/static/src/fields/auto_save_hr_job_competences/*',
+            'reclutamiento__kuale/static/src/**/*',
+            'reclutamiento__kuale/static/src/fields/**/*',
+            'reclutamiento__kuale/static/src/go_back_button/**/*',
+            # 'reclutamiento__kuale/static/src/fields/skills_one2many/*',
+            # 'reclutamiento__kuale/static/src/**/*',
+            # 'reclutamiento__kuale/static/src/views/*.js',
+            'reclutamiento__kuale/static/src/scss/backend.scss',
+            'reclutamiento__kuale/static/src/js/statusbar_arrows.js',
+            'reclutamiento__kuale/static/src/scss/statusbar_arrows.scss',
+            'reclutamiento__kuale/static/src/xml/statusbar_arrows.xml',
+            'reclutamiento__kuale/static/src/hojas_membretadas/**',
+
+        ],
+        'web.assets_frontend': [
+            'reclutamiento__kuale/static/src/scss/website_recruitment.scss',
+            # 'reclutamiento__kuale/static/src/js/custom_recuitment_script.js',
+
+        ],
+        # `web.assets_frontend` is only used for CSS in the frontend layout.
+        # Put page-level JS in the frontend JS bundles.
+        'web.assets_frontend_minimal': [
+            'reclutamiento__kuale/static/src/js/form-navigation.js',
+        ],
+    },
+    # only loaded in demonstration mode
+    'demo': [
+        'demo/demo.xml',
+    ],
+    'qweb': [
+    ],
+    'controllers': [
+        'controllers/websiteController.py',
+    ]
+}

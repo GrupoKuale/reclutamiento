@@ -1,0 +1,713 @@
+<odoo>
+    <!--Hr Department Inherit Kanban view-->
+    <record id="hr_job_reclutamiento_kuale" model="ir.ui.view">
+        <field name="name">hr.job.form_reclutamiento_kuale</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//form" position="attributes">
+                    <attribute name="js_class">go_back_button</attribute>
+                </xpath>
+                <xpath expr="//sheet" position="before">
+                    <header>
+                        <button string="Generar PDF Especificaciones" name="generate_pdf_job" type="object"
+                                data-hotkey="x"/>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                                Formatos
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <button string="Formato de reglamento recibido" name="generate_format_regulation"
+                                            type="object"
+                                            data-hotkey="x"/>
+                                </li>
+                                <li>
+                                    <button string="Carta de confidencialidad" name="generate_format_confidentiality"
+                                            type="object"
+                                            data-hotkey="x"/>
+                                </li>
+                                <li>
+                                    <button string="Formato vale de uniforme" name="generate_format_uniform"
+                                            type="object"
+                                            data-hotkey="x"/>
+                                </li>
+                                <li>
+                                    <button string="Formato pagaré" name="generate_format_promissory" type="object"
+                                            data-hotkey="x"/>
+                                </li>
+                            </ul>
+                        </div>
+                    </header>
+                </xpath>
+
+                <xpath expr="//div[@class='oe_title']" position="replace"/>
+                <xpath expr="//notebook" position="before">
+                    <div class="container custom_container">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="container custom_container">
+                                    <div class="row">
+                                        <div class="wrap_input_custom col">
+                                            <label for="name"/>
+                                            <h3>
+                                                <field name="name" placeholder="e.g. Sales Manager"
+                                                    readonly="not is_Parent_Job"/>
+                                            </h3>
+                                        </div>
+                                        <div class="wrap_input_custom col">
+                                            <label for="name_kuale"/>
+                                            <h3>
+                                                <field name="name_kuale" placeholder="Experto en servicio/calidad"
+                                                    readonly="not is_Parent_Job"/>
+                                            </h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wrap_input_custom col-2 offset-1 align-self-center">
+                                <group>
+                                    <field name="is_published" widget="boolean_toggle" string="Publicar en sitio web"/>
+                                    <field name="show_driverLicense" widget="boolean_toggle"
+                                        string="Solicitar licencia"
+                                        readonly="not is_Parent_Job"/>
+                                    <field name="show_linkedIn" widget="boolean_toggle"
+                                        string="Solicitar perfil LinkedIn"
+                                        readonly="not is_Parent_Job"/>
+                                </group>
+                            </div>
+                        </div>
+                        <div class="row" invisible="1">
+                            <div class="col-2 offset-md-8">
+                                <group>
+                                    <field name="administrative"/>
+                                </group>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="container custom_container">
+                        <div class="row">
+                            <div class="col col-division-right">
+                                <group>
+                                    <field name="address_id" context="{'show_address': 1}" placeholder="Remote"
+                                        can_create="True" can_write="True" field_id="address_id_0"
+                                        invisible="1"/>
+                                    <field name="company_id" string="Empresa"
+                                        domain="[('parent_id', '=', False)]"
+                                        invisible="not is_Parent_Job"/>
+                                    <field name="branch_company_id" string="Empresa"
+                                        readonly="1"
+                                        invisible="is_Parent_Job"/>
+                                    <field name="company_id" string="Sucursal"
+                                        readonly="1"
+                                        invisible="is_Parent_Job"/>
+                                    <field name="city_Job" context="{'name_format': 'city'}" domain="[('state', '=', 'Tamaulipas')]"/>
+                                    <field name="contract_type_id" can_create="True" can_write="True"
+                                        field_id="contract_type_id_0"
+                                        readonly="not is_Parent_Job"/>
+                                    <field name="department_id" readonly="not is_Parent_Job"/>
+                                    <field name="job_position_type" readonly="not is_Parent_Job"/>
+                                </group>
+                                <div class="o_row" name="recruitment_target" style="margin-left: 20px">
+                                    <i class="fa fa-male fa-3x" aria-hidden="true"
+                                    style="color:var(--biz-theme-primary-color);"/>
+                                    <field name="no_of_recruitment" class="o_hr_narrow_field" readonly="1"
+                                        field_id="no_of_recruitment_0" style="margin-left:10px !important"/>
+                                </div>
+                            </div>
+                            <div class="col col-division-right">
+                                <group>
+                                    <field name="schooling_id"
+                                        options="{'no_open': True, 'no_create': True}"
+                                        string="Ultimo grado de estudios"
+                                        readonly="not is_Parent_Job"/>
+                                    <field name="age_id" readonly="not is_Parent_Job"/>
+                                    <field name="gender_id" options="{'no_open': True, 'no_create': True}"
+                                        readonly="not is_Parent_Job"/>
+                                </group>
+                            </div>
+                            <div class="col">
+                                <group>
+                                    <field name="business_name" invisible="1"/>
+                                </group>
+                                <separator string="Imagen promocional"
+                                        style="margin: 0 0 0 0!important; padding: 0 !important; padding-left: 10px !important"/>
+                                <div class="custom_image">
+                                    <field name="recruitment_promo_image" widget="image" nolabel="1"
+                                        readonly="not is_Parent_Job"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                </xpath>
+                <xpath expr="//form" position="inside">
+                    <field name="allowed_user_ids" invisible="1"/>
+                    <field name="is_Parent_Job" invisible="1"/>
+                </xpath>
+                <xpath expr="//notebook" position="replace">
+                    <notebook class="custom_notebook">
+                        <page string="Descripcion del puesto" name="recruitment_page">
+                            <separator string="Objetivo" style="font-size: 1em !important;"/>
+                            <field name="objective" widget="toolbar" style="width:95%; padding-left:5%"
+                                readonly="not is_Parent_Job"/>
+                            <separator string="Justificación de la vacante" style="font-size: 1em !important;"/>
+                            <field name="justify" widget="toolbar" style="width:95%; padding-left:5%"
+                                readonly="not is_Parent_Job"/>
+                            <separator string="Actividades" style="font-size: 1em !important;"/>
+                            <field name="activities_ids" nolabel="1" required="1"
+                                readonly="not is_Parent_Job">
+                                <tree editable="true" class="clean_table_css">
+                                    <field name="name" required="1"/>
+                                    <button name="open_record_activities" type="object" data-hotkey="x"
+                                            class="fa fa-pencil"/>
+                                    <button name="toggle_description" type="object"
+                                            class="fa fa-eye" invisible="description == False"/>
+                                    <field name="description" invisible="show_description == False"/>
+                                    <field name="show_description" invisible="1" nolabel="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Experiencia y conocimiento" name="experience_knowledge_page">
+                            <separator string="Experiencia" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="experiences_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="comments"/>
+                                </tree>
+                            </field>
+                            <separator string="Herramientas y conocimientos" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <separator string="Herramientas operativas"/>
+                            <field name="tool_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree create="true" delete="false">
+                                    <field name="name" readonly="True"/>
+                                    <field name="description" readonly="True"/>
+                                </tree>
+                            </field>
+                            <separator string="Software"/>
+                            <field name="software_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree create="true" delete="false">
+                                    <field name="name" readonly="True"/>
+                                    <field name="description" readonly="True"/>
+                                </tree>
+                            </field>
+                            <separator string="Competencias" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="competence_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree create="True" delete="false">
+                                    <field name="competency_type_id"/>
+                                    <field name="name" readonly="True"/>
+                                </tree>
+                            </field>
+                            <separator string="Idiomas" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="language_k_ids" nolabel="1" required="1" readonly="not is_Parent_Job">
+                                <tree editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="level"/>
+                                    <field name="level_progress" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Jornada/Contrato" name="job_contracts">
+                            <div class="container custom_container">
+                                <div class="row">
+                                    <div class="col col-division-right">
+                                        <group>
+                                            <field name="working_schedule_id" widget="list"
+                                                string="Horario de trabajo"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col col-division-right">
+                                        <group>
+                                            <field name="type_workday" readonly="not is_Parent_Job"/>
+                                            <field name="workday" readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col col-division-right">
+                                        <group>
+                                            <field name="day_ids" widget="many2many_tags"
+                                                options="{'no_open': True, 'no_create': True}"
+                                                readonly="not is_Parent_Job"/>
+                                            <field name="days_off_catalog" widget="many2many_tags"
+                                                options="{'no_open': True, 'no_create': True}"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col">
+                                        <group>
+                                            <field name="start_time" widget="float_time"
+                                                readonly="not is_Parent_Job"/>
+                                            <field name="end_time" widget="float_time"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                            <separator string="Contrato" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <group>
+                                <field name="contract_type_kuale_id" widget="radio"
+                                    readonly="not is_Parent_Job"/>
+                                <field name="comments_contract_type" invisible="1"/>
+                            </group>
+                        </page>
+                        <page string="Relaciones" name="relationships_page">
+                            <separator string="Internas" style="font size: 1em !important;"/>
+                            <hr style="width:30%; border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="int_rel_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                            <separator string="Externas" style="font size: 1em !important;"/>
+                            <hr style="width:30%; border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="ext_rel_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                            <separator string="Estándares de rendimiento" style="font size: 1em !important;"/>
+                            <hr style="width:30%; border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="perf_st_ids" nolabel="1" readonly="not is_Parent_Job">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                            <separator string="Comentarios/expectativas generales" style="font size: 1em !important;"/>
+                            <hr style="width:30%; border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="comments_id" nolabel="1" readonly="not is_Parent_Job">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Adicional" name="additional_page">
+                            <separator string="Preguntas filtro" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <group>
+                                <field name="filter_question_id" readonly="not is_Parent_Job"/>
+                            </group>
+                            <separator string="Plan de vida - Carrera y Capacitación"
+                                    style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <div class="container custom-container">
+                                <div class="row">
+                                    <div class="col">
+                                        <group>
+                                            <field name="is_career_path_eligible"
+                                                string="Aplica a plan de carrera y capacitaciones"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col">
+                                        <group invisible="is_career_path_eligible == False">
+                                            <field name="slide_for_ids" widget="many2many_tags"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col">
+                                        <group invisible="is_career_path_eligible == False">
+                                            <field name="slide_during_ids" widget="many2many_tags"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                    <div class="col">
+                                        <group invisible="is_career_path_eligible == False">
+                                            <field name="potential_future_jobs" widget="many2many_tags"
+                                                readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                            <separator string="Prendas" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="products" nolabel="1" required="1" readonly="not is_Parent_Job">
+                                <tree editable="top">
+                                    <field name="product_template_id" required="1"/>
+                                    <field name="product_id" column_invisible="True" required="1"/>
+                                    <field name="quantity" required="1"/>
+                                </tree>
+                            </field>
+                            <separator string="Detalles del proceso" style="font size: 1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <field name="job_details" nolabel="1" field_id="job_details_0" widget="toolbar"
+                                style="width:95%; padding-left:5%" readonly="not is_Parent_Job"/>
+                        </page>
+                        <page string="Oferta" name="Offert_page">
+                            <div class="container custom_container">
+                                <div class="row">
+                                    <div class="col">
+                                        <separator string="Tabulador" style="font size: 1em !important"/>
+                                        <field name="job_tab_ids" readonly="not is_Parent_Job">
+                                            <tree>
+                                                <field name="name" readonly="True"/>
+                                                <field name="salary" readonly="True"/>
+                                                <field name="company_id" readonly="True"/>
+                                            </tree>
+                                        </field>
+                                    </div>
+                                    <div class="col">
+                                        <separator string="Salario" style="font size:1em !important"/>
+                                        <group>
+                                            <field name="net_base_salary" readonly="not is_Parent_Job"/>
+                                            <field name="capped_net_salary" readonly="not is_Parent_Job"/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </page>
+                        <page string="Configuraciones" name="settings_page">
+                            <div class="container custom-container" style="margin-top:20px;">
+                                <div class="row">
+                                    <div class="col">
+                                        <field name="user_id" invisible="1"/>
+                                        <div name="alias_def">
+                                            <label for="alias_name" string="Pseudonimo de correo electronico"
+                                                help="Define a specific contact address for this job position. If you keep it empty, the default email address will be used which is in human resources settings"/>
+                                            <field name="alias_id" class="oe_read_only" string="Email Alias"
+                                                required="0"
+                                                on_change="1" can_create="True" can_write="True"
+                                                field_id="alias_id_0"/>
+                                            <field name="alias_name" class="oe_inline" on_change="1"
+                                                field_id="alias_name_0"/>@
+                                            <field name="alias_domain_id" class="oe_inline"
+                                                placeholder="e.g. domain.com"
+                                                options="{'no_create': True, 'no_open': True}" can_create="True"
+                                                can_write="True" field_id="alias_domain_id_0"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <separator string="Descripción de puesto" style="font size:1em !important"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <separator string="Descripción web"/>
+                            <field name="description" options="{'collaborative': true}" widget="toolbar"
+                                style="width:95%; padding-left:5%" readonly="not is_Parent_Job"/>
+                            <separator string="Descripción de contrato"/>
+                            <field name="contract_description" widget="toolbar"
+                                style="width:95%; padding-left:5%" readonly="not is_Parent_Job"/>
+                            <br/>
+                            <separator string="Anexo" style="font-size:1em !important;"/>
+                            <hr style="border: 1px solid var(--biz-theme-primary-color) !important; margin-top:-18px"/>
+                            <div style="padding-left:5%; color: #6c757d; font-size:0.9em; margin-bottom:8px;">
+                                Carga el archivo de anexo (PDF o Word) que se adjuntará automáticamente
+                                al final del contrato cuando el tipo seleccionado contenga "Anexo" en su nombre.
+                                Este archivo se sincroniza a todos los puestos hijos.
+                            </div>
+                            <group>
+                                <field name="annex_file"
+                                    widget="binary"
+                                    filename="annex_filename"
+                                    string="Archivo de Anexo (PDF o Word)"
+                                    readonly="not is_Parent_Job"/>
+                                <field name="annex_filename" invisible="1"/>
+                            </group>
+                            <xpath expr="//page[@name='settings_page']//div[@class='container custom-container']" position="after">
+                                <separator string="Etapas del proceso" style="font-size:1em !important;"/>
+                                <group>
+                                    <field name="show_propuesta_contrato" 
+                                        string="Aplicar etapa Propuesta de contrato"
+                                        widget="boolean_toggle"
+                                        readonly="not is_Parent_Job"/>
+                                </group>
+                            </xpath>
+                        </page>
+                    </notebook>
+                </xpath>
+
+                <xpath expr="//field[@name='no_of_recruitment']" position="attributes">
+                    <attribute name="readonly">1</attribute>
+                </xpath>
+
+                <xpath expr="//div[@class='oe_chatter']" position="before">
+                    <div class="o_attachment_preview"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+    <!-- BRANCH JOB-->
+    <record id="reclutamiento__kuale_branch_job_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.branch_job.form</field>
+        <field name="model">reclutamiento__kuale.branch_job</field>
+        <field name="arch" type="xml">
+            <form string="datos de sucursal">
+                <sheet>
+                    <group>
+                        <field name="company_id" column_invisible="1"/>
+                        <field name="branch_ids" options="{'no_open': True, 'no_create': True}"
+                               domain="[('parent_id', '=', company_id)]"
+                               invisible="not company_id"/>
+                        <field name="branch_address"/>
+                        <field name="branch_report_to"/>
+                        <field name="basic_salary"/>
+                        <field name="capped_salary"/>
+                        <field name="min_employees"/>
+                        <field name="max_employees"/>
+                        <!--field name="subordinate_id" widget="many2one_avatar_user"/-->
+                        <field name="subordinate_quantity"/>
+                        <field name="user_id" widget="many2one_avatar_user"/>
+                        <field name="interviewer_ids" widget="many2many_tags_avatar"
+                               options="{'no_create': True, 'no_create_edit': True}"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- WEEKDAYS-->
+    <record id="reclutamiento_kuale_weekdays_view_tree" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.weekdays</field>
+        <field name="arch" type="xml">
+            <tree string="Días laborables" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_weekdays_view_form" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.weekdays</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_weekdays_action" model="ir.actions.act_window">
+        <field name="name">Días de la semana</field>
+        <field name="res_model">reclutamiento__kuale.weekdays</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+               Crear un nuevo día de la semana
+            </p>
+        </field>
+    </record>
+
+    <!-- GENDER-->
+    <record id="reclutamiento_kuale_gender_view_tree" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.gender</field>
+        <field name="arch" type="xml">
+            <tree string="Género" editable="bottom">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_gender_view_form" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.gender</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_gender_action" model="ir.actions.act_window">
+        <field name="name">Género</field>
+        <field name="res_model">reclutamiento__kuale.gender</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo género
+            </p>
+        </field>
+    </record>
+    <!--EXPERIENCIA-->
+    <record id="reclutamiento_kuale_experience_view_tree" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.experience</field>
+        <field name="arch" type="xml">
+            <tree string="Experiencia" editable="bottom">
+                <field name="name"/>
+                <field name="comments"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_experience_view_form" model="ir.ui.view">
+        <field name="model">reclutamiento__kuale.experience</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="comments"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="reclutamiento_kuale_experience_action" model="ir.actions.act_window">
+        <field name="name">Experiencia</field>
+        <field name="res_model">reclutamiento__kuale.experience</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- FILTRO POR SUCURSAL en kanban de puestos -->
+    <record id="view_hr_job_search_branch_kuale" model="ir.ui.view">
+        <field name="name">hr.job.search.kuale.branch</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_job_search_view"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="after">
+                <field name="company_id"
+                    string="Sucursal"
+                    icon="fa-building"
+                    enable_counters="1"
+                    hierarchize="0"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Sucursal en card kanban de puestos -->
+    <record id="view_hr_job_kanban_branch_kuale" model="ir.ui.view">
+        <field name="name">hr.job.kanban.kuale.branch</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+            <field name="active" position="after">
+                <field name="is_authorized"/>
+                <field name="bolsa_trabajo"/>
+                <field name="branch_company_id" invisible="1"/>
+            </field>
+            <div class="o_secondary" groups="base.group_multi_company" position="replace">
+                <div class="o_secondary" groups="base.group_multi_company">
+                    <t t-set="cpn" t-value="record.branch_company_id.value or ''"/>
+                    <t t-set="canon"
+                    t-value="
+                        cpn == &quot;Carl's&quot;                                 ? &quot;Carl's Jr.&quot;         :
+                        cpn == &quot;Hamburguesas Mafis S.A. de C.V.&quot;       ? &quot;Carl's Jr.&quot;         :
+                        cpn == &quot;Helados Mafis SA de CV&quot;                ? &quot;Dairy Queen&quot;        :
+                        cpn == &quot;Hidrológica Kuale S.A. de C.V.&quot;       ? &quot;Hidrológica&quot;       :
+                        cpn == &quot;Tintocinco S.A. de C.V.&quot;              ? &quot;Tintocinco&quot;        :
+                        cpn == &quot;Proyectos Sifam S.A. de C.V.&quot;         ? &quot;Tintocinco&quot;        :
+                        cpn == &quot;Publipuentes Tamaulipas S.A. de C.V.&quot; ? &quot;Publipuentes&quot;      :
+                        cpn == &quot;Mister Motor S.A. de C.V.&quot;            ? &quot;Mister Motor&quot;      :
+                        cpn == &quot;Inmobiliaria Erben&quot;                   ? &quot;Inmobiliaria Erben&quot; :
+                        cpn
+                    "/>
+                    <t t-set="bcolor"
+                        t-value="
+                            canon == &quot;Carl's Jr.&quot;          ? '#D4A017' :
+                            canon == 'Dairy Queen'         ? '#003087' :
+                            canon == 'Hidrológica'        ? '#0099cc' :
+                            canon == 'Publipuentes'       ? '#e67e22' :
+                            canon == 'Mister Motor'       ? '#555555' :
+                            canon == 'Tintocinco'         ? '#8e44ad' :
+                            canon == 'Inmobiliaria Erben' ? '#c0392b' :
+                            '#FA0000'
+                        "/>
+                    <small t-att-style="'display:inline-block; background-color:' + bcolor + '; color:#fff; border-radius:20px; padding:2px 8px; font-size:11px; font-weight:700; letter-spacing:0.3px;'">
+                        <i class="fa fa-building-o" role="img" aria-label="Company" title="Company"/>
+                        <field name="branch_company_id"/> - <field name="company_id"/>
+                    </small>
+                </div>
+            </div>
+            <div t-attf-class="#{!selection_mode ? kanban_color(record.color.raw_value) : ''}" position="attributes">
+                <attribute name="t-attf-class">#{!selection_mode ? kanban_color(record.color.raw_value) : ''} #{!record.is_authorized.raw_value ? 'o_kanban_card_disabled' : ''}</attribute>
+            </div>
+            <xpath expr="//t[@t-name='kanban-box']/div" position="inside">
+                <t t-if="!record.is_authorized.raw_value">
+                    <div class="o_kanban_disabled_overlay position-absolute top-0 start-0 w-100 h-100"
+                        style="z-index: 9999; cursor: not-allowed;"
+                        onclick="event.stopPropagation(); event.preventDefault(); return false;"/>
+                </t>
+            </xpath>
+            <!-- Toggle Bolsa de trabajo -->
+            <xpath expr="//div[hasclass('o_link_trackers')]" position="replace">
+                <div class="col-6 text-end">
+                    <field name="bolsa_trabajo" widget="boolean_toggle" class="me-1"/>
+                    Bolsa de trabajo
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Autorizacion vista list -->
+    <record id="hr_job_list_branch_kuale" model="ir.ui.view">
+        <field name="name">hr.job.list.kuale.branch</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_job_view_tree_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-muted">not is_authorized and not is_Parent_Job</attribute>
+            </xpath>
+            <field name="no_of_recruitment" position="before">
+                <field name="is_authorized" column_invisible="True"/>
+                <field name="is_Parent_Job" column_invisible="True"/>
+            </field>
+        </field>
+    </record>
+    
+    <!-- Quitar botón Nuevo en vista KANBAN de puestos de trabajo -->
+    <record id="hr_job_kanban_menu_kuale" model="ir.ui.view">
+        <field name="name">hr.job.kanban.menu.kuale</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='kanban-menu']" position="attributes">
+                <attribute name="groups">base.group_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Quitar botón Nuevo en vista LISTA de puestos de trabajo -->
+    <!--<record id="hr_job_tree_view_kuale_no_create" model="ir.ui.view">
+        <field name="name">hr.job.tree.kuale.no.create</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+        </field>
+    </record>-->
+
+    <!-- Excluir puestos padre del catálogo en vista Reclutamiento -->
+    <record model="ir.actions.act_window" id="hr_recruitment.action_hr_job">
+        <field name="domain">[('from_requisition', '=', True)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Override botón "Por reclutar" para abrir requisiciones -->
+    <record id="view_hr_job_kanban_recruitment_btn" model="ir.ui.view">
+        <field name="name">hr.job.kanban.recruitment.btn.kuale</field>
+        <field name="model">hr.job</field>
+        <field name="priority">20</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='kanban-box']//a[@name='edit_job']" position="replace">
+                <a name="action_open_requisitions" 
+                type="object"
+                t-attf-class="{{ record.no_of_recruitment.raw_value > 0 ? 'text-primary fw-bolder' : 'text-secondary' }}"
+                groups="hr_recruitment.group_hr_recruitment_user">
+                    <field name="no_of_recruitment"/> Por reclutar
+                </a>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Vista Empleados - solo mostrar jobs padre -->
+    <record model="ir.actions.act_window" id="hr.action_hr_job">
+        <field name="domain">[('is_Parent_Job', '=', True)]</field>
+    </record>
+</odoo>

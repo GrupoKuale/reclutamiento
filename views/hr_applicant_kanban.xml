@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_applicant_kanban_view_kuale" model="ir.ui.view">
+            <field name="name">hr.applicant.kanban.kuale</field>
+            <field name="model">hr.applicant</field>
+            <field name="inherit_id" ref="hr_recruitment.hr_kanban_view_applicant"/>
+            <field name="arch" type="xml">
+
+                <!-- Declarar campos necesarios -->
+                <xpath expr="//field[@name='refuse_reason_id']" position="after">
+                    <field name="abandoned"/>
+                    <field name="abandonment_reason"/>
+                    <field name="abandonment_comment"/>
+                    <field name="active"/>
+                    <field name="from_bolsa_trabajo"/>
+                    <field name="application_status"/>
+                    <field name="is_hired_stage"/>
+                    <field name="status_stage_id"/>
+                    <field name="formatos_verified"/>
+                    <field name="company_id" invisible="1"/>
+                    <field name="company_parent_name" invisible="1"/>
+                </xpath>
+
+                <!-- Menú condicional -->
+                <xpath expr="//t[@t-name='kanban-menu']" position="replace">
+                    <t t-name="kanban-menu">
+                        <t t-if="!record.abandoned.raw_value">
+                            <a role="menuitem" name="action_makeMeeting" type="object" class="dropdown-item">Programar entrevista</a>
+                            <a role="menuitem" name="archive_applicant" type="object" class="dropdown-item">Rechazar</a>
+                        </t>
+                        <t t-if="record.active.raw_value">
+                            <a role="menuitem" name="action_archive" type="object" class="dropdown-item">Archivar</a>
+                        </t>
+                        <t t-else="">
+                            <a role="menuitem" name="action_unarchive" type="object" class="dropdown-item">Desarchivar</a>
+                        </t>
+                        <t t-if="widget.deletable">
+                            <a role="menuitem" type="delete" class="dropdown-item">Eliminar</a>
+                        </t>
+                        <t t-if="!record.abandoned.raw_value">
+                            <div role="separator" class="dropdown-divider"/>
+                            <ul class="oe_kanban_colorpicker text-center" data-field="color"/>
+                        </t>
+                    </t>
+                </xpath>
+
+                <!-- Quitar clic global si abandonado -->
+                <xpath expr="//t[@t-name='kanban-box']/div" position="attributes">
+                    <attribute name="t-attf-class">
+                        {{!selection_mode ? 'oe_kanban_color_' + kanban_getcolor(record.color.raw_value) : ''}}
+                        oe_kanban_card
+                        {{record.abandoned.raw_value ? '' : 'oe_kanban_global_click'}}
+                        oe_applicant_kanban oe_semantic_html_override
+                        {{record.abandoned.raw_value ? 'o_kanban_record_abandoned' : ''}}
+                    </attribute>
+                </xpath>
+
+                <!-- Ocultar ribbon HIRED si está abandonado -->
+                <xpath expr="//div[hasclass('ribbon')]" position="attributes">
+                    <attribute name="t-if">!record.abandoned.raw_value</attribute>
+                </xpath>
+
+                <xpath expr="//div[hasclass('ribbon')]" position="after">
+                    <t t-if="record.abandoned.raw_value">
+                        <span style="position:absolute; top:8px; right:8px;
+                                    background-color:#ff6b00; color:#fff;
+                                    border-radius:20px; padding:3px 10px;
+                                    font-size:9px; font-weight:600;
+                                    max-width:55%; white-space:normal;
+                                    word-break:break-word; text-align:center;
+                                    line-height:1.4; z-index:2;">
+                            Abandonado por: <t t-esc="record.abandonment_reason.value"/><t t-if="record.abandonment_comment.raw_value"> - <t t-esc="record.abandonment_comment.raw_value"/></t>
+                        </span>
+                    </t>
+                    <!-- Etiqueta Bolsa de trabajo -->
+                    <t t-if="record.from_bolsa_trabajo.raw_value">
+                        <span style="display:inline-block;
+                                    background-color:#27ae60; color:#fff;
+                                    border-radius:20px; padding:3px 10px;
+                                    font-size:9px; font-weight:600;
+                                    margin-bottom:4px;">
+                            Bolsa de trabajo
+                        </span>
+                    </t>
+                </xpath>
+
+                <!-- Reemplazar ribbon "Refused" por español -->
+                <xpath expr="//div[hasclass('ribbon')]" position="replace">
+                    <div t-if="record.refuse_reason_id.raw_value and !record.abandoned.raw_value"
+                        class="ribbon ribbon-top-right">
+                        <span style="background-color:#e74c3c;">
+                            Rechazado
+                        </span>
+                    </div>
+                    <div class="ribbon ribbon-top-right"
+                        t-elif="record.formatos_verified.raw_value">
+                        <span class="text-bg-success">Contratado</span>
+                    </div>
+                    <div class="ribbon ribbon-top-right"
+                        t-elif="!record.formatos_verified.raw_value and !record.refuse_reason_id.raw_value and !record.abandoned.raw_value and record.status_stage_id.raw_value != 1">
+                        <span style="background-color:#3498db;">En proceso</span>
+                    </div>
+                </xpath>
+
+                <!-- Eliminar span "Refused" original -->
+                <xpath expr="//span[@invisible=&quot;application_status != 'refused'&quot;]" position="replace">
+                </xpath>
+
+                <!-- Mostrar motivo debajo del nombre -->
+                <xpath expr="//b[hasclass('o_kanban_record_title')]/.." position="replace">
+                    <div class="o_kanban_record_headings">
+                        <b class="o_kanban_record_title mt8" t-if="record.partner_name.raw_value">
+                            <field name="partner_name"/><br/>
+                        </b>
+                        <t t-if="record.refuse_reason_id.raw_value">
+                            <div style="font-size:10px; color:#e74c3c; margin-top:2px; margin-bottom:4px;">
+                                Motivo: <t t-esc="record.refuse_reason_id.value"/>
+                            </div>
+                        </t>
+                        <div class="o_kanban_record_subtitle" invisible="context.get('search_default_job_id', False)">
+                            <t t-set="cpn" t-value="record.company_parent_name.raw_value or ''"/>
+                            <t t-set="canon"
+                            t-value="
+                                cpn == &quot;Carl's&quot;                                 ? &quot;Carl's Jr.&quot;         :
+                                cpn == &quot;Hamburguesas Mafis S.A. de C.V.&quot;       ? &quot;Carl's Jr.&quot;         :
+                                cpn == &quot;Helados Mafis SA de CV&quot;                ? &quot;Dairy Queen&quot;        :
+                                cpn == &quot;Hidrológica Kuale S.A. de C.V.&quot;       ? &quot;Hidrológica&quot;       :
+                                cpn == &quot;Tintocinco S.A. de C.V.&quot;              ? &quot;Tintocinco&quot;        :
+                                cpn == &quot;Proyectos Sifam S.A. de C.V.&quot;         ? &quot;Tintocinco&quot;        :
+                                cpn == &quot;Publipuentes Tamaulipas S.A. de C.V.&quot; ? &quot;Publipuentes&quot;      :
+                                cpn == &quot;Mister Motor S.A. de C.V.&quot;            ? &quot;Mister Motor&quot;      :
+                                cpn == &quot;Inmobiliaria Erben&quot;                   ? &quot;Inmobiliaria Erben&quot; :
+                                cpn
+                            "/>
+                            <t t-set="bcolor"
+                            t-value="
+                                canon == &quot;Carl's Jr.&quot;          ? '#B8860B' :
+                                canon == 'Dairy Queen'         ? '#003087' :
+                                canon == 'Hidrológica'        ? '#0099cc' :
+                                canon == 'Publipuentes'       ? '#e67e22' :
+                                canon == 'Mister Motor'       ? '#555555' :
+                                canon == 'Tintocinco'         ? '#8e44ad' :
+                                canon == 'Inmobiliaria Erben' ? '#c0392b' :
+                                '#FA0000'
+                            "/>
+                            <span t-att-style="'display:inline-block; background-color:' + bcolor + '; color:#fff; border-radius:20px; padding:1px 7px; font-size:10px; font-weight:700;'">
+                                <field name="job_id"/>
+                            </span>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

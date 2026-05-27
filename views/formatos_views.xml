@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════
+         1. WIZARD PRINCIPAL
+         ══════════════════════════════════════════════════════ -->
+    <record id="view_formatos_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.formatos_wizard.form</field>
+        <field name="model">reclutamiento__kuale.formatos_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Formatos del puesto">
+                <sheet>
+                    <div style="margin-bottom: 16px;">
+                        <h4 style="color: #0097a7;">Formatos requeridos para este puesto</h4>
+                        <p class="text-muted" style="font-size:0.9em;">
+                            Haz clic en "Ver / Imprimir" para abrir cada formato,
+                            luego adjunta el archivo firmado y confírmalo.
+                        </p>
+                    </div>
+
+                    <field name="line_ids" nolabel="1">
+                        <!--
+                            editable="" + no_open="1":
+                            - evita abrir el formulario de la línea al clickear
+                            - attachment_display_name es Char simple: Odoo lo
+                              envía como string al cliente, "" = falsy, valor = truthy
+                        -->
+                        <tree create="false" delete="false" editable="" no_open="1">
+
+                            <!-- Campos de control ocultos -->
+                            <field name="format_id"              column_invisible="1"/>
+                            <field name="confirmed"              column_invisible="1"/>
+                            <field name="attachment_datas"       column_invisible="1"/>
+
+                            <!-- Col 1: Nombre del formato (solo lectura, no clickeable) -->
+                            <field name="name"
+                                   string="Formato"
+                                   readonly="1"/>
+
+                            <!-- Botón ojo: ver archivo -->
+                            <button name="action_open_attachment_preview"
+                                    type="object"
+                                    string=""
+                                    icon="fa-eye"
+                                    invisible="not attachment_display_name"
+                                    title="Ver archivo"/>
+
+                            <!-- Nombre del archivo -->
+                            <field name="attachment_display_name"
+                                   string="Archivo adjunto"
+                                   readonly="1"
+                                   invisible="not attachment_display_name"/>
+
+                            <!-- Quitar: cuando HAY archivo y NO está confirmado -->
+                            <button name="action_remove_attachment"
+                                    type="object"
+                                    string="Quitar"
+                                    icon="fa-times"
+                                    invisible="not attachment_display_name or confirmed"
+                                    title="Quitar archivo"/>
+
+                            <!-- Ver/Imprimir: SOLO cuando NO hay archivo -->
+                            <button name="action_open_format"
+                                    type="object"
+                                    string="Ver / Imprimir"
+                                    icon="fa-file-pdf-o"
+                                    invisible="attachment_display_name"/>
+
+                            <!-- Adjuntar: SOLO cuando NO hay archivo -->
+                            <button name="action_upload_file"
+                                    type="object"
+                                    string="Adjuntar"
+                                    icon="fa-upload"
+                                    invisible="attachment_display_name"/>
+                            
+                            <!-- Escanear: SOLO cuando NO hay archivo -->  
+                            <button name="action_scan_formato"
+                                    type="object"
+                                    string="Escanear"
+                                    icon="fa-desktop"
+                                    invisible="attachment_display_name"
+                                    title="Escanear con escáner físico"/>
+
+                            <!-- Confirmar: cuando HAY archivo y NO está confirmado -->
+                            <button name="action_confirm_line"
+                                    type="object"
+                                    string="Confirmar"
+                                    icon="fa-check"
+                                    invisible="confirmed or not attachment_display_name"/>
+
+                            <!-- Confirmado: solo texto, cuando YA está confirmado -->
+                            <button name="action_confirm_line"
+                                    type="object"
+                                    string="✓ Confirmado"
+                                    invisible="not confirmed"/>
+
+                        </tree>
+                    </field>
+
+                    <div role="status" class="alert alert-warning mt-3"
+                         invisible="all_confirmed">
+                        Adjunta y confirma todos los formatos para continuar.
+                    </div>
+
+                    <!-- ── Sección Contrato (aparece cuando todos confirmados) ── -->
+                    <div invisible="not all_confirmed" style="margin-top:16px;">
+                        <separator string="Contrato"/>
+                        <p class="text-muted" style="font-size:0.9em;">
+                            Genera e imprime el contrato, fírmalo y adjúntalo aquí.
+                        </p>
+
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+
+                            <!-- Contrato -->
+                            <button name="action_generate_contract"
+                                    type="object"
+                                    string="Generar Contrato"
+                                    icon="fa-file-text-o"
+                                    class="btn btn-secondary"/>
+
+                            <button name="action_upload_contract"
+                                    type="object"
+                                    string="Adjuntar contrato firmado"
+                                    icon="fa-upload"
+                                    class="btn btn-secondary"
+                                    invisible="contract_display_name"/>
+
+                            <button name="action_scan_contrato"
+                                    type="object"
+                                    string="Escanear contrato"
+                                    icon="fa-desktop"
+                                    class="btn btn-secondary"
+                                    invisible="contract_display_name"/>
+
+                            <button name="action_open_contract_preview"
+                                    type="object"
+                                    string=""
+                                    icon="fa-eye"
+                                    invisible="not contract_display_name"/>
+
+                            <field name="contract_display_name"
+                                readonly="1"
+                                invisible="not contract_display_name"
+                                style="color:#0097a7; font-weight:500;"/>
+
+                            <button name="action_remove_contract"
+                                    type="object"
+                                    string="Quitar"
+                                    icon="fa-times"
+                                    invisible="not contract_display_name"/>
+
+                        </div>
+
+                        <!-- Separador Formato de Contratación GK -->
+                        <separator string="Formato de Contratación GK" style="margin-top:16px;"/>
+
+                        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+
+                            <button name="action_generar_formato_contratacion"
+                                    type="object"
+                                    string="Formato de Contratación GK"
+                                    icon="fa-file-pdf-o"
+                                    class="btn btn-secondary"/>
+
+                            <button name="action_upload_formato_contratacion"
+                                    type="object"
+                                    string="Adjuntar formato firmado"
+                                    icon="fa-upload"
+                                    class="btn btn-secondary"
+                                    invisible="formato_contratacion_display_name"/>
+
+                            <button name="action_scan_formato_contratacion"
+                                    type="object"
+                                    string="Escanear formato"
+                                    icon="fa-desktop"
+                                    class="btn btn-secondary"
+                                    invisible="formato_contratacion_display_name"/>
+
+                            <button name="action_preview_formato_contratacion"
+                                    type="object"
+                                    string=""
+                                    icon="fa-eye"
+                                    invisible="not formato_contratacion_display_name"/>
+
+                            <field name="formato_contratacion_display_name"
+                                readonly="1"
+                                invisible="not formato_contratacion_display_name"
+                                style="color:#0097a7; font-weight:500;"/>
+
+                            <button name="action_remove_formato_contratacion"
+                                    type="object"
+                                    string="Quitar"
+                                    icon="fa-times"
+                                    invisible="not formato_contratacion_display_name"/>
+
+                        </div>
+
+                        <!-- Alertas -->
+                        <div role="status" class="alert alert-success mt-3"
+                            invisible="not contract_display_name">
+                            Contrato adjunto. Puedes aceptar.
+                        </div>
+                        <div role="status" class="alert alert-warning mt-3"
+                            invisible="contract_display_name">
+                            Genera el contrato, fírmalo y adjúntalo para continuar.
+                        </div>
+
+                        <field name="formato_contratacion_display_name" invisible="1"/>
+                        <field name="formato_contratacion_datas" invisible="1"/>
+                    </div>
+
+                    <field name="all_confirmed" invisible="1"/>
+                    <field name="contract_display_name" invisible="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_accept"
+                        type="object"
+                        string="Aceptar"
+                        class="btn btn-primary"
+                        invisible="not all_confirmed"/>
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancelar"
+                            class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════
+         2. WIZARD DE CONFIRMACION FINAL
+         ══════════════════════════════════════════════════════ -->
+    <record id="view_formatos_confirm_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.formatos_confirm_wizard.form</field>
+        <field name="model">reclutamiento__kuale.formatos_confirm_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirmar Formatos">
+                <sheet>
+                    <div class="text-center p-4">
+                        <h3 class="mt-3">¿Confirmar formatos completados?</h3>
+                        <p class="text-muted">
+                            Al confirmar se marcará el proceso de formatos como completado.
+                        </p>
+                    </div>
+                    <field name="applicant_id" invisible="1"/>
+                </sheet>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirmar"
+                            class="btn btn-primary"/>
+                    <button name="action_cancel" type="object" string="Cancelar"
+                            class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <!-- ══════════════════════════════════════════════════════
+         3. PARCHE hr.job
+         ══════════════════════════════════════════════════════ -->
+    <record id="hr_job_formatos_settings_patch" model="ir.ui.view">
+        <field name="name">hr.job.formatos.settings.patch</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="reclutamiento__kuale.hr_job_reclutamiento_kuale"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//header//div[hasclass('dropdown')]" position="replace"/>
+
+                <!-- Agregar este xpath PRIMERO para declarar el campo -->
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="is_Parent_Job" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//page[@name='settings_page']" position="inside">
+                    <separator string="Formatos" style="font-size:1em !important;"/>
+                    <hr style="border: 1px solid var(--biz-theme-primary-color) !important;
+                            margin-top:-18px"/>
+                    <p class="text-muted" style="font-size:0.85em; padding-left:8px;">
+                        Activa los formatos que se requerirán al contratar.
+                        Se sincronizan automáticamente a los puestos hijos.
+                    </p>
+                    <field name="formatos_ids"
+                        widget="formatos_toggles"
+                        readonly="not is_Parent_Job"
+                        nolabel="1"/>
+                </xpath>
+            </data>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════
+         4. PARCHE hr.applicant
+         ══════════════════════════════════════════════════════ -->
+    <record id="hr_applicant_formatos_patch" model="ir.ui.view">
+        <field name="name">hr.applicant.formatos.patch</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="reclutamiento__kuale.hr_applicant_view_form_reclutamiento_kuale"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//header//div[hasclass('dropdown')]" position="replace"/>
+            </data>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════
+         5. WIZARD DE SUBIDA DE ARCHIVO
+         ══════════════════════════════════════════════════════ -->
+    <record id="view_formatos_upload_wizard_form" model="ir.ui.view">
+        <field name="name">reclutamiento__kuale.formatos_upload_wizard.form</field>
+        <field name="model">reclutamiento__kuale.formatos_upload_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Subir Archivo">
+                <sheet>
+                    <field name="line_id" invisible="1"/>
+                    <group>
+                        <field name="attachment_data"
+                               widget="binary"
+                               filename="attachment_filename"
+                               string="Seleccionar archivo"/>
+                        <field name="attachment_filename" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_upload"
+                            type="object"
+                            string="Subir archivo"
+                            class="btn btn-primary"/>
+                    <button name="action_cancel"
+                            type="object"
+                            string="Cancelar"
+                            class="btn btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

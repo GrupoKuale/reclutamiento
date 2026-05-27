@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_website_form_kuale_settings" model="ir.ui.view">
+            <field name="name">website.form.kuale.settings</field>
+            <field name="model">website</field>
+            <field name="inherit_id" ref="website.view_website_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='domain']/field[@name='domain']" position="after">
+                    <field name="homepage_url"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

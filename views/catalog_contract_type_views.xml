@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Contract type -->
+        <record id="reclutamiento_kuale_contract_type_tree_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.contract_type.view.tree</field>
+            <field name="model">reclutamiento__kuale.contract_type</field>
+            <field name="arch" type="xml">
+                <tree string="Tipos de contrato">
+                    <field name="active" column_invisible="True" />
+                    <field name="name" />
+                    <!--<field name="company_id" groups="base.group_multi_company" />-->
+                    <field name="company_id"/>
+                    <field name="description" />
+                </tree>
+            </field>
+        </record>
+        <record id="reclutamiento_kuale_contract_type_form_view" model="ir.ui.view">
+            <field name="name">reclutamiento__kuale.contract_type.view.form</field>
+            <field name="model">reclutamiento__kuale.contract_type</field>
+            <field name="arch" type="xml">
+                <form string="Tipos de contrato">
+                    <field name="id" invisible="1"/>
+                    <field name="active" invisible="1" />
+                    <sheet>
+                         <div class="oe_title">
+                            <label for="name" string="Tipos de contrato"/>
+                            <h1>
+                                <field name="name" placeholder="Nombre" required="True"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <!--<field name="company_id" groups="base.group_multi_company" />-->
+                                <field name="company_id" />
+                                <field name="description" />
+                            </group>
+                            <group></group>
+
+                        </group>
+                            <group string="Periodo de prueba" name="trial_period">
+                            </group>
+                            <field name="trial_period_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+
+                            <group string="Jornada" name="jornada">
+                            </group>
+                            <field name="jornada_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                </tree>
+                            </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="reclutamiento__kuale_contract_type_action" model="ir.actions.act_window">
+            <field name="name">Tipos de contrato</field>
+            <field name="res_model">reclutamiento__kuale.contract_type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear nuevo Tipo de contrato
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

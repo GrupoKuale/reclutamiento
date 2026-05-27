@@ -1,0 +1,782 @@
+<odoo>
+    <!--TIPOS DE CONTRATOS-->
+    <data>
+        <record id="type_contract_01" model="catalog_sat.type_contract">
+            <field name="name">01</field>
+            <field name="description">Contrato de trabajo por tiempo indeterminado</field>
+        </record>
+        <record id="type_contract_02" model="catalog_sat.type_contract">
+            <field name="name">02</field>
+            <field name="description">Contrato de trabajo para obra determinada</field>
+        </record>
+        <record id="type_contract_03" model="catalog_sat.type_contract">
+            <field name="name">03</field>
+            <field name="description">Contrato de trabajo por tiempo determinado</field>
+        </record>
+        <record id="type_contract_04" model="catalog_sat.type_contract">
+            <field name="name">04</field>
+            <field name="description">Contrato de trabajo por temporada</field>
+        </record>
+        <record id="type_contract_05" model="catalog_sat.type_contract">
+            <field name="name">05</field>
+            <field name="description">Contrato de trabajo sujeto a prueba</field>
+        </record>
+        <record id="type_contract_06" model="catalog_sat.type_contract">
+            <field name="name">06</field>
+            <field name="description">Contrato de trabajo con capacitación inicial</field>
+        </record>
+        <record id="type_contract_07" model="catalog_sat.type_contract">
+            <field name="name">07</field>
+            <field name="description">Modalidad de contratación por pago de hora laborada</field>
+        </record>
+        <record id="type_contract_08" model="catalog_sat.type_contract">
+            <field name="name">08</field>
+            <field name="description">Modalidad de trabajo por comisión laboral</field>
+        </record>
+        <record id="type_contract_09" model="catalog_sat.type_contract">
+            <field name="name">09</field>
+            <field name="description">Modalidades de contratación donde no existe relación de trabajo</field>
+        </record>
+        <record id="type_contract_10" model="catalog_sat.type_contract">
+            <field name="name">10</field>
+            <field name="description">Jubilación, pensión, retiro.</field>
+        </record>
+        <record id="type_contract_99" model="catalog_sat.type_contract">
+            <field name="name">99</field>
+            <field name="description">Otro contrato</field>
+        </record>
+    </data>
+    <!--PERIODICIDAD DE PAGO-->
+    <data>
+        <record id="payment_periodicity_01" model="catalog_sat.payment_periodicity">
+            <field name="name">01</field>
+            <field name="description">Diario</field>
+        </record>
+        <record id="payment_periodicity_02" model="catalog_sat.payment_periodicity">
+            <field name="name">02</field>
+            <field name="description">Semanal</field>
+        </record>
+        <record id="payment_periodicity_03" model="catalog_sat.payment_periodicity">
+            <field name="name">03</field>
+            <field name="description">Catorcenal</field>
+        </record>
+        <record id="payment_periodicity_04" model="catalog_sat.payment_periodicity">
+            <field name="name">04</field>
+            <field name="description">Quincenal</field>
+        </record>
+        <record id="payment_periodicity_05" model="catalog_sat.payment_periodicity">
+            <field name="name">05</field>
+            <field name="description">Mensual</field>
+        </record>
+        <record id="payment_periodicity_06" model="catalog_sat.payment_periodicity">
+            <field name="name">06</field>
+            <field name="description">Bimestral</field>
+        </record>
+        <record id="payment_periodicity_07" model="catalog_sat.payment_periodicity">
+            <field name="name">07</field>
+            <field name="description">Unidad obra</field>
+        </record>
+        <record id="payment_periodicity_08" model="catalog_sat.payment_periodicity">
+            <field name="name">08</field>
+            <field name="description">Comisión</field>
+        </record>
+        <record id="payment_periodicity_09" model="catalog_sat.payment_periodicity">
+            <field name="name">09</field>
+            <field name="description">Precio alzado</field>
+        </record>
+        <record id="payment_periodicity_10" model="catalog_sat.payment_periodicity">
+            <field name="name">10</field>
+            <field name="description">Decenal</field>
+        </record>
+        <record id="payment_periodicity_99" model="catalog_sat.payment_periodicity">
+            <field name="name">99</field>
+            <field name="description">Otra Periodicidad</field>
+        </record>
+    </data>
+    <!--TIPO DE JORNADA-->
+    <data>
+        <record id="type_workday_01" model="catalog_sat.type_workday">
+            <field name="name">01</field>
+            <field name="description">Diurna</field>
+        </record>
+        <record id="type_workday_02" model="catalog_sat.type_workday">
+            <field name="name">02</field>
+            <field name="description">Nocturna</field>
+        </record>
+        <record id="type_workday_03" model="catalog_sat.type_workday">
+            <field name="name">03</field>
+            <field name="description">Mixta</field>
+        </record>
+        <record id="type_workday_04" model="catalog_sat.type_workday">
+            <field name="name">04</field>
+            <field name="description">Por hora</field>
+        </record>
+        <record id="type_workday_05" model="catalog_sat.type_workday">
+            <field name="name">05</field>
+            <field name="description">Reducida</field>
+        </record>
+        <record id="type_workday_06" model="catalog_sat.type_workday">
+            <field name="name">06</field>
+            <field name="description">Continuada</field>
+        </record>
+        <record id="type_workday_07" model="catalog_sat.type_workday">
+            <field name="name">07</field>
+            <field name="description">Partida</field>
+        </record>
+        <record id="type_workday_08" model="catalog_sat.type_workday">
+            <field name="name">08</field>
+            <field name="description">Por turnos</field>
+        </record>
+        <record id="type_workday_99" model="catalog_sat.type_workday">
+            <field name="name">99</field>
+            <field name="description">Otra Jornada</field>
+        </record>
+    </data>
+    <!--RÉGIMEN FISCAL-->
+    <data>
+        <record id="fiscal_regime_601" model="catalog_sat.fiscal_regime">
+            <field name="name">601</field>
+            <field name="description">General de Ley Personas Morales</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+        <record id="fiscal_regime_603" model="catalog_sat.fiscal_regime">
+            <field name="name">603</field>
+            <field name="description">Personas Morales con Fines no Lucrativos</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+
+        <record id="fiscal_regime_605" model="catalog_sat.fiscal_regime">
+            <field name="name">605</field>
+            <field name="description">Sueldos y Salarios e Ingresos Asimilados a Salarios</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_606" model="catalog_sat.fiscal_regime">
+            <field name="name">606</field>
+            <field name="description">Arrendamiento</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_607" model="catalog_sat.fiscal_regime">
+            <field name="name">607</field>
+            <field name="description">Régimen de Enajenación o Adquisición de Bienes</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="fiscal_regime_608" model="catalog_sat.fiscal_regime">
+            <field name="name">608</field>
+            <field name="description">Demás ingresos</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_610" model="catalog_sat.fiscal_regime">
+            <field name="name">610</field>
+            <field name="description">Residentes en el Extranjero sin Establecimiento Permanente en México</field>
+            <field name="apply_for">both</field>
+        </record>
+
+        <record id="fiscal_regime_611" model="catalog_sat.fiscal_regime">
+            <field name="name">611</field>
+            <field name="description">Ingresos por Dividendos (socios y accionistas)</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_612" model="catalog_sat.fiscal_regime">
+            <field name="name">612</field>
+            <field name="description">Personas Físicas con Actividades Empresariales y Profesionales</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_614" model="catalog_sat.fiscal_regime">
+            <field name="name">614</field>
+            <field name="description">Ingresos por intereses</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_615" model="catalog_sat.fiscal_regime">
+            <field name="name">615</field>
+            <field name="description">Régimen de los ingresos por obtención de premios</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_616" model="catalog_sat.fiscal_regime">
+            <field name="name">616</field>
+            <field name="description">Sin obligaciones fiscales</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_620" model="catalog_sat.fiscal_regime">
+            <field name="name">620</field>
+            <field name="description">Sociedades Cooperativas de Producción que optan por diferir sus ingresos</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+
+        <record id="fiscal_regime_621" model="catalog_sat.fiscal_regime">
+            <field name="name">621</field>
+            <field name="description">Incorporación Fiscal</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="fiscal_regime_622" model="catalog_sat.fiscal_regime">
+            <field name="name">622</field>
+            <field name="description">Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+
+        <record id="fiscal_regime_623" model="catalog_sat.fiscal_regime">
+            <field name="name">623</field>
+            <field name="description">Opcional para Grupos de Sociedades</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+
+        <record id="fiscal_regime_624" model="catalog_sat.fiscal_regime">
+            <field name="name">624</field>
+            <field name="description">Coordinados</field>
+            <field name="apply_for">legal_entity</field>
+        </record>
+
+        <record id="fiscal_regime_625" model="catalog_sat.fiscal_regime">
+            <field name="name">625</field>
+            <field name="description">Régimen de las Actividades Empresariales con ingresos a través de Plataformas
+                Tecnológicas
+            </field>
+            <field name="apply_for">natural_person</field>
+        </record>
+
+        <record id="fiscal_regime_626" model="catalog_sat.fiscal_regime">
+            <field name="name">626</field>
+            <field name="description">Régimen Simplificado de Confianza</field>
+            <field name="apply_for">both</field>
+        </record>
+    </data>
+    <!--TIPO DE RÉGIMEN-->
+    <data>
+        <record id="type_regime_02" model="catalog_sat.type_regime">
+            <field name="name">02</field>
+            <field name="description">Sueldos (Incluye ingresos señalados en la fracción I del artículo 94 de LISR)
+            </field>
+        </record>
+        <record id="type_regime_03" model="catalog_sat.type_regime">
+            <field name="name">03</field>
+            <field name="description">Jubilados</field>
+        </record>
+
+        <record id="type_regime_04" model="catalog_sat.type_regime">
+            <field name="name">04</field>
+            <field name="description">Pensionados</field>
+        </record>
+
+        <record id="type_regime_05" model="catalog_sat.type_regime">
+            <field name="name">05</field>
+            <field name="description">Asimilados Miembros Sociedades Cooperativas Producción</field>
+        </record>
+
+        <record id="type_regime_06" model="catalog_sat.type_regime">
+            <field name="name">06</field>
+            <field name="description">Asimilados Integrantes Sociedades Asociaciones Civiles</field>
+        </record>
+
+        <record id="type_regime_07" model="catalog_sat.type_regime">
+            <field name="name">07</field>
+            <field name="description">Asimilados Miembros Consejos</field>
+        </record>
+
+        <record id="type_regime_08" model="catalog_sat.type_regime">
+            <field name="name">08</field>
+            <field name="description">Asimilados Comisionistas</field>
+        </record>
+
+        <record id="type_regime_09" model="catalog_sat.type_regime">
+            <field name="name">09</field>
+            <field name="description">Asimilados Honorarios</field>
+        </record>
+
+        <record id="type_regime_10" model="catalog_sat.type_regime">
+            <field name="name">10</field>
+            <field name="description">Asimilados Acciones</field>
+        </record>
+
+        <record id="type_regime_11" model="catalog_sat.type_regime">
+            <field name="name">11</field>
+            <field name="description">Asimilados Otros</field>
+        </record>
+
+        <record id="type_regime_12" model="catalog_sat.type_regime">
+            <field name="name">12</field>
+            <field name="description">Jubilados o Pensionados</field>
+        </record>
+
+        <record id="type_regime_13" model="catalog_sat.type_regime">
+            <field name="name">13</field>
+            <field name="description">Indemnización o Separación</field>
+        </record>
+
+        <record id="type_regime_99" model="catalog_sat.type_regime">
+            <field name="name">99</field>
+            <field name="description">Otro Régimen</field>
+        </record>
+    </data>
+    <!--USO CFDI-->
+    <data>
+        <record id="use_cfdi_g01" model="catalog_sat.use_cfdi">
+            <field name="name">G01</field>
+            <field name="description">Adquisición de mercancías</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_g02" model="catalog_sat.use_cfdi">
+            <field name="name">G02</field>
+            <field name="description">Devoluciones, descuentos o bonificaciones</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_g03" model="catalog_sat.use_cfdi">
+            <field name="name">G03</field>
+            <field name="description">Gastos en general</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i01" model="catalog_sat.use_cfdi">
+            <field name="name">I01</field>
+            <field name="description">Construcciones</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i02" model="catalog_sat.use_cfdi">
+            <field name="name">I02</field>
+            <field name="description">Mobilario y equipo de oficina por inversiones</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i03" model="catalog_sat.use_cfdi">
+            <field name="name">I03</field>
+            <field name="description">Equipo de transporte</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i04" model="catalog_sat.use_cfdi">
+            <field name="name">I04</field>
+            <field name="description">Equipo de computo y accesorios</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i05" model="catalog_sat.use_cfdi">
+            <field name="name">I05</field>
+            <field name="description">Dados, troqueles, moldes, matrices y herramental</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i06" model="catalog_sat.use_cfdi">
+            <field name="name">I06</field>
+            <field name="description">Comunicaciones telefónicas</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i07" model="catalog_sat.use_cfdi">
+            <field name="name">I07</field>
+            <field name="description">Comunicaciones satelitales</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_i08" model="catalog_sat.use_cfdi">
+            <field name="name">I08</field>
+            <field name="description">Otra maquinaria y equipo</field>
+            <field name="apply_for">both</field>
+        </record>
+        <record id="use_cfdi_d01" model="catalog_sat.use_cfdi">
+            <field name="name">D01</field>
+            <field name="description">Honorarios médicos, dentales y gastos hospitalarios.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d02" model="catalog_sat.use_cfdi">
+            <field name="name">D02</field>
+            <field name="description">Gastos médicos por incapacidad o discapacidad</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d03" model="catalog_sat.use_cfdi">
+            <field name="name">D03</field>
+            <field name="description">Gastos funerales.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d04" model="catalog_sat.use_cfdi">
+            <field name="name">D04</field>
+            <field name="description">Donativos.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d05" model="catalog_sat.use_cfdi">
+            <field name="name">D05</field>
+            <field name="description">Intereses reales efectivamente pagados por créditos hipotecarios (casa
+                habitación).
+            </field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d06" model="catalog_sat.use_cfdi">
+            <field name="name">D06</field>
+            <field name="description">Aportaciones voluntarias al SAR.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d07" model="catalog_sat.use_cfdi">
+            <field name="name">D07</field>
+            <field name="description">Primas por seguros de gastos médicos.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d08" model="catalog_sat.use_cfdi">
+            <field name="name">D08</field>
+            <field name="description">Gastos de transportación escolar obligatoria.</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d09" model="catalog_sat.use_cfdi">
+            <field name="name">D09</field>
+            <field name="description">Depósitos en cuentas para el ahorro, primas que tengan como base planes de
+                pensiones.
+            </field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_d10" model="catalog_sat.use_cfdi">
+            <field name="name">D10</field>
+            <field name="description">Pagos por servicios educativos (colegiaturas)</field>
+            <field name="apply_for">natural_person</field>
+        </record>
+        <record id="use_cfdi_p01" model="catalog_sat.use_cfdi">
+            <field name="name">P01</field>
+            <field name="description">Por definir</field>
+            <field name="apply_for">both</field>
+        </record>
+    </data>
+    <!--RIESGO PUESTO-->
+    <data>
+        <record id="risk_placed_1" model="catalog_sat.risk_placed">
+            <field name="name">1</field>
+            <field name="description">Clase I</field>
+        </record>
+        <record id="risk_placed_2" model="catalog_sat.risk_placed">
+            <field name="name">2</field>
+            <field name="description">Clase II</field>
+        </record>
+        <record id="risk_placed_3" model="catalog_sat.risk_placed">
+            <field name="name">3</field>
+            <field name="description">Clase III</field>
+        </record>
+        <record id="risk_placed_4" model="catalog_sat.risk_placed">
+            <field name="name">4</field>
+            <field name="description">Clase IV</field>
+        </record>
+        <record id="risk_placed_5" model="catalog_sat.risk_placed">
+            <field name="name">5</field>
+            <field name="description">Clase V</field>
+        </record>
+        <record id="risk_placed_99" model="catalog_sat.risk_placed">
+            <field name="name">99</field>
+            <field name="description">No aplica</field>
+        </record>
+    </data>
+    <!--MÉTODOS DE PAGO-->
+    <data>
+        <record id="payment_method_pue" model="catalog_sat.payment_method">
+            <field name="name">PUE</field>
+            <field name="description">Pago en una sola exhibición</field>
+        </record>
+        <record id="payment_method_ppd" model="catalog_sat.payment_method">
+            <field name="name">PPD</field>
+            <field name="description">Pago en parcialidades o diferido</field>
+        </record>
+    </data>
+    <!--ESTADOS-->
+    <data>
+        <record id="federal_entity_code_agu" model="catalog_sat.federal_entity_code">
+            <field name="name">AGU</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Aguascalientes</field>
+        </record>
+        <record id="federal_entity_code_bcn" model="catalog_sat.federal_entity_code">
+            <field name="name">BCN</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Baja California</field>
+        </record>
+        <record id="federal_entity_code_bcs" model="catalog_sat.federal_entity_code">
+            <field name="name">BCS</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Baja California Sur</field>
+        </record>
+
+        <record id="federal_entity_code_cam" model="catalog_sat.federal_entity_code">
+            <field name="name">CAM</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Campeche</field>
+        </record>
+
+        <record id="federal_entity_code_chp" model="catalog_sat.federal_entity_code">
+            <field name="name">CHP</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Chiapas</field>
+        </record>
+
+        <record id="federal_entity_code_chh" model="catalog_sat.federal_entity_code">
+            <field name="name">CHH</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Chihuahua</field>
+        </record>
+
+        <record id="federal_entity_code_coa" model="catalog_sat.federal_entity_code">
+            <field name="name">COA</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Coahuila</field>
+        </record>
+
+        <record id="federal_entity_code_col" model="catalog_sat.federal_entity_code">
+            <field name="name">COL</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Colima</field>
+        </record>
+
+        <record id="federal_entity_code_cmx" model="catalog_sat.federal_entity_code">
+            <field name="name">CMX</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Ciudad de México</field>
+        </record>
+
+        <record id="federal_entity_code_dur" model="catalog_sat.federal_entity_code">
+            <field name="name">DUR</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Durango</field>
+        </record>
+        <record id="federal_entity_code_gua" model="catalog_sat.federal_entity_code">
+            <field name="name">GUA</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Guanajuato</field>
+        </record>
+
+        <record id="federal_entity_code_gro" model="catalog_sat.federal_entity_code">
+            <field name="name">GRO</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Guerrero</field>
+        </record>
+
+        <record id="federal_entity_code_hgo" model="catalog_sat.federal_entity_code">
+            <field name="name">HGO</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Hidalgo</field>
+        </record>
+
+        <record id="federal_entity_code_jal" model="catalog_sat.federal_entity_code">
+            <field name="name">JAL</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Jalisco</field>
+        </record>
+
+        <record id="federal_entity_code_mex" model="catalog_sat.federal_entity_code">
+            <field name="name">MEX</field>
+            <field name="c_country">MEX</field>
+            <field name="description">México</field>
+        </record>
+
+        <record id="federal_entity_code_mic" model="catalog_sat.federal_entity_code">
+            <field name="name">MIC</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Michoacán</field>
+        </record>
+
+        <record id="federal_entity_code_mor" model="catalog_sat.federal_entity_code">
+            <field name="name">MOR</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Morelos</field>
+        </record>
+
+        <record id="federal_entity_code_nay" model="catalog_sat.federal_entity_code">
+            <field name="name">NAY</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Nayarit</field>
+        </record>
+
+        <record id="federal_entity_code_nle" model="catalog_sat.federal_entity_code">
+            <field name="name">NLE</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Nuevo León</field>
+        </record>
+
+        <record id="federal_entity_code_oax" model="catalog_sat.federal_entity_code">
+            <field name="name">OAX</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Oaxaca</field>
+        </record>
+
+        <record id="federal_entity_code_pue" model="catalog_sat.federal_entity_code">
+            <field name="name">PUE</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Puebla</field>
+        </record>
+
+        <record id="federal_entity_code_que" model="catalog_sat.federal_entity_code">
+            <field name="name">QUE</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Querétaro</field>
+        </record>
+
+        <record id="federal_entity_code_roo" model="catalog_sat.federal_entity_code">
+            <field name="name">ROO</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Quintana Roo</field>
+        </record>
+
+        <record id="federal_entity_code_slp" model="catalog_sat.federal_entity_code">
+            <field name="name">SLP</field>
+            <field name="c_country">MEX</field>
+            <field name="description">San Luis Potosí</field>
+        </record>
+
+        <record id="federal_entity_code_sin" model="catalog_sat.federal_entity_code">
+            <field name="name">SIN</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Sinaloa</field>
+        </record>
+
+        <record id="federal_entity_code_son" model="catalog_sat.federal_entity_code">
+            <field name="name">SON</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Sonora</field>
+        </record>
+
+        <record id="federal_entity_code_tab" model="catalog_sat.federal_entity_code">
+            <field name="name">TAB</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Tabasco</field>
+        </record>
+
+        <record id="federal_entity_code_tam" model="catalog_sat.federal_entity_code">
+            <field name="name">TAM</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Tamaulipas</field>
+        </record>
+
+        <record id="federal_entity_code_tla" model="catalog_sat.federal_entity_code">
+            <field name="name">TLA</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Tlaxcala</field>
+        </record>
+
+        <record id="federal_entity_code_ver" model="catalog_sat.federal_entity_code">
+            <field name="name">VER</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Veracruz</field>
+        </record>
+
+        <record id="federal_entity_code_yuc" model="catalog_sat.federal_entity_code">
+            <field name="name">YUC</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Yucatán</field>
+        </record>
+
+        <record id="federal_entity_code_zac" model="catalog_sat.federal_entity_code">
+            <field name="name">ZAC</field>
+            <field name="c_country">MEX</field>
+            <field name="description">Zacatecas</field>
+        </record>
+    </data>
+    <!--BASE DE PAGO (NOMINAS)-->
+    <data>
+        <record id="payment_basis_1" model="catalog_payroll.payment_basis">
+            <field name="name">Sueldo</field>
+        </record>
+        <record id="payment_basis_2" model="catalog_payroll.payment_basis">
+            <field name="name">Sueldo-comision</field>
+        </record>
+        <record id="payment_basis_3" model="catalog_payroll.payment_basis">
+            <field name="name">Destajo</field>
+        </record>
+        <record id="payment_basis_4" model="catalog_payroll.payment_basis">
+            <field name="name">Comisión</field>
+        </record>
+        <record id="payment_basis_5" model="catalog_payroll.payment_basis">
+            <field name="name">Sueldo-destajo</field>
+        </record>
+    </data>
+    <!--TIPO DE MOVIMIENTO (IMSS)-->
+    <data noupdate="0">
+        <record id="type_movement_2" model="catalog_imss.type_movement">
+            <field name="id_catalog">02</field>
+            <field name="name">Baja</field>
+        </record>
+        <record id="type_movement_3" model="catalog_imss.type_movement">
+            <field name="id_catalog">07</field>
+            <field name="name">Modificación</field>
+        </record>
+        <record id="type_movement_4" model="catalog_imss.type_movement">
+            <field name="id_catalog">08</field>
+            <field name="name">Reingreso</field>
+        </record>
+    </data>
+    <!--TIPO DE TRABAJADOR (IMSS)-->
+    <data noupdate="0">
+        <record id="type_worker_1" model="catalog_imss.type_worker">
+            <field name="id_catalog">1</field>
+            <field name="name">Permanente</field>
+        </record>
+        <record id="type_worker_2" model="catalog_imss.type_worker">
+            <field name="id_catalog">2</field>
+            <field name="name">Eventual</field>
+        </record>
+        <record id="type_worker_3" model="catalog_imss.type_worker">
+            <field name="id_catalog">3</field>
+            <field name="name">Eventual de la construcción</field>
+        </record>
+        <record id="type_worker_4" model="catalog_imss.type_worker">
+            <field name="id_catalog">4</field>
+            <field name="name">Eventual del Campo</field>
+        </record>
+    </data>
+    <!--TIPO DE JORNADA (IMSS)-->
+    <data>
+        <record id="type_workday_1" model="catalog_imss.type_workday">
+            <field name="name">Semana normal</field>
+        </record>
+        <record id="type_workday_2" model="catalog_imss.type_workday">
+            <field name="name">Reducida</field>
+        </record>
+        <record id="type_workday_3" model="catalog_imss.type_workday">
+            <field name="name">Menos de 8 hrs</field>
+        </record>
+    </data>
+    <!--TIPO DE SALARIO (IMSS)-->
+    <data noupdate="0">
+        <record id="type_salary_1" model="catalog_imss.type_salary">
+            <field name="id_catalog">0</field>
+            <field name="name">Salario fijo</field>
+        </record>
+        <record id="type_salary_2" model="catalog_imss.type_salary">
+            <field name="id_catalog">1</field>
+            <field name="name">Salario variable</field>
+        </record>
+        <record id="type_salary_3" model="catalog_imss.type_salary">
+            <field name="id_catalog">2</field>
+            <field name="name">Salario mixto</field>
+        </record>
+    </data>
+    <!--TIPO DE JORNADA/SEMANA REDUCIDA (IMSS)-->
+    <data noupdate="0">
+        <record id="type_working_day_reduced_1" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">0</field>
+            <field name="name">Jornada completa</field>
+        </record>
+        <record id="type_working_day_reduced_2" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">1</field>
+            <field name="name">1 Día</field>
+        </record>
+        <record id="type_working_day_reduced_3" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">2</field>
+            <field name="name">2 Días</field>
+        </record>
+        <record id="type_working_day_reduced_4" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">3</field>
+            <field name="name">3 Días</field>
+        </record>
+        <record id="type_working_day_reduced_5" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">4</field>
+            <field name="name">4 Días</field>
+        </record>
+        <record id="type_working_day_reduced_6" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">5</field>
+            <field name="name">5 Días</field>
+        </record>
+        <record id="type_working_day_reduced_7" model="catalog_imss.type_working_day_reduced">
+            <field name="id_catalog">6</field>
+            <field name="name">Jornada reducida</field>
+        </record>
+    </data>
+    <!--ZONA DE SALARIO (IMSS)-->
+    <data>
+        <record id="salary_zone_2024" model="catalog_imss.salary_zone">
+            <field name="effective_date">2024-01-01</field>
+            <field name="wage_zone_a">248.93</field>
+            <field name="wage_zone_b">248.93</field>
+            <field name="wage_zone_c">248.93</field>
+        </record>
+    </data>
+</odoo>

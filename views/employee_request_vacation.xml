@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_employee_request_vacation_form" model="ir.ui.view">
+            <field name="name">employee.request.vacation.form</field>
+            <field name="model">reclutamiento__kuale.employee.request.vacation</field>
+            <field name="arch" type="xml">
+                <form string="Solicitud de vacaciones">
+                    <sheet>
+                        <group>
+                            <field name="startDate"/>
+                            <field name="endDate"/>
+                            <field name="requestId" context="{'default_vacationRequestId': active_id}">
+                                <tree>
+                                    <field name="requestedBy"/>
+                                    <field name="status"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_employee_request_vacation_tree" model="ir.ui.view">
+            <field name="name">employee.request.vacation.tree</field>
+            <field name="model">reclutamiento__kuale.employee.request.vacation</field>
+            <field name="arch" type="xml">
+                <tree string="Solicitudes de vacaciones">
+                    <field name="startDate"/>
+                    <field name="endDate"/>
+                    <field name="requestId"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_employee_request_vacation_search" model="ir.ui.view">
+            <field name="name">employee.request.vacation.search</field>
+            <field name="model">reclutamiento__kuale.employee.request.vacation</field>
+            <field name="arch" type="xml">
+                <search string="Buscar solicitudes de vacaciones">
+                    <filter name="filter_start_date" string="Fecha de inicio" domain="[('startDate', '!=', False)]"/>
+                    <filter name="filter_end_date" string="Fecha de finalización" domain="[('endDate', '!=', False)]"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_employee_request_vacation" model="ir.actions.act_window">
+            <field name="name">Solicitudes de vacaciones</field>
+            <field name="res_model">reclutamiento__kuale.employee.request.vacation</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_employee_request_vacation_tree"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Crea la primera solicitud de vacaciones.
+                </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

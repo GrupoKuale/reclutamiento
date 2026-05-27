@@ -1,0 +1,24 @@
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+<strong style="box-sizing:border-box;font-weight:700;">CARTA DE CONFIDENCIALIDAD
+</strong></p>
+<br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px; text-align:right;">
+<t t-out="object.company_id.city"></t>,<t t-out="object.company_id.state_id.name"></t> A <t t-out="object.actual_date"></t>
+</p><br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align: justify; ">
+En virtud de que por los servicios que presta  y en beneficio de la empresa, en mi relación como empleado y dado que tengo acceso y recibo información relativa a, diseño, clientes, productos, formulas, contraseñas, fichas de seguridad, fichas técnicas de información general de la empresa y por tanto poseo conocimiento de los asuntos, comerciales y administrativos de carácter reservado o confidenciales de la misma, me obligo en los términos de la Fracción  XIII del Artículo 134 de  la ley Federal del Trabajo, a guardarlos escrupulosamente en todo momento, es decir durante mi relación laboral y después de concluida esta, entendiendo que me está prohibido usarlos y/o  externarlos en beneficio propio o de terceros sin el consentimiento por escrito de esta negociación  ya que estoy consciente de que revelar tales secretos puedo incurrir en la comisión de un ilícito penal o de responsabilidad civil regulada por el artículos 1388 y 1389 del Código civil vigente en el Estado de Tamaulipas.
+
+Por otra parte, por la naturaleza y características de las funciones mencionadas que ejecuto por cuenta y a favor de la empresa, que pueden ser asuntos comerciales o de perfeccionamiento de los procesos de venta, formulas o productos de creación, estoy de acuerdo en que cualquier invención, innovación o mejora que se derive de dichas funciones  y el derecho  a la explotación  de ella incluyendo el manejo de mercancía, venta y compra de productos, la marca   corresponderá a esta empresa, sin que lo anterior implique en mi favor ningún beneficio, ya que el trabajo que desarrollo se me remunera en forma tal, que se incluye a esas circunstancias, renunciando a cualquier derecho que reclamar ante las instancias correspondientes referente al registro, uso y disfrute de patentes, marcas e invenciones y que son vigiladas por la autoridad del INSTITUTO MEXICANO DE LA PROPIEDAD INDUSTRIAL.
+
+Por ultimo doy la debida autorización a la presente empleadora de poder utilizar los datos personales que aquí entrego, con el fin administrativo o de servicios que requiera conforme a lo señalado en la ley y en los términos y condiciones de la misma, sin que esto signifique un derecho a reclamar el uso de dichos datos, toda vez que son con el único fin administrativos de la empleadora.
+
+</p>
+<br><br><br><br>
+<p style="margin:0px 0 0px 0;box-sizing:border-box;margin-bottom: 0px;text-align:center;">
+A T E N T A M E N T E.<br><br><br>
+
+
+
+________________________________<br>
+<t t-out="object.name"></t><t t-out="object.last_name"></t><t t-out="object.last_name2"></t>
+</p>

@@ -1,0 +1,8 @@
+<odoo>
+    <record id="website_vacantes_page" model="website.page">
+        <field name="name">Vacancies</field>
+        <field name="url">/vacancy</field>
+        <field name="view_id" ref="reclutamiento__kuale_vacantes_template"/>
+        <field name="website_published" eval="True"/>
+    </record>
+</odoo>

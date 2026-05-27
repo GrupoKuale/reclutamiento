@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Contrato editable -->
+    <template id="report_contract_document">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <t t-if="o.contract_format_id.body">
+                    <div t-out="o.contract_format_id.body"/>
+                </t>
+                <t t-else="">
+                    <p>No se ha seleccionado ningún formato.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Contrato actual del empleado (Es el contrato que se generó por primea vez, no es editable) -->
+    <template id="report_contract_document_current">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <t t-if="o.contract_current">
+                    <div t-out="o.contract_current"/>
+                </t>
+                <t t-else="">
+                    <p>No se ha seleccionado ningún formato.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <!-- Vista previa del formato del contrato en edición -->
+    <template id="report_contract_document_preview">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <t t-if="o.body">
+                    <div t-out="o.body"/>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_contractemployee">
+        <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="o">
+                 <t t-if="o.contract_current">
+                    <t t-call="reclutamiento__kuale.report_contract_document_current"/>
+                </t>
+                 <t t-else="">
+                    <t t-call="reclutamiento__kuale.report_contract_document"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <!-- Template Vista previa del formato del contrato en edición -->
+    <template id="report_contractpreview">
+        <t t-call="web.html_container">
+             <t t-foreach="docs" t-as="o">
+                <t t-call="reclutamiento__kuale.report_contract_document_preview"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_contractEmployee">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t>
+                    <t t-call="reclutamiento__kuale.body_contractEmployee"/>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="body_contractEmployee">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top: 0cm; margin-right: 3cm; margin-bottom: 2.5cm; margin-left: 3cm;">
+                <t t-if="o.body_temp">
+                    <div t-out="o.body_temp"/>
+                </t>
+                <t t-else="">
+                    <p>El contrato no se pudo generar.</p>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Seed: legacy demo companies.
+             NOTE: res.company.name is unique in this DB, so keep ONE record per company name. -->
+        <record id="company_kuale_demo_data" model="res.company" forcecreate="0">
+            <field name="name">Kuale Demo Matriz</field>
+            <field name="no_store">1</field>
+            <field name="branch_name">Matriz</field>
+            <field name="company_type">branch</field>
+        </record>
+
+        <record id="company_kuale_demo_branch_data" model="res.company" forcecreate="0">
+            <field name="name">Kuale Demo Sucursal Centro</field>
+            <field name="no_store">2</field>
+            <field name="branch_name">Sucursal Centro</field>
+            <field name="company_type">branch</field>
+        </record>
+    </data>
+</odoo>

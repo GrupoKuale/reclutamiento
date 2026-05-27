@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="regulation_received" model="ir.actions.report">
+            <field name="name">Formato_recibido_reglamento</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.formatReceived</field>
+            <field name="report_file">reclutamiento__kuale.formatReceived</field>
+            <field name="print_report_name">'Formato_Reglamento_Recibido'</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="confidentiality_received" model="ir.actions.report">
+            <field name="name">Carta_confidencialidad</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.formatConfidentiality</field>
+            <field name="report_file">reclutamiento__kuale.formatConfidentiality</field>
+            <field name="print_report_name">'Carta Confidencialidad'</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+        <record id="uniform_voucher_format" model="ir.actions.report">
+            <field name="name">Vale_uniforme</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.formatUniformVoucher</field>
+            <field name="report_file">reclutamiento__kuale.formatUniformVoucher</field>
+            <field name="print_report_name">'Formato de vale de uniforme'</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+         <record id="promissory_format" model="ir.actions.report">
+            <field name="name">Pagare</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.formatPromissory</field>
+            <field name="report_file">reclutamiento__kuale.formatPromissory</field>
+            <field name="print_report_name">'Formato de pagaré'</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+         <record id="contract_summary" model="ir.actions.report">
+            <field name="name">Contrato</field>
+            <field name="model">hr.applicant</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">reclutamiento__kuale.contractSummary</field>
+            <field name="report_file">reclutamiento__kuale.contractSummary</field>
+            <field name="print_report_name">'Formato de contratación'</field>
+            <field name="binding_model_id" ref="model_hr_applicant"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

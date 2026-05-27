@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="reclutamiento__kuale_vacantes_template">
+      <t t-call="website.layout" >
+        <t t-set="pageName" t-value="vacantes"/>
+        <div id="wrap" class="oe_structure oe_empty kuale-vacantes">
+          <section class="s_title parallax s_parallax_is_fixed bg-black-50 pt24 pb24 kuale-hero" data-vcss="001" data-snippet="s_title" data-scroll-background-ratio="1">
+            <span class="s_parallax_bg oe_img_bg" style="background-image: url('/reclutamiento__kuale/static/src/images/kuale/imagen-4-prueba.png'); background-position: 50% 0;"/>
+            <div class="o_we_bg_filter bg-black-50"/>
+            <div class="container kuale-hero__inner">
+              <h1 class="kuale-hero__title">VACANTES</h1>
+            </div>
+          </section>
+          <div class="container kuale-vacantes__content">
+            <div class="row my-4 kuale-vacantes__grid">
+            <t t-set="companies" t-value="request.env['res.company'].get_all_companies()"/>
+            <t t-foreach="companies" t-as="company">
+              <div class="col-md-4 mb-4">
+                <div class="card kuale-card">
+                  <div class="card-body text-center kuale-card__body">
+                    <a t-attf-href="/jobs/#{company['id']}" class="kuale-card__link">
+                      <h5 class="card-title kuale-card__title">
+                        <t t-esc="company['name']"/>
+                      </h5>
+                      <img t-if="company['logo']" t-attf-src="data:image/png;base64,#{company['logo']}" alt="Company Logo" class="kuale-card__logo"/>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </t>
+          </div>
+          </div>
+        </div>
+      </t>
+    </template>
+</odoo>
