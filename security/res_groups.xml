@@ -132,6 +132,14 @@
             <field name="implied_ids" eval="[(4, ref('group_ca_gerente'))]"/>
         </record>
 
+        <!-- ===================== DIRECCIÓN / CONSEJO ===================== -->
+        <record id="group_direccion" model="res.groups">
+            <field name="name">Dirección / Consejo</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">CEO y socios: acceso de solo lectura a Contabilidad kuale</field>
+            <field name="implied_ids" eval="[(4, ref('account.group_account_readonly'))]"/>
+        </record>
+
         <!-- ===================== ENLACE ===================== -->
         <record id="group_enlace_auxiliar" model="res.groups">
             <field name="name">Enlace - Auxiliar</field>
