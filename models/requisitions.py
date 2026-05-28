@@ -361,7 +361,7 @@ class Requisitions(models.Model):
                 (self.env.uid, dh_group.id)
             )
             is_dh = bool(self.env.cr.fetchone())
-        if not (is_dh or self.env.uid == 1):
+        if not (is_dh or self.env.user.has_group('base.group_system')):
             raise AccessError("Solo el equipo de Desarrollo Humano (DH) o el administrador pueden autorizar requisiciones.")
         for requisition in self:
             isvalid = False

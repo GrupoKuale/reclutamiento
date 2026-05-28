@@ -5,115 +5,153 @@
              <field name="name">Administracion de roles</field>
             <field name="sequence">10</field>
         </record>
-        <record id="group_dh_access" model="res.groups">
-            <field name="name">Desarrollo Humano (DH)</field>
+
+        <!-- ===================== GUÍAS ===================== -->
+        <record id="group_guias_entrenamiento" model="res.groups">
+            <field name="name">Guías en Entrenamiento</field>
             <field name="category_id" ref="rol_employees_permissions"/>
-            <field name="comment">Filtrar opciones para usuarios con este rol</field>
+            <field name="comment">Solo lectura en productos; puede crear órdenes de compra pero no autorizarlas</field>
         </record>
-        <record id="group_lgp_access" model="res.groups">
-            <field name="name">La Gente Es Primero (LGP)</field>
-            <field name="category_id" ref="rol_employees_permissions"/>
-            <field name="comment">Filtrar opciones para usuarios con este rol</field>
-        </record>
-        <record id="group_pxc_access" model="res.groups">
-            <field name="name">Pasión por el Cliente (PXC)</field>
-            <field name="category_id" ref="rol_employees_permissions"/>
-            <field name="comment">Filtrar opciones para usuarios con este rol</field>
-        </record>
+
         <record id="group_guias_generales" model="res.groups">
             <field name="name">Guías Generales</field>
             <field name="category_id" ref="rol_employees_permissions"/>
             <field name="comment">Solo sus candidatos; mueve entre Primera entrevista y Segunda entrevista</field>
+            <field name="implied_ids" eval="[(4, ref('group_guias_entrenamiento'))]"/>
         </record>
+
         <record id="group_guias_foraneos" model="res.groups">
             <field name="name">Guías Foráneos</field>
             <field name="category_id" ref="rol_employees_permissions"/>
             <field name="comment">Solo sus candidatos; puede mover por todas las etapas del pipeline</field>
+            <field name="implied_ids" eval="[(4, ref('group_guias_entrenamiento'))]"/>
         </record>
+
+        <!-- ===================== DH - Desarrollo Humano ===================== -->
+        <record id="group_dh_access" model="res.groups">
+            <field name="name">Desarrollo Humano - Auxiliar (DH)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de Desarrollo Humano</field>
+        </record>
+
+        <record id="group_dh_gerente" model="res.groups">
+            <field name="name">Desarrollo Humano - Gerente (DH)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de Desarrollo Humano; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_dh_access'))]"/>
+        </record>
+
+        <record id="group_dh_director" model="res.groups">
+            <field name="name">Desarrollo Humano - Director (DH)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de Desarrollo Humano; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_dh_gerente'))]"/>
+        </record>
+
+        <!-- ===================== LGP - La Gente Primero ===================== -->
+        <record id="group_lgp_access" model="res.groups">
+            <field name="name">La Gente Primero - Auxiliar (LGP)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de La Gente Primero</field>
+        </record>
+
+        <record id="group_lgp_gerente" model="res.groups">
+            <field name="name">La Gente Primero - Gerente (LGP)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de La Gente Primero; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_lgp_access'))]"/>
+        </record>
+
+        <record id="group_lgp_director" model="res.groups">
+            <field name="name">La Gente Primero - Director (LGP)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de La Gente Primero; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_lgp_gerente'))]"/>
+        </record>
+
+        <!-- ===================== PXC - Pasión por el Cliente ===================== -->
+        <record id="group_pxc_access" model="res.groups">
+            <field name="name">Pasión por el Cliente - Auxiliar (PXC)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de Pasión por el Cliente</field>
+        </record>
+
+        <record id="group_pxc_gerente" model="res.groups">
+            <field name="name">Pasión por el Cliente - Gerente (PXC)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de Pasión por el Cliente; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_pxc_access'))]"/>
+        </record>
+
+        <record id="group_pxc_director" model="res.groups">
+            <field name="name">Pasión por el Cliente - Director (PXC)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de Pasión por el Cliente; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_pxc_gerente'))]"/>
+        </record>
+
+        <!-- ===================== OR - Optimización de Recursos ===================== -->
+        <record id="group_or_auxiliar" model="res.groups">
+            <field name="name">Optimización de Recursos - Auxiliar (OR)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de Optimización de Recursos; acceso a contabilidad</field>
+        </record>
+
+        <record id="group_or_gerente" model="res.groups">
+            <field name="name">Optimización de Recursos - Gerente (OR)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de Optimización de Recursos; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_or_auxiliar'))]"/>
+        </record>
+
+        <record id="group_or_director" model="res.groups">
+            <field name="name">Optimización de Recursos - Director (OR)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de Optimización de Recursos; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_or_gerente'))]"/>
+        </record>
+
+        <!-- ===================== CA - Conservación de Activos ===================== -->
+        <record id="group_ca_auxiliar" model="res.groups">
+            <field name="name">Conservación de Activos - Auxiliar (CA)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de Conservación de Activos</field>
+        </record>
+
+        <record id="group_ca_gerente" model="res.groups">
+            <field name="name">Conservación de Activos - Gerente (CA)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de Conservación de Activos; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_ca_auxiliar'))]"/>
+        </record>
+
+        <record id="group_ca_director" model="res.groups">
+            <field name="name">Conservación de Activos - Director (CA)</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de Conservación de Activos; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_ca_gerente'))]"/>
+        </record>
+
+        <!-- ===================== ENLACE ===================== -->
+        <record id="group_enlace_auxiliar" model="res.groups">
+            <field name="name">Enlace - Auxiliar</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel auxiliar de Enlace</field>
+        </record>
+
+        <record id="group_enlace_gerente" model="res.groups">
+            <field name="name">Enlace - Gerente</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel gerente de Enlace; hereda permisos de auxiliar</field>
+            <field name="implied_ids" eval="[(4, ref('group_enlace_auxiliar'))]"/>
+        </record>
+
+        <record id="group_enlace_director" model="res.groups">
+            <field name="name">Enlace - Director</field>
+            <field name="category_id" ref="rol_employees_permissions"/>
+            <field name="comment">Nivel director de Enlace; hereda permisos de gerente</field>
+            <field name="implied_ids" eval="[(4, ref('group_enlace_gerente'))]"/>
+        </record>
+
     </data>
-    <!--<record id="base.module_category_human_resources_employees" model="ir.module.category">
-        <field name="sequence">10</field>
-    </record>
-
-    <record id="group_reclutamiento_kuale_user" model="res.groups">
-        <field name="name">Officer: Manage all employeessss</field>
-        <field name="category_id" ref="base.module_category_human_resources_employees"/>
-        <field name="implied_ids" eval="[(6, 0, [ref('base.group_user')])]"/>
-        <field name="comment">The user will be able to approve document created by employees.</field>
-    </record>-->
-
-    <!--<record id="group_hr_manager" model="res.groups">
-       <field name="name">Administrator</field>
-       <field name="comment">The user will have access to the human resources configuration as well as statistic reports.</field>
-       <field name="category_id" ref="base.module_category_human_resources_employees"/>
-       <field name="implied_ids" eval="[(4, ref('group_hr_user'))]"/>
-       <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
-   </record>-->
-
-    <!--<data noupdate="1">
-        <record id="base.default_user" model="res.users">
-            <field name="groups_id" eval="[(4,ref('group_hr_manager'))]"/>
-        </record>
-
-        <record id="hr_employee_comp_rule" model="ir.rule">
-            <field name="name">Employee multi company rule</field>
-            <field name="model_id" ref="model_hr_employee"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
-        </record>
-
-        <record id="hr_dept_comp_rule" model="ir.rule">
-            <field name="name">Department multi company rule</field>
-            <field name="model_id" ref="model_hr_department"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
-        </record>
-
-        <record id="hr_employee_public_comp_rule" model="ir.rule">
-            <field name="name">Employee multi company rule</field>
-            <field name="model_id" ref="model_hr_employee_public"/>
-            <field name="domain_force">['|',('company_id', '=',False),('company_id', 'in', company_ids)]</field>
-        </record>
-
-        <record id="hr_job_comp_rule" model="ir.rule">
-            <field name="name">Job multi company rule</field>
-            <field name="model_id" ref="model_hr_job"/>
-            <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
-        </record>
-
-        <record id="ir_rule_res_partner_bank_internal_users" model="ir.rule">
-            <field name="name">HR: Prevent non HR officers from accessing employee bank accounts</field>
-            <field name="model_id" ref="base.model_res_partner_bank"/>
-            <field name="domain_force">[('partner_id.employee_ids', '=', False)]</field>
-            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-        </record>
-
-        <record id="ir_rule_res_partner_bank_employees" model="ir.rule">
-            <field name="name">HR: Allow HR officers from accessing employee bank accounts</field>
-            <field name="model_id" ref="base.model_res_partner_bank"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
-            <field name="groups" eval="[(4, ref('hr.group_hr_user'))]"/>
-        </record>
-
-        <record id="ir_rule_hr_contract_type_multi_company" model="ir.rule">
-            <field name="name">HR Contract Type: Multi Company</field>
-            <field name="model_id" ref="model_hr_contract_type"/>
-            <field name="domain_force">['|', ('country_id', '=', False), ('country_id', 'in', user.env.companies.country_id.ids)]</field>
-        </record>
-
-        <record id="mail_plan_rule_group_hr_manager" model="ir.rule">
-            <field name="name">Manager can edit employee plan</field>
-            <field name="groups" eval="[(4, ref('group_hr_manager'))]"/>
-            <field name="model_id" ref="mail.model_mail_activity_plan"/>
-            <field name="domain_force">[('res_model', '=', 'hr.employee')]</field>
-            <field name="perm_read" eval="False"/>
-        </record>
-
-        <record id="mail_plan_templates_rule_group_hr_manager" model="ir.rule">
-            <field name="name">Manager can edit employee plan template</field>
-            <field name="groups" eval="[(4, ref('group_hr_manager'))]"/>
-            <field name="model_id" ref="mail.model_mail_activity_plan_template"/>
-            <field name="domain_force">[('plan_id.res_model', '=', 'hr.employee')]</field>
-            <field name="perm_read" eval="False"/>
-        </record>
-
-    </data>-->
 </odoo>
